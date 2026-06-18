@@ -3,492 +3,313 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>İhracat Müşteri Analizi Dashboard</title>
+<title>İhracat Müşteri Analizi</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
-  :root {
-    --dark: #1B3A6B; --mid: #2E6DA4; --light: #D6E4F7;
-    --green: #27AE60; --red: #E74C3C; --orange: #E67E22;
-    --gold: #F39C12; --white: #fff; --gray: #f5f6fa;
-    --text: #2c3e50; --border: #dde3ed;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; color: var(--text); }
-
-  /* NAV */
-  nav { background: var(--dark); color: white; padding: 0 24px;
-        display: flex; align-items: center; justify-content: space-between;
-        height: 56px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
-  nav h1 { font-size: 17px; letter-spacing: .5px; }
-  nav span { font-size: 12px; opacity: .7; }
-  .nav-tabs { display: flex; gap: 4px; }
-  .nav-tab { color: rgba(255,255,255,.7); padding: 8px 16px; border-radius: 6px;
-             cursor: pointer; font-size: 13px; transition: all .2s; border: none;
-             background: transparent; }
-  .nav-tab:hover, .nav-tab.active { background: rgba(255,255,255,.15); color: white; }
-
-  /* PAGES */
-  .page { display: none; padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
-  .page.active { display: block; }
-
-  /* KPI CARDS */
-  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 20px; }
-  .kpi { background: white; border-radius: 12px; padding: 18px 20px;
-         box-shadow: 0 2px 8px rgba(0,0,0,.07); border-top: 4px solid var(--mid);
-         transition: transform .2s; }
-  .kpi:hover { transform: translateY(-2px); }
-  .kpi.green { border-color: var(--green); }
-  .kpi.red { border-color: var(--red); }
-  .kpi.gold { border-color: var(--gold); }
-  .kpi label { font-size: 11px; text-transform: uppercase; letter-spacing: .8px;
-               color: #888; display: block; margin-bottom: 6px; }
-  .kpi .val { font-size: 24px; font-weight: 700; color: var(--dark); }
-  .kpi .sub { font-size: 11px; color: #aaa; margin-top: 4px; }
-
-  /* GRID LAYOUTS */
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
-  .grid3 { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 18px; }
-  .span2 { grid-column: 1 / -1; }
-
-  /* CARD */
-  .card { background: white; border-radius: 12px; padding: 20px;
-          box-shadow: 0 2px 8px rgba(0,0,0,.07); }
-  .card h2 { font-size: 14px; font-weight: 600; color: var(--dark);
-             margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--light); }
-  .card h2 span { font-size: 11px; color: #999; font-weight: 400; margin-left: 6px; }
-
-  /* MAP */
-  #map { height: 420px; border-radius: 8px; }
-
-  /* TABLE */
-  .tbl-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { background: var(--dark); color: white; padding: 10px 12px;
-       text-align: left; font-weight: 600; position: sticky; top: 0; }
-  td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
-  tr:hover td { background: var(--light); }
-  tr:nth-child(even) td { background: #fafbfd; }
-  tr:nth-child(even):hover td { background: var(--light); }
-
-  /* BADGES */
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px;
-           font-size: 11px; font-weight: 600; white-space: nowrap; }
-  .b-yildiz { background: #d5f5e3; color: #1e8449; }
-  .b-sadik  { background: #d6eaf8; color: #1a5276; }
-  .b-poten  { background: #fef9e7; color: #9a7d0a; }
-  .b-risk   { background: #fdebd0; color: #a04000; }
-  .b-kayip  { background: #fadbd8; color: #922b21; }
-
-  /* BAR SPARK */
-  .bar-spark { height: 8px; border-radius: 4px; background: var(--light);
-               margin-top: 4px; overflow: hidden; }
-  .bar-spark-fill { height: 100%; border-radius: 4px; background: var(--mid); }
-
-  /* SEARCH */
-  .search-box { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px;
-                font-size: 13px; width: 260px; outline: none; }
-  .search-box:focus { border-color: var(--mid); box-shadow: 0 0 0 3px rgba(46,109,164,.15); }
-  .tbl-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
-  select.filter-sel { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px;
-                      font-size: 13px; outline: none; }
-
-  /* PRIORITY TAGS */
-  .p-star   { color: var(--green); font-weight: 700; }
-  .p-hold   { color: var(--mid); font-weight: 600; }
-  .p-grow   { color: var(--gold); font-weight: 600; }
-  .p-watch  { color: #999; }
-  .p-drop   { color: var(--red); font-weight: 600; }
-
-  /* CROSS SELL */
-  .cs-yes { color: var(--green); font-weight: 700; font-size: 15px; }
-  .cs-no  { color: #ddd; font-size: 15px; }
-
-  /* CHART CONTAINER */
-  .chart-wrap { position: relative; }
-
-  @media (max-width: 768px) {
-    .grid2, .grid3 { grid-template-columns: 1fr; }
-    nav h1 { font-size: 14px; }
-    .nav-tab { padding: 6px 10px; font-size: 12px; }
-  }
+:root{--dark:#1B3A6B;--mid:#2E6DA4;--light:#D6E4F7;--green:#27AE60;--red:#E74C3C;--orange:#E67E22;--gold:#F39C12;--border:#dde3ed;--gray:#f5f6fa}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#eef2f7;color:#2c3e50}
+nav{background:var(--dark);color:#fff;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+nav h1{font-size:16px;letter-spacing:.4px}
+.ntabs{display:flex;gap:3px}
+.ntab{color:rgba(255,255,255,.7);padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px;border:none;background:transparent;transition:all .2s}
+.ntab:hover,.ntab.on{background:rgba(255,255,255,.18);color:#fff}
+.page{display:none;padding:18px 22px;max-width:1400px;margin:0 auto}
+.page.on{display:block}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:#fff;border-radius:11px;padding:16px 18px;box-shadow:0 2px 8px rgba(0,0,0,.07);border-top:4px solid var(--mid)}
+.kpi.g{border-color:var(--green)}.kpi.r{border-color:var(--red)}
+.kpi label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#999;display:block;margin-bottom:5px}
+.kpi .v{font-size:22px;font-weight:700;color:var(--dark)}
+.kpi .s{font-size:10px;color:#bbb;margin-top:3px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g31{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+.card{background:#fff;border-radius:11px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h2{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:14px;padding-bottom:9px;border-bottom:2px solid var(--light)}
+.card h2 em{font-size:10px;color:#aaa;font-weight:400;margin-left:5px;font-style:normal}
+#map{height:420px;border-radius:8px}
+.tw{overflow-x:auto;max-height:520px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--dark);color:#fff;padding:9px 11px;text-align:left;font-weight:600;position:sticky;top:0;z-index:2}
+td{padding:8px 11px;border-bottom:1px solid var(--border)}
+tr:hover td{background:var(--light)}
+tr:nth-child(even) td{background:#fafbfd}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.by{background:#d5f5e3;color:#1e8449}.bs{background:#d6eaf8;color:#1a5276}
+.bp{background:#fef9e7;color:#9a7d0a}.br{background:#fdebd0;color:#a04000}.bk{background:#fadbd8;color:#922b21}
+.spark{height:7px;border-radius:4px;background:var(--light);margin-top:3px;overflow:hidden}
+.sparkf{height:100%;border-radius:4px;background:var(--mid)}
+.sb{padding:7px 12px;border:1px solid var(--border);border-radius:7px;font-size:12px;outline:none;font-family:inherit}
+.sb:focus{border-color:var(--mid)}
+.ctrl{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.csyes{color:var(--green);font-weight:700;font-size:14px}
+.csno{color:#ddd;font-size:14px}
+@media(max-width:768px){.g2,.g31{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
 <nav>
   <h1>🌍 İhracat Müşteri Analizi</h1>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('genel')">📊 Genel Bakış</button>
-    <button class="nav-tab" onclick="showPage('harita')">🗺️ Dünya Haritası</button>
-    <button class="nav-tab" onclick="showPage('musteri')">👥 Müşteriler</button>
-    <button class="nav-tab" onclick="showPage('urun')">📦 Ürünler</button>
-    <button class="nav-tab" onclick="showPage('crosssell')">🎯 Cross-Sell</button>
+  <div class="ntabs">
+    <button class="ntab on" onclick="go('genel',this)">📊 Genel</button>
+    <button class="ntab" onclick="go('harita',this)">🗺️ Harita</button>
+    <button class="ntab" onclick="go('musteri',this)">👥 Müşteriler</button>
+    <button class="ntab" onclick="go('urun',this)">📦 Ürünler</button>
+    <button class="ntab" onclick="go('cross',this)">🎯 Cross-Sell</button>
   </div>
-  <span>2024 – 2026</span>
+  <span style="font-size:11px;opacity:.6">2024–2026</span>
 </nav>
 
-<!-- ═══════════════════ SAYFA 1: GENEL BAKIŞ ═══════════════════ -->
-<div id="page-genel" class="page active">
-  <div class="kpi-grid" id="kpi-container"></div>
-  <div class="grid3">
-    <div class="card">
-      <h2>📈 Yıllık Ciro Trendi <span>USD bazında</span></h2>
-      <canvas id="trendChart" height="100"></canvas>
-    </div>
-    <div class="card">
-      <h2>🥧 Ürün Kategorileri</h2>
-      <canvas id="katChart" height="180"></canvas>
-    </div>
+<div id="pg-genel" class="page on">
+  <div class="kgrid" id="kpis"></div>
+  <div class="g31">
+    <div class="card"><h2>📈 Aylık Ciro Trendi <em>USD</em></h2><canvas id="cTrend"></canvas></div>
+    <div class="card"><h2>🥧 Ürün Kategorileri</h2><canvas id="cKat"></canvas></div>
   </div>
-  <div class="grid2">
-    <div class="card">
-      <h2>🏆 Top 10 Ülke <span>Toplam USD</span></h2>
-      <canvas id="ulkeChart" height="140"></canvas>
-    </div>
-    <div class="card">
-      <h2>👥 Müşteri Segmentleri <span>RFM Analizi</span></h2>
-      <canvas id="rfmChart" height="140"></canvas>
-    </div>
+  <div class="g2">
+    <div class="card"><h2>🏆 Top 10 Ülke <em>yıl karşılaştırma</em></h2><canvas id="cUlke"></canvas></div>
+    <div class="card"><h2>👥 Müşteri Segmentleri</h2><canvas id="cRfm"></canvas></div>
   </div>
 </div>
 
-<!-- ═══════════════════ SAYFA 2: HARİTA ═══════════════════ -->
-<div id="page-harita" class="page">
-  <div class="card" style="margin-bottom:18px">
-    <h2>🌍 İhracat Haritası <span>Çember büyüklüğü = satış hacmi</span></h2>
+<div id="pg-harita" class="page">
+  <div class="card" style="margin-bottom:16px">
+    <h2>🌍 İhracat Haritası <em>çember = satış hacmi · tıkla = detay</em></h2>
     <div id="map"></div>
   </div>
-  <div class="card">
-    <h2>📊 Ülke Bazlı Yıllık Karşılaştırma</h2>
-    <canvas id="ulkeYilChart" height="80"></canvas>
-  </div>
+  <div class="card"><h2>📊 Ülke × Yıl</h2><canvas id="cUlkeYil" height="70"></canvas></div>
 </div>
 
-<!-- ═══════════════════ SAYFA 3: MÜŞTERİLER ═══════════════════ -->
-<div id="page-musteri" class="page">
+<div id="pg-musteri" class="page">
   <div class="card">
-    <h2>👥 Müşteri Listesi <span>RFM Segmentasyon</span></h2>
-    <div class="tbl-controls">
-      <input class="search-box" id="musteriSearch" placeholder="🔍 Müşteri ara..." oninput="filterMusteri()">
-      <select class="filter-sel" id="segFilter" onchange="filterMusteri()">
-        <option value="">Tüm Segmentler</option>
-        <option>Yıldız Müşteri</option>
-        <option>Sadık Müşteri</option>
-        <option>Potansiyel</option>
-        <option>Risk Altında</option>
-        <option>Kayıp Müşteri</option>
-      </select>
-      <select class="filter-sel" id="ulkeFilter" onchange="filterMusteri()">
-        <option value="">Tüm Ülkeler</option>
-      </select>
-    </div>
-    <div class="tbl-wrap">
-      <table id="musteriTable">
-        <thead>
-          <tr>
-            <th>Müşteri</th><th>Ülke</th><th>Son Alım</th>
-            <th>Gün Önce</th><th>Fatura #</th><th>Toplam USD</th><th>Segment</th>
-          </tr>
-        </thead>
-        <tbody id="musteriBody"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════ SAYFA 4: ÜRÜNLER ═══════════════════ -->
-<div id="page-urun" class="page">
-  <div class="card" style="margin-bottom:18px">
-    <h2>🏆 Top 15 Ürün <span>Toplam USD Satış</span></h2>
-    <canvas id="urunChart" height="80"></canvas>
-  </div>
-  <div class="card">
-    <div class="tbl-controls">
-      <input class="search-box" id="urunSearch" placeholder="🔍 Ürün ara..." oninput="filterUrun()">
-    </div>
-    <div class="tbl-wrap">
-      <table id="urunTable">
-        <thead>
-          <tr><th>#</th><th>Ürün Adı</th><th>Toplam USD</th><th>Payı</th></tr>
-        </thead>
-        <tbody id="urunBody"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════ SAYFA 5: CROSS-SELL ═══════════════════ -->
-<div id="page-crosssell" class="page">
-  <div class="card" style="margin-bottom:14px; background: linear-gradient(135deg,#1B3A6B,#2E6DA4); color:white;">
-    <h2 style="color:white; border-color:rgba(255,255,255,.2)">🎯 Cross-Sell Fırsatları</h2>
-    <p style="font-size:13px; opacity:.85">✓ = satın aldı &nbsp;|&nbsp; ○ = almadı (fırsat!) &nbsp;|&nbsp; Yüksek cirolu müşterilerin eksik kategorileri öncelikli hedef.</p>
-  </div>
-  <div class="card">
-    <div class="tbl-controls">
-      <input class="search-box" id="csSearch" placeholder="🔍 Müşteri ara..." oninput="filterCS()">
-      <select class="filter-sel" id="csSegFilter" onchange="filterCS()">
+    <h2>👥 Müşteri RFM Analizi</h2>
+    <div class="ctrl">
+      <input class="sb" id="mSrch" placeholder="🔍 Müşteri ara..." oninput="renderM()" style="width:220px">
+      <select class="sb" id="mSeg" onchange="renderM()">
         <option value="">Tüm Segmentler</option>
         <option>Yıldız Müşteri</option><option>Sadık Müşteri</option>
-        <option>Potansiyel</option><option>Risk Altında</option>
+        <option>Potansiyel</option><option>Risk Altında</option><option>Kayıp Müşteri</option>
+      </select>
+      <select class="sb" id="mUlke" onchange="renderM()"><option value="">Tüm Ülkeler</option></select>
+    </div>
+    <div class="tw"><table><thead><tr>
+      <th>Müşteri</th><th>Ülke</th><th>Son Alım</th><th>Gün Önce</th><th>Fatura #</th><th>Toplam USD</th><th>Segment</th>
+    </tr></thead><tbody id="mBody"></tbody></table></div>
+  </div>
+</div>
+
+<div id="pg-urun" class="page">
+  <div class="card" style="margin-bottom:16px"><h2>🏆 Top 15 Ürün</h2><canvas id="cUrun" height="80"></canvas></div>
+  <div class="card">
+    <div class="ctrl"><input class="sb" id="uSrch" placeholder="🔍 Ürün ara..." oninput="renderU()" style="width:280px"></div>
+    <div class="tw"><table><thead><tr><th>#</th><th>Ürün Adı</th><th>Toplam USD</th><th>Pay %</th></tr></thead>
+    <tbody id="uBody"></tbody></table></div>
+  </div>
+</div>
+
+<div id="pg-cross" class="page">
+  <div class="card" style="background:linear-gradient(135deg,var(--dark),var(--mid));margin-bottom:12px">
+    <h2 style="color:#fff;border-color:rgba(255,255,255,.2)">🎯 Cross-Sell Fırsatları <em style="color:rgba(255,255,255,.7)">✓ aldı · ○ almadı = fırsat</em></h2>
+  </div>
+  <div class="card">
+    <div class="ctrl">
+      <input class="sb" id="csSrch" placeholder="🔍 Müşteri ara..." oninput="renderCS()" style="width:220px">
+      <select class="sb" id="csSeg" onchange="renderCS()">
+        <option value="">Tüm Segmentler</option>
+        <option>Yıldız Müşteri</option><option>Sadık Müşteri</option><option>Potansiyel</option><option>Risk Altında</option>
       </select>
     </div>
-    <div class="tbl-wrap">
-      <table id="csTable">
-        <thead id="csHead"></thead>
-        <tbody id="csBody"></tbody>
-      </table>
-    </div>
+    <div class="tw"><table><thead id="csHead"></thead><tbody id="csBody"></tbody></table></div>
   </div>
 </div>
 
 <script>
-// ── DATA ────────────────────────────────────────────────────────────────────
-const RAW = {"ulke": [{"Ulke": "ALMANYA", "Ulke_EN": "Germany", "toplam": 243912.87000000002, "musteri": 4, "fatura": 11, "usd_2024": 95754.69, "usd_2025": 11516.472, "usd_2026": 136641.708, "lat": 51.1657, "lon": 10.4515, "buyume": -88.0}, {"Ulke": "ARNAVUTLUK", "Ulke_EN": "Albania", "toplam": 213299.29800044122, "musteri": 3, "fatura": 33, "usd_2024": 17478.45000000464, "usd_2025": 147962.97000043283, "usd_2026": 47857.878000003766, "lat": 41.1533, "lon": 20.1683, "buyume": 746.5}, {"Ulke": "AVUSTURYA", "Ulke_EN": "Austria", "toplam": 19999.440000000002, "musteri": 1, "fatura": 5, "usd_2024": 14818.68, "usd_2025": 0.0, "usd_2026": 5180.76, "lat": 47.5162, "lon": 14.5501, "buyume": -100.0}, {"Ulke": "BELÇİKA", "Ulke_EN": "Belgium", "toplam": 43026.768000000004, "musteri": 2, "fatura": 4, "usd_2024": 43026.768000000004, "usd_2025": 0.0, "usd_2026": 0.0, "lat": 50.5039, "lon": 4.4699, "buyume": -100.0}, {"Ulke": "BOSNA HERSEK", "Ulke_EN": "Bosnia and Herzegovina", "toplam": 154096.9056, "musteri": 4, "fatura": 13, "usd_2024": 18046.497600000002, "usd_2025": 47694.204000000005, "usd_2026": 88356.204, "lat": 43.9159, "lon": 17.6791, "buyume": 164.3}, {"Ulke": "BULGARİSTAN", "Ulke_EN": "Bulgaria", "toplam": 228318.3179777892, "musteri": 6, "fatura": 20, "usd_2024": 108017.85239992992, "usd_2025": 76306.31999999999, "usd_2026": 43994.145577859286, "lat": 42.7339, "lon": 25.4858, "buyume": -29.4}, {"Ulke": "FAS", "Ulke_EN": "Morocco", "toplam": 503043.06563589216, "musteri": 7, "fatura": 22, "usd_2024": 244961.4400000191, "usd_2025": 176290.92909952448, "usd_2026": 81790.69653634855, "lat": 31.7917, "lon": -7.0926, "buyume": -28.0}, {"Ulke": "FRANSA", "Ulke_EN": "France", "toplam": 60568.452000000005, "musteri": 2, "fatura": 6, "usd_2024": 8399.7, "usd_2025": 39727.152, "usd_2026": 12441.6, "lat": 46.2276, "lon": 2.2137, "buyume": 373.0}, {"Ulke": "GÜRCİSTAN", "Ulke_EN": "Georgia", "toplam": 105811.15000008301, "musteri": 3, "fatura": 10, "usd_2024": 57357.15, "usd_2025": 48454.00000008301, "usd_2026": 0.0, "lat": 42.3154, "lon": 43.3569, "buyume": -15.5}, {"Ulke": "KOSOVA", "Ulke_EN": "Kosovo", "toplam": 658830.6935897303, "musteri": 2, "fatura": 41, "usd_2024": 217696.74478501282, "usd_2025": 328871.2968046828, "usd_2026": 112262.65200003466, "lat": 42.6026, "lon": 20.903, "buyume": 51.1}, {"Ulke": "MACARİSTAN", "Ulke_EN": "Hungary", "toplam": 185246.73000030604, "musteri": 2, "fatura": 5, "usd_2024": 70724.88, "usd_2025": 73160.01000030604, "usd_2026": 41361.840000000004, "lat": 47.1625, "lon": 19.5033, "buyume": 3.4}, {"Ulke": "MAKEDONYA", "Ulke_EN": "North Macedonia", "toplam": 297289.12897396635, "musteri": 2, "fatura": 17, "usd_2024": 92039.28264023582, "usd_2025": 134254.58833373053, "usd_2026": 70995.258, "lat": 41.6086, "lon": 21.7453, "buyume": 45.9}, {"Ulke": "MOLDAVYA", "Ulke_EN": "Moldova", "toplam": 6712.632, "musteri": 1, "fatura": 1, "usd_2024": 0.0, "usd_2025": 0.0, "usd_2026": 6712.6320000000005, "lat": 47.4116, "lon": 28.3699, "buyume": NaN}, {"Ulke": "POLONYA", "Ulke_EN": "Poland", "toplam": 335370.05007153936, "musteri": 3, "fatura": 11, "usd_2024": 0.0, "usd_2025": 166440.81007153934, "usd_2026": 168929.24000000002, "lat": 51.9194, "lon": 19.1451, "buyume": NaN}, {"Ulke": "ROMANYA", "Ulke_EN": "Romania", "toplam": 908123.919, "musteri": 5, "fatura": 32, "usd_2024": 364574.71499999997, "usd_2025": 284475.67199999996, "usd_2026": 259073.53200000004, "lat": 45.9432, "lon": 24.9668, "buyume": -22.0}, {"Ulke": "SERBIA", "Ulke_EN": "Serbia", "toplam": 741343.4270595841, "musteri": 2, "fatura": 35, "usd_2024": 125449.38719969381, "usd_2025": 464492.22026060976, "usd_2026": 151401.81959928048, "lat": 44.0165, "lon": 21.0059, "buyume": 270.3}, {"Ulke": "SLOVENYA", "Ulke_EN": "Slovenia", "toplam": 26651.419200156823, "musteri": 1, "fatura": 2, "usd_2024": 0.0, "usd_2025": 26651.419200156826, "usd_2026": 0.0, "lat": 46.1512, "lon": 14.9955, "buyume": NaN}, {"Ulke": "TUNUS", "Ulke_EN": "Tunisia", "toplam": 499.2, "musteri": 1, "fatura": 1, "usd_2024": 0.0, "usd_2025": 0.0, "usd_2026": 499.2, "lat": 33.8869, "lon": 9.5375, "buyume": NaN}, {"Ulke": "UKRAYNA", "Ulke_EN": "Ukraine", "toplam": 329367.8500010866, "musteri": 3, "fatura": 18, "usd_2024": 0.0, "usd_2025": 177910.45, "usd_2026": 151457.40000108661, "lat": 48.3794, "lon": 31.1656, "buyume": NaN}, {"Ulke": "YUNANİSTAN", "Ulke_EN": "Greece", "toplam": 143069.76, "musteri": 2, "fatura": 13, "usd_2024": 0.0, "usd_2025": 89873.55, "usd_2026": 53196.21, "lat": 39.0742, "lon": 21.8243, "buyume": NaN}, {"Ulke": "ÜRDÜN", "Ulke_EN": "Jordan", "toplam": 232718.95, "musteri": 1, "fatura": 7, "usd_2024": 130756.25, "usd_2025": 71142.5, "usd_2026": 30820.2, "lat": 30.5852, "lon": 36.2384, "buyume": -45.6}, {"Ulke": "İNGİLTERE", "Ulke_EN": "United Kingdom", "toplam": 208084.039, "musteri": 1, "fatura": 5, "usd_2024": 0.0, "usd_2025": 114781.584, "usd_2026": 93302.45499999999, "lat": 55.3781, "lon": -3.436, "buyume": NaN}, {"Ulke": "İSPANYA", "Ulke_EN": "Spain", "toplam": 27026.784000000003, "musteri": 1, "fatura": 2, "usd_2024": 0.0, "usd_2025": 27026.784, "usd_2026": 0.0, "lat": 40.4637, "lon": -3.7492, "buyume": NaN}, {"Ulke": "İSRAİL", "Ulke_EN": "Israel", "toplam": 32400.00000278704, "musteri": 1, "fatura": 1, "usd_2024": 32400.00000278704, "usd_2025": 0.0, "usd_2026": 0.0, "lat": 31.0461, "lon": 34.8516, "buyume": -100.0}, {"Ulke": "İSVİÇRE", "Ulke_EN": "Switzerland", "toplam": 18145.08, "musteri": 2, "fatura": 2, "usd_2024": 18145.08, "usd_2025": 0.0, "usd_2026": 0.0, "lat": 46.8182, "lon": 8.2275, "buyume": -100.0}, {"Ulke": "İTALYA", "Ulke_EN": "Italy", "toplam": 139967.7494381619, "musteri": 4, "fatura": 8, "usd_2024": 0.0, "usd_2025": 97094.83823997842, "usd_2026": 42872.9111981835, "lat": 41.8719, "lon": 12.5674, "buyume": NaN}], "trend": [{"Yil": 2024, "Ay": 1, "USD_Tutar": 139226.592, "label": "2024-01"}, {"Yil": 2024, "Ay": 2, "USD_Tutar": 15756.74, "label": "2024-02"}, {"Yil": 2024, "Ay": 3, "USD_Tutar": 150648.45198640844, "label": "2024-03"}, {"Yil": 2024, "Ay": 4, "USD_Tutar": 9111.42, "label": "2024-04"}, {"Yil": 2024, "Ay": 5, "USD_Tutar": 229775.3474015944, "label": "2024-05"}, {"Yil": 2024, "Ay": 6, "USD_Tutar": 23804.928000242526, "label": "2024-06"}, {"Yil": 2024, "Ay": 7, "USD_Tutar": 124518.70799999923, "label": "2024-07"}, {"Yil": 2024, "Ay": 8, "USD_Tutar": 220932.0906394513, "label": "2024-08"}, {"Yil": 2024, "Ay": 9, "USD_Tutar": 73668.744, "label": "2024-09"}, {"Yil": 2024, "Ay": 10, "USD_Tutar": 148969.284, "label": "2024-10"}, {"Yil": 2024, "Ay": 11, "USD_Tutar": 268152.1676000179, "label": "2024-11"}, {"Yil": 2024, "Ay": 12, "USD_Tutar": 255083.09399996937, "label": "2024-12"}, {"Yil": 2025, "Ay": 1, "USD_Tutar": 134912.97952, "label": "2025-01"}, {"Yil": 2025, "Ay": 2, "USD_Tutar": 186410.72400005526, "label": "2025-02"}, {"Yil": 2025, "Ay": 3, "USD_Tutar": 130975.65, "label": "2025-03"}, {"Yil": 2025, "Ay": 4, "USD_Tutar": 325686.1382608, "label": "2025-04"}, {"Yil": 2025, "Ay": 5, "USD_Tutar": 222523.04680008302, "label": "2025-05"}, {"Yil": 2025, "Ay": 6, "USD_Tutar": 174696.02800771673, "label": "2025-06"}, {"Yil": 2025, "Ay": 7, "USD_Tutar": 246166.68367153296, "label": "2025-07"}, {"Yil": 2025, "Ay": 8, "USD_Tutar": 158595.21400013592, "label": "2025-08"}, {"Yil": 2025, "Ay": 9, "USD_Tutar": 264160.7916027242, "label": "2025-09"}, {"Yil": 2025, "Ay": 10, "USD_Tutar": 215768.9014880458, "label": "2025-10"}, {"Yil": 2025, "Ay": 11, "USD_Tutar": 277469.6586520583, "label": "2025-11"}, {"Yil": 2025, "Ay": 12, "USD_Tutar": 266761.9540078919, "label": "2025-12"}, {"Yil": 2026, "Ay": 1, "USD_Tutar": 307678.9645356637, "label": "2026-01"}, {"Yil": 2026, "Ay": 2, "USD_Tutar": 190347.3731981793, "label": "2026-02"}, {"Yil": 2026, "Ay": 3, "USD_Tutar": 178650.900000008, "label": "2026-03"}, {"Yil": 2026, "Ay": 4, "USD_Tutar": 580135.1905778593, "label": "2026-04"}, {"Yil": 2026, "Ay": 5, "USD_Tutar": 234886.1876, "label": "2026-05"}, {"Yil": 2026, "Ay": 6, "USD_Tutar": 107449.72600108662, "label": "2026-06"}], "top_urun": [{"UrunAdi": "PLS. DIAMOND ÇATAL 50'Lİ (2000)", "USD_Tutar": 191301.75600000002}, {"UrunAdi": "SMARTPACK PLS. PREMİUM ÇATAL (4000)", "USD_Tutar": 182865.27455715946}, {"UrunAdi": "PRİZMA KAP 120 CC (1000)", "USD_Tutar": 174184.76869849447}, {"UrunAdi": "SMARTPACK PLS. EKO KAŞIK BEYAZ (7000)", "USD_Tutar": 133214.20401683557}, {"UrunAdi": "SMARTPACK PLS. EKO KAŞIK (7000)", "USD_Tutar": 128412.85223984948}, {"UrunAdi": "PLS. DIAMOND BIÇAK 50'Lİ (2000)", "USD_Tutar": 120023.98800000001}, {"UrunAdi": "PLS. DIAMOND KAŞIK 50'Lİ (2000)", "USD_Tutar": 117122.70800790691}, {"UrunAdi": "AL BASSAM PLS. EKO KAŞIK BEYAZ (2000)", "USD_Tutar": 116704.7}, {"UrunAdi": "SMARTPACK PLS. EKO ÇATAL BEYAZ (7000)", "USD_Tutar": 116372.97597600946}, {"UrunAdi": "PLASTİK KAŞIK 50'Lİ PREMİUM (4000)", "USD_Tutar": 108954.375}, {"UrunAdi": "COMFY PACK PREMIUM ÇATAL (1000)", "USD_Tutar": 99239.25600000001}, {"UrunAdi": "MYPAK (REUSABLE) PLASTİK ÇATAL SİYAH (1000)", "USD_Tutar": 91186.72390000001}, {"UrunAdi": "180 CC PLS. KRİSTAL BARDAK (1000)", "USD_Tutar": 81910.60874031358}, {"UrunAdi": "PRİZMA KAP 60 CC (1000)", "USD_Tutar": 80277.1393234839}, {"UrunAdi": "SMARTPACK PLS. LÜX ÇATAL (4000)", "USD_Tutar": 79949.43679928049}], "kategori": [{"Kategori": "Çatal", "USD_Tutar": 1728262.7904339589}, {"Kategori": "Kaşık", "USD_Tutar": 1405487.7755291937}, {"Kategori": "Diğer", "USD_Tutar": 885669.4306990171}, {"Kategori": "Bıçak", "USD_Tutar": 598058.4793887188}, {"Kategori": "Kap/Kapak", "USD_Tutar": 535490.6234307034}, {"Kategori": "Tabak/Kase", "USD_Tutar": 498395.2388835464}, {"Kategori": "Bardak", "USD_Tutar": 210182.3411863859}, {"Kategori": "Aksesuar", "USD_Tutar": 1377.0}], "rfm": [{"Segment": "Potansiyel", "sayi": 12, "toplam": 308149.58920015686}, {"Segment": "Risk Altında", "sayi": 15, "toplam": 134118.6120027177}, {"Segment": "Sadık Müşteri", "sayi": 16, "toplam": 913022.4134621468}, {"Segment": "Yıldız Müşteri", "sayi": 23, "toplam": 4507633.064886503}], "musteri_listesi": [{"CariKodu": 564, "Unvan": "QUALITY PACK SRL", "Ulke": "ROMANYA", "SonAlis": "2026-06-06", "Recency_gun": 12, "AlisSikligi": 20, "ToplamUSD": 704697.0630000001, "Segment": "Yıldız Müşteri"}, {"CariKodu": 563, "Unvan": "LB GROUP SH P.K.", "Ulke": "KOSOVA", "SonAlis": "2026-04-30", "Recency_gun": 49, "AlisSikligi": 28, "ToplamUSD": 531430.3619896699, "Segment": "Yıldız Müşteri"}, {"CariKodu": 686, "Unvan": "MOTOSPEED D.O.O.", "Ulke": "SERBIA", "SonAlis": "2026-05-14", "Recency_gun": 35, "AlisSikligi": 19, "ToplamUSD": 518028.3818595841, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1276, "Unvan": "NAVIPACK LLC", "Ulke": "UKRAYNA", "SonAlis": "2026-04-04", "Recency_gun": 75, "AlisSikligi": 12, "ToplamUSD": 249194.45, "Segment": "Yıldız Müşteri"}, {"CariKodu": 768, "Unvan": "AL BASSAM FOR PLASTIC ESTABLISHMENT", "Ulke": "ÜRDÜN", "SonAlis": "2026-04-05", "Recency_gun": 74, "AlisSikligi": 7, "ToplamUSD": 232718.95, "Segment": "Yıldız Müşteri"}, {"CariKodu": 943, "Unvan": "FAKTOR D.O.O.", "Ulke": "SERBIA", "SonAlis": "2026-06-03", "Recency_gun": 15, "AlisSikligi": 16, "ToplamUSD": 223315.0452, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1384, "Unvan": "EKSPERT POŁUDNIE SP. Z O.O", "Ulke": "POLONYA", "SonAlis": "2026-05-08", "Recency_gun": 41, "AlisSikligi": 7, "ToplamUSD": 219722.78607153933, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1126, "Unvan": "BRANN HANDELS GMBH", "Ulke": "ALMANYA", "SonAlis": "2026-05-25", "Recency_gun": 24, "AlisSikligi": 6, "ToplamUSD": 214426.278, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1264, "Unvan": "BB CATERING SUPPLIES", "Ulke": "İNGİLTERE", "SonAlis": "2026-04-21", "Recency_gun": 58, "AlisSikligi": 5, "ToplamUSD": 208084.039, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1219, "Unvan": "FERPROM DOO", "Ulke": "MAKEDONYA", "SonAlis": "2026-03-25", "Recency_gun": 85, "AlisSikligi": 7, "ToplamUSD": 149739.21792275592, "Segment": "Yıldız Müşteri"}, {"CariKodu": 165, "Unvan": "HEMİ PAPİR MAKEDONYA", "Ulke": "MAKEDONYA", "SonAlis": "2026-05-15", "Recency_gun": 34, "AlisSikligi": 10, "ToplamUSD": 147549.91105121042, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1249, "Unvan": "PACK CENTER IKE", "Ulke": "YUNANİSTAN", "SonAlis": "2026-06-03", "Recency_gun": 15, "AlisSikligi": 12, "ToplamUSD": 135876.96000000002, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1279, "Unvan": "BALKAN TRADE SH.P.K.", "Ulke": "KOSOVA", "SonAlis": "2026-05-18", "Recency_gun": 31, "AlisSikligi": 13, "ToplamUSD": 127400.33160006044, "Segment": "Yıldız Müşteri"}, {"CariKodu": 597, "Unvan": "ESTETİK PACKİNG SRL", "Ulke": "ROMANYA", "SonAlis": "2025-06-17", "Recency_gun": 366, "AlisSikligi": 5, "ToplamUSD": 119015.352, "Segment": "Sadık Müşteri"}, {"CariKodu": 1197, "Unvan": "MARCHICA EMBALLAGES", "Ulke": "FAS", "SonAlis": "2025-11-19", "Recency_gun": 211, "AlisSikligi": 6, "ToplamUSD": 117575.50000001908, "Segment": "Yıldız Müşteri"}, {"CariKodu": 763, "Unvan": "GOLD GRUP BARONA EOOD", "Ulke": "BULGARİSTAN", "SonAlis": "2025-12-18", "Recency_gun": 182, "AlisSikligi": 10, "ToplamUSD": 117403.72199999922, "Segment": "Yıldız Müşteri"}, {"CariKodu": 799, "Unvan": "PROXY MARKET", "Ulke": "FAS", "SonAlis": "2026-02-23", "Recency_gun": 115, "AlisSikligi": 6, "ToplamUSD": 117311.58761227725, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1300, "Unvan": "URGAN GROUP DOO", "Ulke": "BOSNA HERSEK", "SonAlis": "2026-04-25", "Recency_gun": 54, "AlisSikligi": 7, "ToplamUSD": 111777.408, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1059, "Unvan": "GASZTROFUTÁR KFT.", "Ulke": "MACARİSTAN", "SonAlis": "2025-01-31", "Recency_gun": 503, "AlisSikligi": 3, "ToplamUSD": 108436.59, "Segment": "Sadık Müşteri"}, {"CariKodu": 836, "Unvan": "MULTI PACK INTERNATIONAL", "Ulke": "FAS", "SonAlis": "2024-11-07", "Recency_gun": 588, "AlisSikligi": 2, "ToplamUSD": 91490.8, "Segment": "Potansiyel"}, {"CariKodu": 875, "Unvan": "DISTRIPACK SARL", "Ulke": "FAS", "SonAlis": "2025-10-02", "Recency_gun": 259, "AlisSikligi": 4, "ToplamUSD": 85831.97148724727, "Segment": "Sadık Müşteri"}, {"CariKodu": 1520, "Unvan": "LOOKFORT UKRAINE", "Ulke": "UKRAYNA", "SonAlis": "2026-06-09", "Recency_gun": 9, "AlisSikligi": 5, "ToplamUSD": 77173.40000108661, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1474, "Unvan": "ARNES SP. Z O.O.", "Ulke": "POLONYA", "SonAlis": "2025-09-18", "Recency_gun": 273, "AlisSikligi": 2, "ToplamUSD": 77039.424, "Segment": "Sadık Müşteri"}, {"CariKodu": 1422, "Unvan": "ATTASE GASTRO KFT.", "Ulke": "MACARİSTAN", "SonAlis": "2026-01-20", "Recency_gun": 149, "AlisSikligi": 2, "ToplamUSD": 76810.14000030604, "Segment": "Sadık Müşteri"}, {"CariKodu": 1357, "Unvan": "MARTINI & K SHPK", "Ulke": "ARNAVUTLUK", "SonAlis": "2026-03-03", "Recency_gun": 107, "AlisSikligi": 4, "ToplamUSD": 76407.84, "Segment": "Sadık Müşteri"}, {"CariKodu": 1009, "Unvan": "KOMSELL SH.P.K.", "Ulke": "ARNAVUTLUK", "SonAlis": "2026-03-18", "Recency_gun": 92, "AlisSikligi": 20, "ToplamUSD": 76046.68800044122, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1471, "Unvan": "ERBE MARKETING SRL", "Ulke": "ROMANYA", "SonAlis": "2026-05-08", "Recency_gun": 41, "AlisSikligi": 5, "ToplamUSD": 65968.452, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1141, "Unvan": "EURO PACK LTD", "Ulke": "GÜRCİSTAN", "SonAlis": "2025-12-12", "Recency_gun": 188, "AlisSikligi": 6, "ToplamUSD": 63185.80000008301, "Segment": "Sadık Müşteri"}, {"CariKodu": 1234, "Unvan": "APL GROUP SHPK", "Ulke": "ARNAVUTLUK", "SonAlis": "2026-04-08", "Recency_gun": 71, "AlisSikligi": 9, "ToplamUSD": 60844.77, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1314, "Unvan": "EDA PACK", "Ulke": "FRANSA", "SonAlis": "2026-06-09", "Recency_gun": 9, "AlisSikligi": 5, "ToplamUSD": 52168.752, "Segment": "Yıldız Müşteri"}, {"CariKodu": 202, "Unvan": "OPAKOVKA BG LTD.", "Ulke": "BULGARİSTAN", "SonAlis": "2026-05-15", "Recency_gun": 34, "AlisSikligi": 5, "ToplamUSD": 49179.00957785929, "Segment": "Yıldız Müşteri"}, {"CariKodu": 1429, "Unvan": "BIO PACKAGING SRL", "Ulke": "İTALYA", "SonAlis": "2026-02-02", "Recency_gun": 136, "AlisSikligi": 2, "ToplamUSD": 45967.2191981835, "Segment": "Sadık Müşteri"}, {"CariKodu": 1491, "Unvan": "STABILE S.P.A.", "Ulke": "İTALYA", "SonAlis": "2026-02-26", "Recency_gun": 112, "AlisSikligi": 3, "ToplamUSD": 45115.30223997842, "Segment": "Sadık Müşteri"}, {"CariKodu": 1496, "Unvan": "INTRADE SRL", "Ulke": "İTALYA", "SonAlis": "2026-01-29", "Recency_gun": 140, "AlisSikligi": 2, "ToplamUSD": 42518.628, "Segment": "Sadık Müşteri"}, {"CariKodu": 1634, "Unvan": "CAPMAN", "Ulke": "FAS", "SonAlis": "2026-04-24", "Recency_gun": 55, "AlisSikligi": 1, "ToplamUSD": 41352.25, "Segment": "Sadık Müşteri"}, {"CariKodu": 1573, "Unvan": "OLPACK LTD.", "Ulke": "POLONYA", "SonAlis": "2026-04-14", "Recency_gun": 65, "AlisSikligi": 2, "ToplamUSD": 38607.84, "Segment": "Sadık Müşteri"}, {"CariKodu": 1058, "Unvan": "SK PACKAGING BV (I & S)", "Ulke": "BELÇİKA", "SonAlis": "2024-12-16", "Recency_gun": 549, "AlisSikligi": 2, "ToplamUSD": 38106.288, "Segment": "Potansiyel"}, {"CariKodu": 386, "Unvan": "KONSUMATIV LTD", "Ulke": "BULGARİSTAN", "SonAlis": "2025-11-14", "Recency_gun": 216, "AlisSikligi": 2, "ToplamUSD": 35677.8, "Segment": "Potansiyel"}, {"CariKodu": 1082, "Unvan": "GOLD PACK", "Ulke": "GÜRCİSTAN", "SonAlis": "2024-12-12", "Recency_gun": 553, "AlisSikligi": 2, "ToplamUSD": 34825.35, "Segment": "Potansiyel"}, {"CariKodu": 876, "Unvan": "GOLF PLASTIC INDUSTRIAL CO.", "Ulke": "İSRAİL", "SonAlis": "2024-03-11", "Recency_gun": 829, "AlisSikligi": 1, "ToplamUSD": 32400.00000278704, "Segment": "Risk Altında"}, {"CariKodu": 1566, "Unvan": "DELICIOUS PACKAGING SARL", "Ulke": "FAS", "SonAlis": "2026-03-28", "Recency_gun": 82, "AlisSikligi": 2, "ToplamUSD": 31061.196536348547, "Segment": "Sadık Müşteri"}, {"CariKodu": 1428, "Unvan": "GENIAL ENVASES S.L.", "Ulke": "İSPANYA", "SonAlis": "2025-10-07", "Recency_gun": 254, "AlisSikligi": 2, "ToplamUSD": 27026.784000000003, "Segment": "Potansiyel"}, {"CariKodu": 1481, "Unvan": "NEPLAST D.O.O.", "Ulke": "SLOVENYA", "SonAlis": "2025-11-21", "Recency_gun": 209, "AlisSikligi": 2, "ToplamUSD": 26651.419200156823, "Segment": "Potansiyel"}, {"CariKodu": 965, "Unvan": "TEMIZ GMBH", "Ulke": "ALMANYA", "SonAlis": "2025-10-06", "Recency_gun": 255, "AlisSikligi": 3, "ToplamUSD": 22233.42, "Segment": "Sadık Müşteri"}, {"CariKodu": 1055, "Unvan": "GMZ GASTRO GMBH", "Ulke": "AVUSTURYA", "SonAlis": "2026-04-24", "Recency_gun": 55, "AlisSikligi": 5, "ToplamUSD": 19999.44, "Segment": "Sadık Müşteri"}, {"CariKodu": 1519, "Unvan": "MODUL PRODUCTION DOO", "Ulke": "BOSNA HERSEK", "SonAlis": "2026-04-01", "Recency_gun": 78, "AlisSikligi": 2, "ToplamUSD": 19440.0, "Segment": "Sadık Müşteri"}, {"CariKodu": 1420, "Unvan": "SELECQTIAL SARL", "Ulke": "FAS", "SonAlis": "2025-07-14", "Recency_gun": 339, "AlisSikligi": 1, "ToplamUSD": 18419.76, "Segment": "Potansiyel"}, {"CariKodu": 1568, "Unvan": "GLOBAL PLAST SRL", "Ulke": "ROMANYA", "SonAlis": "2026-01-22", "Recency_gun": 147, "AlisSikligi": 1, "ToplamUSD": 17012.268, "Segment": "Potansiyel"}, {"CariKodu": 1007, "Unvan": "T & S TRADING", "Ulke": "BULGARİSTAN", "SonAlis": "2024-05-13", "Recency_gun": 766, "AlisSikligi": 1, "ToplamUSD": 15364.49039993067, "Segment": "Risk Altında"}, {"CariKodu": 1134, "Unvan": "MODUL DOO", "Ulke": "BOSNA HERSEK", "SonAlis": "2025-10-01", "Recency_gun": 260, "AlisSikligi": 2, "ToplamUSD": 14590.8, "Segment": "Potansiyel"}, {"CariKodu": 1133, "Unvan": "AARE GASTRO SERVICE GMBH", "Ulke": "İSVİÇRE", "SonAlis": "2024-10-05", "Recency_gun": 621, "AlisSikligi": 1, "ToplamUSD": 12788.28, "Segment": "Risk Altında"}, {"CariKodu": 944, "Unvan": "KEBAB D'OR 18", "Ulke": "FRANSA", "SonAlis": "2024-03-29", "Recency_gun": 811, "AlisSikligi": 1, "ToplamUSD": 8399.7, "Segment": "Risk Altında"}, {"CariKodu": 725, "Unvan": "MB IMPEKS DOO", "Ulke": "BOSNA HERSEK", "SonAlis": "2024-11-05", "Recency_gun": 590, "AlisSikligi": 2, "ToplamUSD": 8288.6976, "Segment": "Risk Altında"}, {"CariKodu": 48, "Unvan": "PLASTİC SOFİA LDT.", "Ulke": "BULGARİSTAN", "SonAlis": "2024-06-26", "Recency_gun": 722, "AlisSikligi": 1, "ToplamUSD": 8274.960000000001, "Segment": "Risk Altında"}, {"CariKodu": 1102, "Unvan": "LUNCH GROUP LTD", "Ulke": "GÜRCİSTAN", "SonAlis": "2025-07-02", "Recency_gun": 351, "AlisSikligi": 2, "ToplamUSD": 7800.0, "Segment": "Risk Altında"}, {"CariKodu": 1344, "Unvan": "DIMEX S.A.", "Ulke": "YUNANİSTAN", "SonAlis": "2025-05-09", "Recency_gun": 405, "AlisSikligi": 1, "ToplamUSD": 7192.8, "Segment": "Risk Altında"}, {"CariKodu": 1529, "Unvan": "SC ECOLASER LTD", "Ulke": "MOLDAVYA", "SonAlis": "2026-01-16", "Recency_gun": 153, "AlisSikligi": 1, "ToplamUSD": 6712.632, "Segment": "Risk Altında"}, {"CariKodu": 1426, "Unvan": "CARTERIA SRL", "Ulke": "İTALYA", "SonAlis": "2025-09-08", "Recency_gun": 283, "AlisSikligi": 1, "ToplamUSD": 6366.6, "Segment": "Risk Altında"}, {"CariKodu": 1167, "Unvan": "EFFI GASTRO GMBH", "Ulke": "İSVİÇRE", "SonAlis": "2024-10-05", "Recency_gun": 621, "AlisSikligi": 1, "ToplamUSD": 5356.8, "Segment": "Risk Altında"}, {"CariKodu": 1294, "Unvan": "BIGPACK WOP", "Ulke": "ALMANYA", "SonAlis": "2025-02-27", "Recency_gun": 476, "AlisSikligi": 1, "ToplamUSD": 4955.472000000001, "Segment": "Risk Altında"}, {"CariKodu": 1063, "Unvan": "FARLA BELGIUM", "Ulke": "BELÇİKA", "SonAlis": "2024-09-13", "Recency_gun": 643, "AlisSikligi": 2, "ToplamUSD": 4920.4800000000005, "Segment": "Risk Altında"}, {"CariKodu": 1499, "Unvan": "BITE-EM LLC", "Ulke": "UKRAYNA", "SonAlis": "2025-12-09", "Recency_gun": 191, "AlisSikligi": 1, "ToplamUSD": 3000.0, "Segment": "Risk Altında"}, {"CariKodu": 1597, "Unvan": "KREZ ALLIANCE EOOD", "Ulke": "BULGARİSTAN", "SonAlis": "2026-04-30", "Recency_gun": 49, "AlisSikligi": 1, "ToplamUSD": 2418.336, "Segment": "Potansiyel"}, {"CariKodu": 160, "Unvan": "VEGANLAND GOSTRONOMİE GMBH", "Ulke": "ALMANYA", "SonAlis": "2024-05-24", "Recency_gun": 755, "AlisSikligi": 1, "ToplamUSD": 2297.7, "Segment": "Risk Altında"}, {"CariKodu": 1572, "Unvan": "RLR GRAFIK SRL", "Ulke": "ROMANYA", "SonAlis": "2026-01-27", "Recency_gun": 142, "AlisSikligi": 1, "ToplamUSD": 1430.784, "Segment": "Potansiyel"}, {"CariKodu": 1563, "Unvan": "STE ETS JAMELDDINE MAAZOUN - EJEM", "Ulke": "TUNUS", "SonAlis": "2026-01-23", "Recency_gun": 146, "AlisSikligi": 1, "ToplamUSD": 499.2, "Segment": "Potansiyel"}], "kpi": {"toplam": 5862924, "ulke_sayisi": 26, "musteri_sayisi": 66, "yildiz": 23, "risk": 15, "usd_2024": 1659648, "usd_2025": 2604128, "usd_2026": 1599148}};
+const D = {"ulke": [{"Ulke": "ALMANYA", "Ulke_EN": "Germany", "toplam": 243912.87000000002, "musteri": 4, "fatura": 11, "usd_2024": 95754.69, "usd_2025": 11516.472, "usd_2026": 136641.708, "lat": 51.1657, "lon": 10.4515, "buyume": -88.0}, {"Ulke": "ARNAVUTLUK", "Ulke_EN": "Albania", "toplam": 213299.29800044122, "musteri": 3, "fatura": 33, "usd_2024": 17478.45000000464, "usd_2025": 147962.97000043283, "usd_2026": 47857.878000003766, "lat": 41.1533, "lon": 20.1683, "buyume": 746.5}, {"Ulke": "AVUSTURYA", "Ulke_EN": "Austria", "toplam": 19999.440000000002, "musteri": 1, "fatura": 5, "usd_2024": 14818.68, "usd_2025": 0.0, "usd_2026": 5180.76, "lat": 47.5162, "lon": 14.5501, "buyume": -100.0}, {"Ulke": "BELÇİKA", "Ulke_EN": "Belgium", "toplam": 43026.768000000004, "musteri": 2, "fatura": 4, "usd_2024": 43026.768000000004, "usd_2025": 0.0, "usd_2026": 0.0, "lat": 50.5039, "lon": 4.4699, "buyume": -100.0}, {"Ulke": "BOSNA HERSEK", "Ulke_EN": "Bosnia and Herzegovina", "toplam": 154096.9056, "musteri": 4, "fatura": 13, "usd_2024": 18046.497600000002, "usd_2025": 47694.204000000005, "usd_2026": 88356.204, "lat": 43.9159, "lon": 17.6791, "buyume": 164.3}, {"Ulke": "BULGARİSTAN", "Ulke_EN": "Bulgaria", "toplam": 228318.3179777892, "musteri": 6, "fatura": 20, "usd_2024": 108017.85239992992, "usd_2025": 76306.31999999999, "usd_2026": 43994.145577859286, "lat": 42.7339, "lon": 25.4858, "buyume": -29.4}, {"Ulke": "FAS", "Ulke_EN": "Morocco", "toplam": 503043.06563589216, "musteri": 7, "fatura": 22, "usd_2024": 244961.4400000191, "usd_2025": 176290.92909952448, "usd_2026": 81790.69653634855, "lat": 31.7917, "lon": -7.0926, "buyume": -28.0}, {"Ulke": "FRANSA", "Ulke_EN": "France", "toplam": 60568.452000000005, "musteri": 2, "fatura": 6, "usd_2024": 8399.7, "usd_2025": 39727.152, "usd_2026": 12441.6, "lat": 46.2276, "lon": 2.2137, "buyume": 373.0}, {"Ulke": "GÜRCİSTAN", "Ulke_EN": "Georgia", "toplam": 105811.15000008301, "musteri": 3, "fatura": 10, "usd_2024": 57357.15, "usd_2025": 48454.00000008301, "usd_2026": 0.0, "lat": 42.3154, "lon": 43.3569, "buyume": -15.5}, {"Ulke": "KOSOVA", "Ulke_EN": "Kosovo", "toplam": 658830.6935897303, "musteri": 2, "fatura": 41, "usd_2024": 217696.74478501282, "usd_2025": 328871.2968046828, "usd_2026": 112262.65200003466, "lat": 42.6026, "lon": 20.903, "buyume": 51.1}, {"Ulke": "MACARİSTAN", "Ulke_EN": "Hungary", "toplam": 185246.73000030604, "musteri": 2, "fatura": 5, "usd_2024": 70724.88, "usd_2025": 73160.01000030604, "usd_2026": 41361.840000000004, "lat": 47.1625, "lon": 19.5033, "buyume": 3.4}, {"Ulke": "MAKEDONYA", "Ulke_EN": "North Macedonia", "toplam": 297289.12897396635, "musteri": 2, "fatura": 17, "usd_2024": 92039.28264023582, "usd_2025": 134254.58833373053, "usd_2026": 70995.258, "lat": 41.6086, "lon": 21.7453, "buyume": 45.9}, {"Ulke": "MOLDAVYA", "Ulke_EN": "Moldova", "toplam": 6712.632, "musteri": 1, "fatura": 1, "usd_2024": 0.0, "usd_2025": 0.0, "usd_2026": 6712.6320000000005, "lat": 47.4116, "lon": 28.3699, "buyume": 999.0}, {"Ulke": "POLONYA", "Ulke_EN": "Poland", "toplam": 335370.05007153936, "musteri": 3, "fatura": 11, "usd_2024": 0.0, "usd_2025": 166440.81007153934, "usd_2026": 168929.24000000002, "lat": 51.9194, "lon": 19.1451, "buyume": 999.0}, {"Ulke": "ROMANYA", "Ulke_EN": "Romania", "toplam": 908123.919, "musteri": 5, "fatura": 32, "usd_2024": 364574.71499999997, "usd_2025": 284475.67199999996, "usd_2026": 259073.53200000004, "lat": 45.9432, "lon": 24.9668, "buyume": -22.0}, {"Ulke": "SERBIA", "Ulke_EN": "Serbia", "toplam": 741343.4270595841, "musteri": 2, "fatura": 35, "usd_2024": 125449.38719969381, "usd_2025": 464492.22026060976, "usd_2026": 151401.81959928048, "lat": 44.0165, "lon": 21.0059, "buyume": 270.3}, {"Ulke": "SLOVENYA", "Ulke_EN": "Slovenia", "toplam": 26651.419200156823, "musteri": 1, "fatura": 2, "usd_2024": 0.0, "usd_2025": 26651.419200156826, "usd_2026": 0.0, "lat": 46.1512, "lon": 14.9955, "buyume": 999.0}, {"Ulke": "TUNUS", "Ulke_EN": "Tunisia", "toplam": 499.2, "musteri": 1, "fatura": 1, "usd_2024": 0.0, "usd_2025": 0.0, "usd_2026": 499.2, "lat": 33.8869, "lon": 9.5375, "buyume": 999.0}, {"Ulke": "UKRAYNA", "Ulke_EN": "Ukraine", "toplam": 329367.8500010866, "musteri": 3, "fatura": 18, "usd_2024": 0.0, "usd_2025": 177910.45, "usd_2026": 151457.40000108661, "lat": 48.3794, "lon": 31.1656, "buyume": 999.0}, {"Ulke": "YUNANİSTAN", "Ulke_EN": "Greece", "toplam": 143069.76, "musteri": 2, "fatura": 13, "usd_2024": 0.0, "usd_2025": 89873.55, "usd_2026": 53196.21, "lat": 39.0742, "lon": 21.8243, "buyume": 999.0}, {"Ulke": "ÜRDÜN", "Ulke_EN": "Jordan", "toplam": 232718.95, "musteri": 1, "fatura": 7, "usd_2024": 130756.25, "usd_2025": 71142.5, "usd_2026": 30820.2, "lat": 30.5852, "lon": 36.2384, "buyume": -45.6}, {"Ulke": "İNGİLTERE", "Ulke_EN": "United Kingdom", "toplam": 208084.039, "musteri": 1, "fatura": 5, "usd_2024": 0.0, "usd_2025": 114781.584, "usd_2026": 93302.45499999999, "lat": 55.3781, "lon": -3.436, "buyume": 999.0}, {"Ulke": "İSPANYA", "Ulke_EN": "Spain", "toplam": 27026.784000000003, "musteri": 1, "fatura": 2, "usd_2024": 0.0, "usd_2025": 27026.784, "usd_2026": 0.0, "lat": 40.4637, "lon": -3.7492, "buyume": 999.0}, {"Ulke": "İSRAİL", "Ulke_EN": "Israel", "toplam": 32400.00000278704, "musteri": 1, "fatura": 1, "usd_2024": 32400.00000278704, "usd_2025": 0.0, "usd_2026": 0.0, "lat": 31.0461, "lon": 34.8516, "buyume": -100.0}, {"Ulke": "İSVİÇRE", "Ulke_EN": "Switzerland", "toplam": 18145.08, "musteri": 2, "fatura": 2, "usd_2024": 18145.08, "usd_2025": 0.0, "usd_2026": 0.0, "lat": 46.8182, "lon": 8.2275, "buyume": -100.0}, {"Ulke": "İTALYA", "Ulke_EN": "Italy", "toplam": 139967.7494381619, "musteri": 4, "fatura": 8, "usd_2024": 0.0, "usd_2025": 97094.83823997842, "usd_2026": 42872.9111981835, "lat": 41.8719, "lon": 12.5674, "buyume": 999.0}], "trend": [{"Yil": 2024, "Ay": 1, "USD_Tutar": 139226.592, "label": "2024-01"}, {"Yil": 2024, "Ay": 2, "USD_Tutar": 15756.74, "label": "2024-02"}, {"Yil": 2024, "Ay": 3, "USD_Tutar": 150648.45198640844, "label": "2024-03"}, {"Yil": 2024, "Ay": 4, "USD_Tutar": 9111.42, "label": "2024-04"}, {"Yil": 2024, "Ay": 5, "USD_Tutar": 229775.3474015944, "label": "2024-05"}, {"Yil": 2024, "Ay": 6, "USD_Tutar": 23804.928000242526, "label": "2024-06"}, {"Yil": 2024, "Ay": 7, "USD_Tutar": 124518.70799999923, "label": "2024-07"}, {"Yil": 2024, "Ay": 8, "USD_Tutar": 220932.0906394513, "label": "2024-08"}, {"Yil": 2024, "Ay": 9, "USD_Tutar": 73668.744, "label": "2024-09"}, {"Yil": 2024, "Ay": 10, "USD_Tutar": 148969.284, "label": "2024-10"}, {"Yil": 2024, "Ay": 11, "USD_Tutar": 268152.1676000179, "label": "2024-11"}, {"Yil": 2024, "Ay": 12, "USD_Tutar": 255083.09399996937, "label": "2024-12"}, {"Yil": 2025, "Ay": 1, "USD_Tutar": 134912.97952, "label": "2025-01"}, {"Yil": 2025, "Ay": 2, "USD_Tutar": 186410.72400005526, "label": "2025-02"}, {"Yil": 2025, "Ay": 3, "USD_Tutar": 130975.65, "label": "2025-03"}, {"Yil": 2025, "Ay": 4, "USD_Tutar": 325686.1382608, "label": "2025-04"}, {"Yil": 2025, "Ay": 5, "USD_Tutar": 222523.04680008302, "label": "2025-05"}, {"Yil": 2025, "Ay": 6, "USD_Tutar": 174696.02800771673, "label": "2025-06"}, {"Yil": 2025, "Ay": 7, "USD_Tutar": 246166.68367153296, "label": "2025-07"}, {"Yil": 2025, "Ay": 8, "USD_Tutar": 158595.21400013592, "label": "2025-08"}, {"Yil": 2025, "Ay": 9, "USD_Tutar": 264160.7916027242, "label": "2025-09"}, {"Yil": 2025, "Ay": 10, "USD_Tutar": 215768.9014880458, "label": "2025-10"}, {"Yil": 2025, "Ay": 11, "USD_Tutar": 277469.6586520583, "label": "2025-11"}, {"Yil": 2025, "Ay": 12, "USD_Tutar": 266761.9540078919, "label": "2025-12"}, {"Yil": 2026, "Ay": 1, "USD_Tutar": 307678.9645356637, "label": "2026-01"}, {"Yil": 2026, "Ay": 2, "USD_Tutar": 190347.3731981793, "label": "2026-02"}, {"Yil": 2026, "Ay": 3, "USD_Tutar": 178650.900000008, "label": "2026-03"}, {"Yil": 2026, "Ay": 4, "USD_Tutar": 580135.1905778593, "label": "2026-04"}, {"Yil": 2026, "Ay": 5, "USD_Tutar": 234886.1876, "label": "2026-05"}, {"Yil": 2026, "Ay": 6, "USD_Tutar": 107449.72600108662, "label": "2026-06"}], "top_urun": [{"UrunAdi": "PLS. DIAMOND ÇATAL 50'Lİ (2000)", "USD_Tutar": 191301.75600000002}, {"UrunAdi": "SMARTPACK PLS. PREMİUM ÇATAL (4000)", "USD_Tutar": 182865.27455715946}, {"UrunAdi": "PRİZMA KAP 120 CC (1000)", "USD_Tutar": 174184.76869849447}, {"UrunAdi": "SMARTPACK PLS. EKO KAŞIK BEYAZ (7000)", "USD_Tutar": 133214.20401683557}, {"UrunAdi": "SMARTPACK PLS. EKO KAŞIK (7000)", "USD_Tutar": 128412.85223984948}, {"UrunAdi": "PLS. DIAMOND BIÇAK 50'Lİ (2000)", "USD_Tutar": 120023.98800000001}, {"UrunAdi": "PLS. DIAMOND KAŞIK 50'Lİ (2000)", "USD_Tutar": 117122.70800790691}, {"UrunAdi": "AL BASSAM PLS. EKO KAŞIK BEYAZ (2000)", "USD_Tutar": 116704.7}, {"UrunAdi": "SMARTPACK PLS. EKO ÇATAL BEYAZ (7000)", "USD_Tutar": 116372.97597600946}, {"UrunAdi": "PLASTİK KAŞIK 50'Lİ PREMİUM (4000)", "USD_Tutar": 108954.375}, {"UrunAdi": "COMFY PACK PREMIUM ÇATAL (1000)", "USD_Tutar": 99239.25600000001}, {"UrunAdi": "MYPAK (REUSABLE) PLASTİK ÇATAL SİYAH (1000)", "USD_Tutar": 91186.72390000001}, {"UrunAdi": "180 CC PLS. KRİSTAL BARDAK (1000)", "USD_Tutar": 81910.60874031358}, {"UrunAdi": "PRİZMA KAP 60 CC (1000)", "USD_Tutar": 80277.1393234839}, {"UrunAdi": "SMARTPACK PLS. LÜX ÇATAL (4000)", "USD_Tutar": 79949.43679928049}], "kategori": [{"Kategori": "Çatal", "USD_Tutar": 1728262.7904339589}, {"Kategori": "Kaşık", "USD_Tutar": 1405487.7755291937}, {"Kategori": "Diğer", "USD_Tutar": 885669.4306990171}, {"Kategori": "Bıçak", "USD_Tutar": 598058.4793887188}, {"Kategori": "Kap/Kapak", "USD_Tutar": 535490.6234307034}, {"Kategori": "Tabak/Kase", "USD_Tutar": 498395.2388835464}, {"Kategori": "Bardak", "USD_Tutar": 210182.3411863859}, {"Kategori": "Aksesuar", "USD_Tutar": 1377.0}], "rfm": [{"Segment": "Potansiyel", "sayi": 12, "toplam": 308149.58920015686}, {"Segment": "Risk Altında", "sayi": 15, "toplam": 134118.6120027177}, {"Segment": "Sadık Müşteri", "sayi": 16, "toplam": 913022.4134621468}, {"Segment": "Yıldız Müşteri", "sayi": 23, "toplam": 4507633.064886503}], "musteri_listesi": [{"CariKodu": "564", "Unvan": "QUALITY PACK SRL", "Ulke": "ROMANYA", "SonAlis": "2026-06-06", "Recency_gun": 12, "AlisSikligi": 20, "ToplamUSD": 704697.0630000001, "Segment": "Yıldız Müşteri"}, {"CariKodu": "563", "Unvan": "LB GROUP SH P.K.", "Ulke": "KOSOVA", "SonAlis": "2026-04-30", "Recency_gun": 49, "AlisSikligi": 28, "ToplamUSD": 531430.3619896699, "Segment": "Yıldız Müşteri"}, {"CariKodu": "686", "Unvan": "MOTOSPEED D.O.O.", "Ulke": "SERBIA", "SonAlis": "2026-05-14", "Recency_gun": 35, "AlisSikligi": 19, "ToplamUSD": 518028.3818595841, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1276", "Unvan": "NAVIPACK LLC", "Ulke": "UKRAYNA", "SonAlis": "2026-04-04", "Recency_gun": 75, "AlisSikligi": 12, "ToplamUSD": 249194.45, "Segment": "Yıldız Müşteri"}, {"CariKodu": "768", "Unvan": "AL BASSAM FOR PLASTIC ESTABLISHMENT", "Ulke": "ÜRDÜN", "SonAlis": "2026-04-05", "Recency_gun": 74, "AlisSikligi": 7, "ToplamUSD": 232718.95, "Segment": "Yıldız Müşteri"}, {"CariKodu": "943", "Unvan": "FAKTOR D.O.O.", "Ulke": "SERBIA", "SonAlis": "2026-06-03", "Recency_gun": 15, "AlisSikligi": 16, "ToplamUSD": 223315.0452, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1384", "Unvan": "EKSPERT POŁUDNIE SP. Z O.O", "Ulke": "POLONYA", "SonAlis": "2026-05-08", "Recency_gun": 41, "AlisSikligi": 7, "ToplamUSD": 219722.78607153933, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1126", "Unvan": "BRANN HANDELS GMBH", "Ulke": "ALMANYA", "SonAlis": "2026-05-25", "Recency_gun": 24, "AlisSikligi": 6, "ToplamUSD": 214426.278, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1264", "Unvan": "BB CATERING SUPPLIES", "Ulke": "İNGİLTERE", "SonAlis": "2026-04-21", "Recency_gun": 58, "AlisSikligi": 5, "ToplamUSD": 208084.039, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1219", "Unvan": "FERPROM DOO", "Ulke": "MAKEDONYA", "SonAlis": "2026-03-25", "Recency_gun": 85, "AlisSikligi": 7, "ToplamUSD": 149739.21792275592, "Segment": "Yıldız Müşteri"}, {"CariKodu": "165", "Unvan": "HEMİ PAPİR MAKEDONYA", "Ulke": "MAKEDONYA", "SonAlis": "2026-05-15", "Recency_gun": 34, "AlisSikligi": 10, "ToplamUSD": 147549.91105121042, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1249", "Unvan": "PACK CENTER IKE", "Ulke": "YUNANİSTAN", "SonAlis": "2026-06-03", "Recency_gun": 15, "AlisSikligi": 12, "ToplamUSD": 135876.96000000002, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1279", "Unvan": "BALKAN TRADE SH.P.K.", "Ulke": "KOSOVA", "SonAlis": "2026-05-18", "Recency_gun": 31, "AlisSikligi": 13, "ToplamUSD": 127400.33160006044, "Segment": "Yıldız Müşteri"}, {"CariKodu": "597", "Unvan": "ESTETİK PACKİNG SRL", "Ulke": "ROMANYA", "SonAlis": "2025-06-17", "Recency_gun": 366, "AlisSikligi": 5, "ToplamUSD": 119015.352, "Segment": "Sadık Müşteri"}, {"CariKodu": "1197", "Unvan": "MARCHICA EMBALLAGES", "Ulke": "FAS", "SonAlis": "2025-11-19", "Recency_gun": 211, "AlisSikligi": 6, "ToplamUSD": 117575.50000001908, "Segment": "Yıldız Müşteri"}, {"CariKodu": "763", "Unvan": "GOLD GRUP BARONA EOOD", "Ulke": "BULGARİSTAN", "SonAlis": "2025-12-18", "Recency_gun": 182, "AlisSikligi": 10, "ToplamUSD": 117403.72199999922, "Segment": "Yıldız Müşteri"}, {"CariKodu": "799", "Unvan": "PROXY MARKET", "Ulke": "FAS", "SonAlis": "2026-02-23", "Recency_gun": 115, "AlisSikligi": 6, "ToplamUSD": 117311.58761227725, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1300", "Unvan": "URGAN GROUP DOO", "Ulke": "BOSNA HERSEK", "SonAlis": "2026-04-25", "Recency_gun": 54, "AlisSikligi": 7, "ToplamUSD": 111777.408, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1059", "Unvan": "GASZTROFUTÁR KFT.", "Ulke": "MACARİSTAN", "SonAlis": "2025-01-31", "Recency_gun": 503, "AlisSikligi": 3, "ToplamUSD": 108436.59, "Segment": "Sadık Müşteri"}, {"CariKodu": "836", "Unvan": "MULTI PACK INTERNATIONAL", "Ulke": "FAS", "SonAlis": "2024-11-07", "Recency_gun": 588, "AlisSikligi": 2, "ToplamUSD": 91490.8, "Segment": "Potansiyel"}, {"CariKodu": "875", "Unvan": "DISTRIPACK SARL", "Ulke": "FAS", "SonAlis": "2025-10-02", "Recency_gun": 259, "AlisSikligi": 4, "ToplamUSD": 85831.97148724727, "Segment": "Sadık Müşteri"}, {"CariKodu": "1520", "Unvan": "LOOKFORT UKRAINE", "Ulke": "UKRAYNA", "SonAlis": "2026-06-09", "Recency_gun": 9, "AlisSikligi": 5, "ToplamUSD": 77173.40000108661, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1474", "Unvan": "ARNES SP. Z O.O.", "Ulke": "POLONYA", "SonAlis": "2025-09-18", "Recency_gun": 273, "AlisSikligi": 2, "ToplamUSD": 77039.424, "Segment": "Sadık Müşteri"}, {"CariKodu": "1422", "Unvan": "ATTASE GASTRO KFT.", "Ulke": "MACARİSTAN", "SonAlis": "2026-01-20", "Recency_gun": 149, "AlisSikligi": 2, "ToplamUSD": 76810.14000030604, "Segment": "Sadık Müşteri"}, {"CariKodu": "1357", "Unvan": "MARTINI & K SHPK", "Ulke": "ARNAVUTLUK", "SonAlis": "2026-03-03", "Recency_gun": 107, "AlisSikligi": 4, "ToplamUSD": 76407.84, "Segment": "Sadık Müşteri"}, {"CariKodu": "1009", "Unvan": "KOMSELL SH.P.K.", "Ulke": "ARNAVUTLUK", "SonAlis": "2026-03-18", "Recency_gun": 92, "AlisSikligi": 20, "ToplamUSD": 76046.68800044122, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1471", "Unvan": "ERBE MARKETING SRL", "Ulke": "ROMANYA", "SonAlis": "2026-05-08", "Recency_gun": 41, "AlisSikligi": 5, "ToplamUSD": 65968.452, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1141", "Unvan": "EURO PACK LTD", "Ulke": "GÜRCİSTAN", "SonAlis": "2025-12-12", "Recency_gun": 188, "AlisSikligi": 6, "ToplamUSD": 63185.80000008301, "Segment": "Sadık Müşteri"}, {"CariKodu": "1234", "Unvan": "APL GROUP SHPK", "Ulke": "ARNAVUTLUK", "SonAlis": "2026-04-08", "Recency_gun": 71, "AlisSikligi": 9, "ToplamUSD": 60844.77, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1314", "Unvan": "EDA PACK", "Ulke": "FRANSA", "SonAlis": "2026-06-09", "Recency_gun": 9, "AlisSikligi": 5, "ToplamUSD": 52168.752, "Segment": "Yıldız Müşteri"}, {"CariKodu": "202", "Unvan": "OPAKOVKA BG LTD.", "Ulke": "BULGARİSTAN", "SonAlis": "2026-05-15", "Recency_gun": 34, "AlisSikligi": 5, "ToplamUSD": 49179.00957785929, "Segment": "Yıldız Müşteri"}, {"CariKodu": "1429", "Unvan": "BIO PACKAGING SRL", "Ulke": "İTALYA", "SonAlis": "2026-02-02", "Recency_gun": 136, "AlisSikligi": 2, "ToplamUSD": 45967.2191981835, "Segment": "Sadık Müşteri"}, {"CariKodu": "1491", "Unvan": "STABILE S.P.A.", "Ulke": "İTALYA", "SonAlis": "2026-02-26", "Recency_gun": 112, "AlisSikligi": 3, "ToplamUSD": 45115.30223997842, "Segment": "Sadık Müşteri"}, {"CariKodu": "1496", "Unvan": "INTRADE SRL", "Ulke": "İTALYA", "SonAlis": "2026-01-29", "Recency_gun": 140, "AlisSikligi": 2, "ToplamUSD": 42518.628, "Segment": "Sadık Müşteri"}, {"CariKodu": "1634", "Unvan": "CAPMAN", "Ulke": "FAS", "SonAlis": "2026-04-24", "Recency_gun": 55, "AlisSikligi": 1, "ToplamUSD": 41352.25, "Segment": "Sadık Müşteri"}, {"CariKodu": "1573", "Unvan": "OLPACK LTD.", "Ulke": "POLONYA", "SonAlis": "2026-04-14", "Recency_gun": 65, "AlisSikligi": 2, "ToplamUSD": 38607.84, "Segment": "Sadık Müşteri"}, {"CariKodu": "1058", "Unvan": "SK PACKAGING BV (I & S)", "Ulke": "BELÇİKA", "SonAlis": "2024-12-16", "Recency_gun": 549, "AlisSikligi": 2, "ToplamUSD": 38106.288, "Segment": "Potansiyel"}, {"CariKodu": "386", "Unvan": "KONSUMATIV LTD", "Ulke": "BULGARİSTAN", "SonAlis": "2025-11-14", "Recency_gun": 216, "AlisSikligi": 2, "ToplamUSD": 35677.8, "Segment": "Potansiyel"}, {"CariKodu": "1082", "Unvan": "GOLD PACK", "Ulke": "GÜRCİSTAN", "SonAlis": "2024-12-12", "Recency_gun": 553, "AlisSikligi": 2, "ToplamUSD": 34825.35, "Segment": "Potansiyel"}, {"CariKodu": "876", "Unvan": "GOLF PLASTIC INDUSTRIAL CO.", "Ulke": "İSRAİL", "SonAlis": "2024-03-11", "Recency_gun": 829, "AlisSikligi": 1, "ToplamUSD": 32400.00000278704, "Segment": "Risk Altında"}, {"CariKodu": "1566", "Unvan": "DELICIOUS PACKAGING SARL", "Ulke": "FAS", "SonAlis": "2026-03-28", "Recency_gun": 82, "AlisSikligi": 2, "ToplamUSD": 31061.196536348547, "Segment": "Sadık Müşteri"}, {"CariKodu": "1428", "Unvan": "GENIAL ENVASES S.L.", "Ulke": "İSPANYA", "SonAlis": "2025-10-07", "Recency_gun": 254, "AlisSikligi": 2, "ToplamUSD": 27026.784000000003, "Segment": "Potansiyel"}, {"CariKodu": "1481", "Unvan": "NEPLAST D.O.O.", "Ulke": "SLOVENYA", "SonAlis": "2025-11-21", "Recency_gun": 209, "AlisSikligi": 2, "ToplamUSD": 26651.419200156823, "Segment": "Potansiyel"}, {"CariKodu": "965", "Unvan": "TEMIZ GMBH", "Ulke": "ALMANYA", "SonAlis": "2025-10-06", "Recency_gun": 255, "AlisSikligi": 3, "ToplamUSD": 22233.42, "Segment": "Sadık Müşteri"}, {"CariKodu": "1055", "Unvan": "GMZ GASTRO GMBH", "Ulke": "AVUSTURYA", "SonAlis": "2026-04-24", "Recency_gun": 55, "AlisSikligi": 5, "ToplamUSD": 19999.44, "Segment": "Sadık Müşteri"}, {"CariKodu": "1519", "Unvan": "MODUL PRODUCTION DOO", "Ulke": "BOSNA HERSEK", "SonAlis": "2026-04-01", "Recency_gun": 78, "AlisSikligi": 2, "ToplamUSD": 19440.0, "Segment": "Sadık Müşteri"}, {"CariKodu": "1420", "Unvan": "SELECQTIAL SARL", "Ulke": "FAS", "SonAlis": "2025-07-14", "Recency_gun": 339, "AlisSikligi": 1, "ToplamUSD": 18419.76, "Segment": "Potansiyel"}, {"CariKodu": "1568", "Unvan": "GLOBAL PLAST SRL", "Ulke": "ROMANYA", "SonAlis": "2026-01-22", "Recency_gun": 147, "AlisSikligi": 1, "ToplamUSD": 17012.268, "Segment": "Potansiyel"}, {"CariKodu": "1007", "Unvan": "T & S TRADING", "Ulke": "BULGARİSTAN", "SonAlis": "2024-05-13", "Recency_gun": 766, "AlisSikligi": 1, "ToplamUSD": 15364.49039993067, "Segment": "Risk Altında"}, {"CariKodu": "1134", "Unvan": "MODUL DOO", "Ulke": "BOSNA HERSEK", "SonAlis": "2025-10-01", "Recency_gun": 260, "AlisSikligi": 2, "ToplamUSD": 14590.8, "Segment": "Potansiyel"}, {"CariKodu": "1133", "Unvan": "AARE GASTRO SERVICE GMBH", "Ulke": "İSVİÇRE", "SonAlis": "2024-10-05", "Recency_gun": 621, "AlisSikligi": 1, "ToplamUSD": 12788.28, "Segment": "Risk Altında"}, {"CariKodu": "944", "Unvan": "KEBAB D'OR 18", "Ulke": "FRANSA", "SonAlis": "2024-03-29", "Recency_gun": 811, "AlisSikligi": 1, "ToplamUSD": 8399.7, "Segment": "Risk Altında"}, {"CariKodu": "725", "Unvan": "MB IMPEKS DOO", "Ulke": "BOSNA HERSEK", "SonAlis": "2024-11-05", "Recency_gun": 590, "AlisSikligi": 2, "ToplamUSD": 8288.6976, "Segment": "Risk Altında"}, {"CariKodu": "48", "Unvan": "PLASTİC SOFİA LDT.", "Ulke": "BULGARİSTAN", "SonAlis": "2024-06-26", "Recency_gun": 722, "AlisSikligi": 1, "ToplamUSD": 8274.960000000001, "Segment": "Risk Altında"}, {"CariKodu": "1102", "Unvan": "LUNCH GROUP LTD", "Ulke": "GÜRCİSTAN", "SonAlis": "2025-07-02", "Recency_gun": 351, "AlisSikligi": 2, "ToplamUSD": 7800.0, "Segment": "Risk Altında"}, {"CariKodu": "1344", "Unvan": "DIMEX S.A.", "Ulke": "YUNANİSTAN", "SonAlis": "2025-05-09", "Recency_gun": 405, "AlisSikligi": 1, "ToplamUSD": 7192.8, "Segment": "Risk Altında"}, {"CariKodu": "1529", "Unvan": "SC ECOLASER LTD", "Ulke": "MOLDAVYA", "SonAlis": "2026-01-16", "Recency_gun": 153, "AlisSikligi": 1, "ToplamUSD": 6712.632, "Segment": "Risk Altında"}, {"CariKodu": "1426", "Unvan": "CARTERIA SRL", "Ulke": "İTALYA", "SonAlis": "2025-09-08", "Recency_gun": 283, "AlisSikligi": 1, "ToplamUSD": 6366.6, "Segment": "Risk Altında"}, {"CariKodu": "1167", "Unvan": "EFFI GASTRO GMBH", "Ulke": "İSVİÇRE", "SonAlis": "2024-10-05", "Recency_gun": 621, "AlisSikligi": 1, "ToplamUSD": 5356.8, "Segment": "Risk Altında"}, {"CariKodu": "1294", "Unvan": "BIGPACK WOP", "Ulke": "ALMANYA", "SonAlis": "2025-02-27", "Recency_gun": 476, "AlisSikligi": 1, "ToplamUSD": 4955.472000000001, "Segment": "Risk Altında"}, {"CariKodu": "1063", "Unvan": "FARLA BELGIUM", "Ulke": "BELÇİKA", "SonAlis": "2024-09-13", "Recency_gun": 643, "AlisSikligi": 2, "ToplamUSD": 4920.4800000000005, "Segment": "Risk Altında"}, {"CariKodu": "1499", "Unvan": "BITE-EM LLC", "Ulke": "UKRAYNA", "SonAlis": "2025-12-09", "Recency_gun": 191, "AlisSikligi": 1, "ToplamUSD": 3000.0, "Segment": "Risk Altında"}, {"CariKodu": "1597", "Unvan": "KREZ ALLIANCE EOOD", "Ulke": "BULGARİSTAN", "SonAlis": "2026-04-30", "Recency_gun": 49, "AlisSikligi": 1, "ToplamUSD": 2418.336, "Segment": "Potansiyel"}, {"CariKodu": "160", "Unvan": "VEGANLAND GOSTRONOMİE GMBH", "Ulke": "ALMANYA", "SonAlis": "2024-05-24", "Recency_gun": 755, "AlisSikligi": 1, "ToplamUSD": 2297.7, "Segment": "Risk Altında"}, {"CariKodu": "1572", "Unvan": "RLR GRAFIK SRL", "Ulke": "ROMANYA", "SonAlis": "2026-01-27", "Recency_gun": 142, "AlisSikligi": 1, "ToplamUSD": 1430.784, "Segment": "Potansiyel"}, {"CariKodu": "1563", "Unvan": "STE ETS JAMELDDINE MAAZOUN - EJEM", "Ulke": "TUNUS", "SonAlis": "2026-01-23", "Recency_gun": 146, "AlisSikligi": 1, "ToplamUSD": 499.2, "Segment": "Potansiyel"}], "cs_matrix": [{"CariKodu": "165", "Unvan": "HEMİ PAPİR MAKEDONYA", "Ulke": "MAKEDONYA", "AldigiKat": 7, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 1, "Çok Kullanımlı": 0}, {"CariKodu": "1219", "Unvan": "FERPROM DOO", "Ulke": "MAKEDONYA", "AldigiKat": 7, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 1, "Çok Kullanımlı": 0}, {"CariKodu": "563", "Unvan": "LB GROUP SH P.K.", "Ulke": "KOSOVA", "AldigiKat": 6, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "763", "Unvan": "GOLD GRUP BARONA EOOD", "Ulke": "BULGARİSTAN", "AldigiKat": 6, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "799", "Unvan": "PROXY MARKET", "Ulke": "FAS", "AldigiKat": 6, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "836", "Unvan": "MULTI PACK INTERNATIONAL", "Ulke": "FAS", "AldigiKat": 6, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1009", "Unvan": "KOMSELL SH.P.K.", "Ulke": "ARNAVUTLUK", "AldigiKat": 6, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1276", "Unvan": "NAVIPACK LLC", "Ulke": "UKRAYNA", "AldigiKat": 6, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1357", "Unvan": "MARTINI & K SHPK", "Ulke": "ARNAVUTLUK", "AldigiKat": 6, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1563", "Unvan": "STE ETS JAMELDDINE MAAZOUN - EJEM", "Ulke": "TUNUS", "AldigiKat": 6, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "386", "Unvan": "KONSUMATIV LTD", "Ulke": "BULGARİSTAN", "AldigiKat": 5, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "686", "Unvan": "MOTOSPEED D.O.O.", "Ulke": "SERBIA", "AldigiKat": 5, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1082", "Unvan": "GOLD PACK", "Ulke": "GÜRCİSTAN", "AldigiKat": 5, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1422", "Unvan": "ATTASE GASTRO KFT.", "Ulke": "MACARİSTAN", "AldigiKat": 5, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "202", "Unvan": "OPAKOVKA BG LTD.", "Ulke": "BULGARİSTAN", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "564", "Unvan": "QUALITY PACK SRL", "Ulke": "ROMANYA", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "943", "Unvan": "FAKTOR D.O.O.", "Ulke": "SERBIA", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "965", "Unvan": "TEMIZ GMBH", "Ulke": "ALMANYA", "AldigiKat": 4, "Çatal": 0, "Kaşık": 1, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1007", "Unvan": "T & S TRADING", "Ulke": "BULGARİSTAN", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1055", "Unvan": "GMZ GASTRO GMBH", "Ulke": "AVUSTURYA", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1059", "Unvan": "GASZTROFUTÁR KFT.", "Ulke": "MACARİSTAN", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1126", "Unvan": "BRANN HANDELS GMBH", "Ulke": "ALMANYA", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1134", "Unvan": "MODUL DOO", "Ulke": "BOSNA HERSEK", "AldigiKat": 4, "Çatal": 1, "Kaşık": 0, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 1, "Çok Kullanımlı": 0}, {"CariKodu": "1197", "Unvan": "MARCHICA EMBALLAGES", "Ulke": "FAS", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1300", "Unvan": "URGAN GROUP DOO", "Ulke": "BOSNA HERSEK", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1314", "Unvan": "EDA PACK", "Ulke": "FRANSA", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1428", "Unvan": "GENIAL ENVASES S.L.", "Ulke": "İSPANYA", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1471", "Unvan": "ERBE MARKETING SRL", "Ulke": "ROMANYA", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 1, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1474", "Unvan": "ARNES SP. Z O.O.", "Ulke": "POLONYA", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1520", "Unvan": "LOOKFORT UKRAINE", "Ulke": "UKRAYNA", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1634", "Unvan": "CAPMAN", "Ulke": "FAS", "AldigiKat": 4, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "725", "Unvan": "MB IMPEKS DOO", "Ulke": "BOSNA HERSEK", "AldigiKat": 3, "Çatal": 0, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1063", "Unvan": "FARLA BELGIUM", "Ulke": "BELÇİKA", "AldigiKat": 3, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1133", "Unvan": "AARE GASTRO SERVICE GMBH", "Ulke": "İSVİÇRE", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1141", "Unvan": "EURO PACK LTD", "Ulke": "GÜRCİSTAN", "AldigiKat": 3, "Çatal": 1, "Kaşık": 0, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1234", "Unvan": "APL GROUP SHPK", "Ulke": "ARNAVUTLUK", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1249", "Unvan": "PACK CENTER IKE", "Ulke": "YUNANİSTAN", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1264", "Unvan": "BB CATERING SUPPLIES", "Ulke": "İNGİLTERE", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1279", "Unvan": "BALKAN TRADE SH.P.K.", "Ulke": "KOSOVA", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1384", "Unvan": "EKSPERT POŁUDNIE SP. Z O.O", "Ulke": "POLONYA", "AldigiKat": 3, "Çatal": 0, "Kaşık": 1, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1420", "Unvan": "SELECQTIAL SARL", "Ulke": "FAS", "AldigiKat": 3, "Çatal": 1, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1429", "Unvan": "BIO PACKAGING SRL", "Ulke": "İTALYA", "AldigiKat": 3, "Çatal": 1, "Kaşık": 0, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1481", "Unvan": "NEPLAST D.O.O.", "Ulke": "SLOVENYA", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1491", "Unvan": "STABILE S.P.A.", "Ulke": "İTALYA", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1496", "Unvan": "INTRADE SRL", "Ulke": "İTALYA", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1519", "Unvan": "MODUL PRODUCTION DOO", "Ulke": "BOSNA HERSEK", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1573", "Unvan": "OLPACK LTD.", "Ulke": "POLONYA", "AldigiKat": 3, "Çatal": 1, "Kaşık": 1, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "597", "Unvan": "ESTETİK PACKİNG SRL", "Ulke": "ROMANYA", "AldigiKat": 2, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "768", "Unvan": "AL BASSAM FOR PLASTIC ESTABLISHMENT", "Ulke": "ÜRDÜN", "AldigiKat": 2, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "875", "Unvan": "DISTRIPACK SARL", "Ulke": "FAS", "AldigiKat": 2, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "876", "Unvan": "GOLF PLASTIC INDUSTRIAL CO.", "Ulke": "İSRAİL", "AldigiKat": 2, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1294", "Unvan": "BIGPACK WOP", "Ulke": "ALMANYA", "AldigiKat": 2, "Çatal": 1, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1344", "Unvan": "DIMEX S.A.", "Ulke": "YUNANİSTAN", "AldigiKat": 2, "Çatal": 1, "Kaşık": 1, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1529", "Unvan": "SC ECOLASER LTD", "Ulke": "MOLDAVYA", "AldigiKat": 2, "Çatal": 1, "Kaşık": 0, "Bıçak": 1, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "48", "Unvan": "PLASTİC SOFİA LDT.", "Ulke": "BULGARİSTAN", "AldigiKat": 1, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "160", "Unvan": "VEGANLAND GOSTRONOMİE GMBH", "Ulke": "ALMANYA", "AldigiKat": 1, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "944", "Unvan": "KEBAB D'OR 18", "Ulke": "FRANSA", "AldigiKat": 1, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1102", "Unvan": "LUNCH GROUP LTD", "Ulke": "GÜRCİSTAN", "AldigiKat": 1, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 1, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1167", "Unvan": "EFFI GASTRO GMBH", "Ulke": "İSVİÇRE", "AldigiKat": 1, "Çatal": 1, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1499", "Unvan": "BITE-EM LLC", "Ulke": "UKRAYNA", "AldigiKat": 1, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1566", "Unvan": "DELICIOUS PACKAGING SARL", "Ulke": "FAS", "AldigiKat": 1, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 1, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1597", "Unvan": "KREZ ALLIANCE EOOD", "Ulke": "BULGARİSTAN", "AldigiKat": 1, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 1, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1058", "Unvan": "SK PACKAGING BV (I & S)", "Ulke": "BELÇİKA", "AldigiKat": 0, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1426", "Unvan": "CARTERIA SRL", "Ulke": "İTALYA", "AldigiKat": 0, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1568", "Unvan": "GLOBAL PLAST SRL", "Ulke": "ROMANYA", "AldigiKat": 0, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}, {"CariKodu": "1572", "Unvan": "RLR GRAFIK SRL", "Ulke": "ROMANYA", "AldigiKat": 0, "Çatal": 0, "Kaşık": 0, "Bıçak": 0, "Bardak": 0, "Kap/Kapak": 0, "Tabak/Kase": 0, "Aksesuar": 0, "Çok Kullanımlı": 0}], "kpi": {"toplam": 5862924, "ulke_sayisi": 26, "musteri_sayisi": 66, "yildiz": 23, "risk": 15, "usd_2024": 1659648, "usd_2025": 2604128, "usd_2026": 1599148}};
+const KATS = ['Çatal','Kaşık','Bıçak','Bardak','Kap/Kapak','Tabak/Kase','Aksesuar','Çok Kullanımlı'];
+const USD = v => '$'+Math.round(v).toLocaleString('tr-TR');
+const SEGCLS = {'Yıldız Müşteri':'by','Sadık Müşteri':'bs','Potansiyel':'bp','Risk Altında':'br','Kayıp Müşteri':'bk'};
+const SEGBADGE = s => `<span class="badge ${SEGCLS[s]||''}">${s||''}</span>`;
 
-// ── NAV ─────────────────────────────────────────────────────────────────────
-let mapInited = false;
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  event.target.classList.add('active');
-  if (id === 'harita' && !mapInited) { initMap(); mapInited = true; }
+// NAV
+let mapDone=false;
+function go(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  el.classList.add('on');
+  if(id==='harita'&&!mapDone){initMap();mapDone=true;}
 }
 
-// ── FORMATTERS ──────────────────────────────────────────────────────────────
-const usd = v => '$' + Math.round(v).toLocaleString('tr-TR');
-const pct = v => (v > 0 ? '+' : '') + (isNaN(v) ? 'Yeni' : v.toFixed(1) + '%');
-const segBadge = s => {
-  const m = {'Yıldız Müşteri':'b-yildiz','Sadık Müşteri':'b-sadik',
-             'Potansiyel':'b-poten','Risk Altında':'b-risk','Kayıp Müşteri':'b-kayip'};
-  return `<span class="badge ${m[s]||''}">${s}</span>`;
-};
-
-// ── KPI CARDS ────────────────────────────────────────────────────────────────
-(function() {
-  const k = RAW.kpi;
-  const büyüme = ((k.usd_2025 - k.usd_2024) / k.usd_2024 * 100).toFixed(1);
-  const cards = [
-    { label: '3 Yıl Toplam', val: usd(k.toplam), sub: '2024–2026', cls: '' },
-    { label: '2024 Ciro',    val: usd(k.usd_2024), sub: 'Baz yıl', cls: '' },
-    { label: '2025 Ciro',    val: usd(k.usd_2025), sub: `${büyüme > 0 ? '▲' : '▼'} ${büyüme}% büyüme`, cls: 'green' },
-    { label: '2026 YTD',     val: usd(k.usd_2026), sub: 'Ocak–Haziran', cls: '' },
-    { label: 'Aktif Ülke',   val: k.ulke_sayisi,    sub: 'pazar', cls: '' },
-    { label: 'Müşteri',      val: k.musteri_sayisi,  sub: 'aktif müşteri', cls: '' },
-    { label: 'Yıldız',       val: k.yildiz,          sub: 'müşteri', cls: 'green' },
-    { label: 'Risk/Kayıp',   val: k.risk,            sub: 'takip gerekli', cls: 'red' },
+// KPI
+(()=>{
+  const k=D.kpi, g=((k.usd_2025-k.usd_2024)/k.usd_2024*100).toFixed(1);
+  const cards=[
+    {l:'3 Yıl Toplam',v:USD(k.toplam),s:'2024–2026',c:''},
+    {l:'2024 Ciro',v:USD(k.usd_2024),s:'baz yıl',c:''},
+    {l:'2025 Ciro',v:USD(k.usd_2025),s:(g>0?'▲':'▼')+g+'% büyüme',c:'g'},
+    {l:'2026 YTD',v:USD(k.usd_2026),s:'Oca–Haz',c:''},
+    {l:'Aktif Ülke',v:k.ulke_sayisi,s:'pazar',c:''},
+    {l:'Müşteri',v:k.musteri_sayisi,s:'aktif',c:''},
+    {l:'Yıldız Müşteri',v:k.yildiz,s:'segment',c:'g'},
+    {l:'Risk / Kayıp',v:k.risk,s:'takip gerekli',c:'r'},
   ];
-  document.getElementById('kpi-container').innerHTML = cards.map(c =>
-    `<div class="kpi ${c.cls}"><label>${c.label}</label><div class="val">${c.val}</div><div class="sub">${c.sub}</div></div>`
+  document.getElementById('kpis').innerHTML=cards.map(c=>
+    `<div class="kpi ${c.c}"><label>${c.l}</label><div class="v">${c.v}</div><div class="s">${c.s}</div></div>`
   ).join('');
 })();
 
-// ── TREND CHART ──────────────────────────────────────────────────────────────
-(function() {
-  const trend = RAW.trend;
-  const labels = trend.map(t => `${t.Yil}-${String(t.Ay).padStart(2,'0')}`);
-  const vals   = trend.map(t => Math.round(t.USD_Tutar));
-  new Chart(document.getElementById('trendChart'), {
-    type: 'line',
-    data: { labels, datasets: [{ label: 'USD Ciro', data: vals,
-      borderColor: '#2E6DA4', backgroundColor: 'rgba(46,109,164,.1)',
-      fill: true, tension: 0.4, pointRadius: 3, pointHoverRadius: 6 }] },
-    options: { responsive: true, plugins: { legend: { display: false } },
-      scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
-  });
-})();
-
-// ── KATEGORİ CHART ───────────────────────────────────────────────────────────
-(function() {
-  const k = RAW.kategori;
-  new Chart(document.getElementById('katChart'), {
-    type: 'doughnut',
-    data: { labels: k.map(x => x.Kategori),
-            datasets: [{ data: k.map(x => Math.round(x.USD_Tutar)),
-              backgroundColor: ['#2E6DA4','#27AE60','#E74C3C','#F39C12','#8E44AD','#1ABC9C','#E67E22','#34495E'] }] },
-    options: { responsive: true, plugins: { legend: { position: 'right', labels: { font: { size: 11 } } } } }
-  });
-})();
-
-// ── ÜLKE BAR CHART ───────────────────────────────────────────────────────────
-(function() {
-  const top10 = [...RAW.ulke].sort((a,b) => b.toplam - a.toplam).slice(0,10);
-  new Chart(document.getElementById('ulkeChart'), {
-    type: 'bar',
-    data: { labels: top10.map(x => x.Ulke),
-            datasets: [
-              { label: '2024', data: top10.map(x => Math.round(x.usd_2024)), backgroundColor: '#D6E4F7' },
-              { label: '2025', data: top10.map(x => Math.round(x.usd_2025)), backgroundColor: '#2E6DA4' },
-              { label: '2026', data: top10.map(x => Math.round(x.usd_2026)), backgroundColor: '#27AE60' },
-            ]},
-    options: { responsive: true,
-      scales: { x: { stacked: false }, y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
-  });
-})();
-
-// ── RFM CHART ────────────────────────────────────────────────────────────────
-(function() {
-  const r = RAW.rfm;
-  const colors = {'Yıldız Müşteri':'#27AE60','Sadık Müşteri':'#2E6DA4','Potansiyel':'#F39C12','Risk Altında':'#E67E22','Kayıp Müşteri':'#E74C3C'};
-  new Chart(document.getElementById('rfmChart'), {
-    type: 'bar',
-    data: { labels: r.map(x => x.Segment),
-            datasets: [{ label: 'Müşteri Sayısı', data: r.map(x => x.sayi),
-              backgroundColor: r.map(x => colors[x.Segment] || '#999') }] },
-    options: { indexAxis: 'y', responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { x: { ticks: { stepSize: 1 } } } }
-  });
-})();
-
-// ── HARİTA ───────────────────────────────────────────────────────────────────
-function initMap() {
-  const map = L.map('map').setView([42, 20], 3);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
-
-  const maxVal = Math.max(...RAW.ulke.map(u => u.toplam));
-  RAW.ulke.forEach(u => {
-    if (!u.lat || !u.lon) return;
-    const r = 8 + (u.toplam / maxVal) * 42;
-    const büyümeText = isNaN(u.buyume) ? 'Yeni Pazar' : (u.buyume > 0 ? `▲ ${u.buyume}%` : `▼ ${u.buyume}%`);
-    const color = u.buyume > 20 ? '#27AE60' : u.buyume < -20 ? '#E74C3C' : '#2E6DA4';
-    L.circleMarker([u.lat, u.lon], {
-      radius: r, fillColor: color, color: 'white',
-      weight: 2, opacity: 1, fillOpacity: 0.8
-    }).addTo(map).bindPopup(`
-      <b style="font-size:14px">${u.Ulke}</b><br>
-      <hr style="margin:4px 0">
-      <b>Toplam:</b> ${usd(u.toplam)}<br>
-      <b>2024:</b> ${usd(u.usd_2024)}<br>
-      <b>2025:</b> ${usd(u.usd_2025)}<br>
-      <b>2026 YTD:</b> ${usd(u.usd_2026)}<br>
-      <b>24→25 Büyüme:</b> ${büyümeText}<br>
-      <b>Müşteri:</b> ${u.musteri}
-    `);
-  });
-}
-
-// ── ÜLKE YIL CHART (harita sayfası) ─────────────────────────────────────────
-(function() {
-  const sorted = [...RAW.ulke].sort((a,b) => b.toplam - a.toplam);
-  new Chart(document.getElementById('ulkeYilChart'), {
-    type: 'bar',
-    data: { labels: sorted.map(x => x.Ulke),
-            datasets: [
-              { label: '2024', data: sorted.map(x => Math.round(x.usd_2024)), backgroundColor: '#D6E4F7' },
-              { label: '2025', data: sorted.map(x => Math.round(x.usd_2025)), backgroundColor: '#2E6DA4' },
-              { label: '2026', data: sorted.map(x => Math.round(x.usd_2026)), backgroundColor: '#27AE60' },
-            ]},
-    options: { responsive: true,
-      scales: { y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
-  });
-})();
-
-// ── MÜŞTERİ TABLOSU ──────────────────────────────────────────────────────────
-let musteriData = RAW.musteri_listesi;
-(function() {
-  const sel = document.getElementById('ulkeFilter');
-  const ulkeler = [...new Set(musteriData.map(m => m.Ulke))].sort();
-  ulkeler.forEach(u => { const o = document.createElement('option'); o.value = u; o.text = u; sel.add(o); });
-})();
-
-function filterMusteri() {
-  const q = document.getElementById('musteriSearch').value.toLowerCase();
-  const seg = document.getElementById('segFilter').value;
-  const ulke = document.getElementById('ulkeFilter').value;
-  const filtered = musteriData.filter(m =>
-    (!q || m.Unvan.toLowerCase().includes(q)) &&
-    (!seg || m.Segment === seg) &&
-    (!ulke || m.Ulke === ulke)
-  );
-  renderMusteri(filtered);
-}
-
-function renderMusteri(data) {
-  const maxUSD = Math.max(...musteriData.map(m => m.ToplamUSD));
-  document.getElementById('musteriBody').innerHTML = data.map(m => `
-    <tr>
-      <td><b>${m.Unvan}</b></td>
-      <td>${m.Ulke}</td>
-      <td>${String(m.SonAlis).substring(0,10)}</td>
-      <td style="color:${m.Recency_gun > 365 ? '#E74C3C' : m.Recency_gun > 180 ? '#E67E22' : '#27AE60'}">
-        ${Math.round(m.Recency_gun)} gün
-      </td>
-      <td>${m.AlisSikligi}</td>
-      <td>
-        ${usd(m.ToplamUSD)}
-        <div class="bar-spark"><div class="bar-spark-fill" style="width:${(m.ToplamUSD/maxUSD*100).toFixed(1)}%"></div></div>
-      </td>
-      <td>${segBadge(m.Segment)}</td>
-    </tr>
-  `).join('');
-}
-renderMusteri(musteriData);
-
-// ── ÜRÜN TABLOSU ─────────────────────────────────────────────────────────────
-const allUrun = RAW.top_urun;
-const totalUSD = allUrun.reduce((s,u) => s + u.USD_Tutar, 0);
-
-new Chart(document.getElementById('urunChart'), {
-  type: 'bar',
-  data: { labels: allUrun.map(u => u.UrunAdi.substring(0,35)),
-          datasets: [{ label: 'USD', data: allUrun.map(u => Math.round(u.USD_Tutar)),
-            backgroundColor: '#2E6DA4' }] },
-  options: { indexAxis: 'y', responsive: true,
-    plugins: { legend: { display: false } },
-    scales: { x: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
+// TREND
+new Chart(document.getElementById('cTrend'),{type:'line',
+  data:{labels:D.trend.map(t=>t.label),
+        datasets:[{label:'USD',data:D.trend.map(t=>Math.round(t.USD_Tutar)),
+          borderColor:'#2E6DA4',backgroundColor:'rgba(46,109,164,.1)',fill:true,tension:.4,pointRadius:2}]},
+  options:{responsive:true,plugins:{legend:{display:false}},
+    scales:{y:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}
 });
 
-function filterUrun() {
-  const q = document.getElementById('urunSearch').value.toLowerCase();
-  const filtered = allUrun.filter(u => u.UrunAdi.toLowerCase().includes(q));
-  renderUrun(filtered);
-}
+// KATEGORİ
+new Chart(document.getElementById('cKat'),{type:'doughnut',
+  data:{labels:D.kategori.map(x=>x.Kategori),
+        datasets:[{data:D.kategori.map(x=>Math.round(x.USD_Tutar)),
+          backgroundColor:['#2E6DA4','#27AE60','#E74C3C','#F39C12','#8E44AD','#1ABC9C','#E67E22','#34495E']}]},
+  options:{responsive:true,plugins:{legend:{position:'right',labels:{font:{size:10}}}}}
+});
 
-function renderUrun(data) {
-  document.getElementById('urunBody').innerHTML = data.map((u, i) => `
-    <tr>
-      <td>${i+1}</td>
-      <td>${u.UrunAdi}</td>
-      <td>${usd(u.USD_Tutar)}</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="bar-spark" style="width:80px"><div class="bar-spark-fill" style="width:${(u.USD_Tutar/totalUSD*100*5).toFixed(1)}%"></div></div>
-          ${(u.USD_Tutar/totalUSD*100).toFixed(1)}%
-        </div>
-      </td>
-    </tr>
-  `).join('');
-}
-renderUrun(allUrun);
-
-// ── CROSS-SELL ────────────────────────────────────────────────────────────────
-(function() {
-  // Kategorileri bul
-  const kats = ['Çatal','Kaşık','Bıçak','Bardak','Kap/Kapak','Tabak/Kase','Aksesuar','Çok Kullanımlı'];
-
-  // cross-sell verisini ham veriden oluştur
-  const musteriKat = {};
-  // RAW.musteri_listesi üzerinden segment bilgisi
-  const segMap = {};
-  RAW.musteri_listesi.forEach(m => { segMap[m.CariKodu] = { seg: m.Segment, usd: m.ToplamUSD, ulke: m.Ulke, ad: m.Unvan }; });
-
-  // cross-sell için ayrı yüklü veri yok, Excel'den rebuild edemeyiz
-  // Ancak musteri_listesi'nde yeterli veri var. Basit olarak görsel gösterelim
-  const head = document.getElementById('csHead');
-  const body = document.getElementById('csBody');
-
-  head.innerHTML = `<tr>
-    <th>Müşteri</th><th>Ülke</th>
-    ${kats.map(k => `<th style="font-size:11px;writing-mode:vertical-lr;transform:rotate(180deg);padding:14px 6px">${k}</th>`).join('')}
-    <th>Segment</th><th>Toplam USD</th>
-  </tr>`;
-
-  // Rebuild cross-sell from kat_matrix embedded in page
-  window._csData = [];
+// ÜLKE BAR
+(()=>{
+  const top=([...D.ulke].sort((a,b)=>b.toplam-a.toplam).slice(0,10));
+  new Chart(document.getElementById('cUlke'),{type:'bar',
+    data:{labels:top.map(x=>x.Ulke),
+          datasets:[
+            {label:'2024',data:top.map(x=>Math.round(x.usd_2024)),backgroundColor:'#D6E4F7'},
+            {label:'2025',data:top.map(x=>Math.round(x.usd_2025)),backgroundColor:'#2E6DA4'},
+            {label:'2026',data:top.map(x=>Math.round(x.usd_2026)),backgroundColor:'#27AE60'},
+          ]},
+    options:{responsive:true,scales:{y:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}
+  });
 })();
 
+// RFM BAR
+(()=>{
+  const cols={'Yıldız Müşteri':'#27AE60','Sadık Müşteri':'#2E6DA4','Potansiyel':'#F39C12','Risk Altında':'#E67E22','Kayıp Müşteri':'#E74C3C'};
+  new Chart(document.getElementById('cRfm'),{type:'bar',
+    data:{labels:D.rfm.map(x=>x.Segment),
+          datasets:[{label:'Müşteri',data:D.rfm.map(x=>x.sayi),backgroundColor:D.rfm.map(x=>cols[x.Segment]||'#999')}]},
+    options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}}}
+  });
+})();
+
+// HARİTA
+function initMap(){
+  const map=L.map('map').setView([42,20],3);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
+  const mx=Math.max(...D.ulke.map(u=>u.toplam));
+  D.ulke.forEach(u=>{
+    if(!u.lat||!u.lon)return;
+    const r=8+(u.toplam/mx)*42;
+    const bTxt=u.buyume===999?'Yeni Pazar':(u.buyume>0?`▲ ${u.buyume}%`:`▼ ${u.buyume}%`);
+    const col=u.buyume>20?'#27AE60':u.buyume<-20&&u.buyume!==999?'#E74C3C':'#2E6DA4';
+    L.circleMarker([u.lat,u.lon],{radius:r,fillColor:col,color:'#fff',weight:2,opacity:1,fillOpacity:.8})
+      .addTo(map).bindPopup(`<b style="font-size:13px">${u.Ulke}</b><hr style="margin:4px 0">
+        <b>Toplam:</b> ${USD(u.toplam)}<br><b>2024:</b> ${USD(u.usd_2024)}<br>
+        <b>2025:</b> ${USD(u.usd_2025)}<br><b>2026 YTD:</b> ${USD(u.usd_2026)}<br>
+        <b>24→25:</b> ${bTxt}<br><b>Müşteri:</b> ${u.musteri}`);
+  });
+}
+
+// ÜLKE YIL CHART
+(()=>{
+  const s=[...D.ulke].sort((a,b)=>b.toplam-a.toplam);
+  new Chart(document.getElementById('cUlkeYil'),{type:'bar',
+    data:{labels:s.map(x=>x.Ulke),
+          datasets:[
+            {label:'2024',data:s.map(x=>Math.round(x.usd_2024)),backgroundColor:'#D6E4F7'},
+            {label:'2025',data:s.map(x=>Math.round(x.usd_2025)),backgroundColor:'#2E6DA4'},
+            {label:'2026',data:s.map(x=>Math.round(x.usd_2026)),backgroundColor:'#27AE60'},
+          ]},
+    options:{responsive:true,scales:{y:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}
+  });
+})();
+
+// MÜŞTERİ TABLOSU
+(()=>{
+  const sel=document.getElementById('mUlke');
+  [...new Set(D.musteri_listesi.map(m=>m.Ulke))].sort().forEach(u=>{
+    const o=document.createElement('option');o.value=u;o.text=u;sel.add(o);
+  });
+  const mx=Math.max(...D.musteri_listesi.map(m=>m.ToplamUSD));
+  window.renderM=function(){
+    const q=document.getElementById('mSrch').value.toLowerCase();
+    const seg=document.getElementById('mSeg').value;
+    const ulke=document.getElementById('mUlke').value;
+    const rows=D.musteri_listesi.filter(m=>
+      (!q||m.Unvan.toLowerCase().includes(q))&&(!seg||m.Segment===seg)&&(!ulke||m.Ulke===ulke));
+    document.getElementById('mBody').innerHTML=rows.map(m=>`<tr>
+      <td><b>${m.Unvan}</b></td><td>${m.Ulke}</td>
+      <td>${String(m.SonAlis).substring(0,10)}</td>
+      <td style="color:${m.Recency_gun>365?'#E74C3C':m.Recency_gun>180?'#E67E22':'#27AE60'}">${Math.round(m.Recency_gun)} gün</td>
+      <td style="text-align:center">${m.AlisSikligi}</td>
+      <td>${USD(m.ToplamUSD)}<div class="spark"><div class="sparkf" style="width:${(m.ToplamUSD/mx*100).toFixed(1)}%"></div></div></td>
+      <td>${SEGBADGE(m.Segment)}</td>
+    </tr>`).join('');
+  };
+  window.renderM();
+})();
+
+// ÜRÜN
+(()=>{
+  const tot=D.top_urun.reduce((s,u)=>s+u.USD_Tutar,0);
+  new Chart(document.getElementById('cUrun'),{type:'bar',
+    data:{labels:D.top_urun.map(u=>u.UrunAdi.substring(0,38)),
+          datasets:[{label:'USD',data:D.top_urun.map(u=>Math.round(u.USD_Tutar)),backgroundColor:'#2E6DA4'}]},
+    options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}
+  });
+  window.renderU=function(){
+    const q=document.getElementById('uSrch').value.toLowerCase();
+    const rows=D.top_urun.filter(u=>u.UrunAdi.toLowerCase().includes(q));
+    document.getElementById('uBody').innerHTML=rows.map((u,i)=>`<tr>
+      <td>${i+1}</td><td>${u.UrunAdi}</td><td>${USD(u.USD_Tutar)}</td>
+      <td><div style="display:flex;align-items:center;gap:6px">
+        <div class="spark" style="width:70px"><div class="sparkf" style="width:${Math.min(u.USD_Tutar/tot*100*6,100).toFixed(0)}%"></div></div>
+        ${(u.USD_Tutar/tot*100).toFixed(1)}%
+      </div></td>
+    </tr>`).join('');
+  };
+  window.renderU();
+})();
+
+// CROSS-SELL
+(()=>{
+  const segMap={};
+  D.musteri_listesi.forEach(m=>{segMap[String(m.CariKodu)]=m;});
+  document.getElementById('csHead').innerHTML=`<tr>
+    <th>Müşteri</th><th>Ülke</th>
+    ${KATS.map(k=>`<th style="font-size:9px;writing-mode:vertical-lr;transform:rotate(180deg);padding:12px 5px">${k}</th>`).join('')}
+    <th>Aldığı</th><th>Segment</th><th>Toplam USD</th>
+  </tr>`;
+  window.renderCS=function(){
+    const q=document.getElementById('csSrch').value.toLowerCase();
+    const seg=document.getElementById('csSeg').value;
+    const rows=D.cs_matrix.filter(r=>{
+      const info=segMap[String(r.CariKodu)]||{};
+      return(!q||r.Unvan.toLowerCase().includes(q))&&(!seg||(info.Segment||'')===seg);
+    });
+    document.getElementById('csBody').innerHTML=rows.map(r=>{
+      const info=segMap[String(r.CariKodu)]||{};
+      return`<tr>
+        <td><b>${r.Unvan}</b></td><td>${r.Ulke}</td>
+        ${KATS.map(k=>`<td style="text-align:center"><span class="${r[k]?'csyes':'csno'}">${r[k]?'✓':'○'}</span></td>`).join('')}
+        <td style="text-align:center;font-weight:700;color:var(--mid)">${r.AldigiKat}</td>
+        <td>${SEGBADGE(info.Segment||'')}</td>
+        <td>${USD(info.ToplamUSD||0)}</td>
+      </tr>`;
+    }).join('');
+  };
+  window.renderCS();
+})();
+</script>
+</body>
+</html>
