@@ -490,10 +490,11 @@ const TX = {
   h2Map:     {en:'Customer Map',                tr:'Müşteri Haritası'},
   h2CustList:{en:'Customer List',               tr:'Müşteri Listesi'},
   h2Top15:   {en:'Top 15 Products',             tr:'Top 15 Ürün'},
-  kpi_total: {en:'3-Year Total',      tr:'3 Yıl Toplam'},
-  kpi_2024:  {en:'2024 Revenue',      tr:'2024 Ciro'},
-  kpi_2025:  {en:'2025 Revenue',      tr:'2025 Ciro'},
-  kpi_2026:  {en:'2026 YTD',          tr:'2026 YTD'},
+  kpi_total:  {en:'3-Year Total',      tr:'3 Yıl Toplam'},
+  kpi_12mo:   {en:'Last 12 Months',   tr:'Son 12 Ay'},
+  kpi_2026:   {en:'2026 YTD',         tr:'2026 YTD'},
+  kpi_2025:   {en:'2025 Revenue',     tr:'2025 Ciro'},
+  kpi_2024:   {en:'2024 Revenue',     tr:'2024 Ciro'},
   kpi_ulke:  {en:'Active Countries',  tr:'Aktif Ülke'},
   kpi_mst:   {en:'Customers',         tr:'Müşteri'},
   kpi_star:  {en:'Star Customers',    tr:'Yıldız Müşteri'},
@@ -569,16 +570,20 @@ function toggleLang(){
 function renderKPIs(){
   const k=D.kpi;
   const g=((k.usd_2025-k.usd_2024)/k.usd_2024*100).toFixed(1);
+  const g26=((k.usd_2026-k.usd_2025)/k.usd_2025*100).toFixed(1);
   const isEN=LANG==='en';
+  // last 12 months from trend data (Jul 2025 – Jun 2026)
+  const son12 = D.trend.filter(r=>(r.Yil===2025&&r.Ay>=7)||(r.Yil===2026&&r.Ay<=6)).reduce((s,r)=>s+r.USD_Tutar,0);
   const cards=[
-    {l:tx('kpi_total'), v:USD(k.toplam),      s:'2024–2026',                                      c:''},
-    {l:tx('kpi_2024'),  v:USD(k.usd_2024),    s:isEN?'base year':'baz yıl',                       c:''},
-    {l:tx('kpi_2025'),  v:USD(k.usd_2025),    s:(g>0?'▲':'▼')+Math.abs(g)+'% '+(isEN?'growth':'büyüme'), c:'g'},
-    {l:tx('kpi_2026'),  v:USD(k.usd_2026),    s:'Jan–Jun',                                        c:''},
-    {l:tx('kpi_ulke'),  v:k.ulke_sayisi,       s:isEN?'markets':'pazar',                           c:''},
-    {l:tx('kpi_mst'),   v:k.musteri_sayisi,    s:isEN?'active':'aktif',                            c:''},
-    {l:tx('kpi_star'),  v:k.yildiz,            s:'segment',                                        c:'g'},
-    {l:tx('kpi_risk'),  v:k.risk,              s:isEN?'needs follow-up':'takip gerekli',           c:'r'},
+    {l:tx('kpi_total'), v:USD(k.toplam),      s:'2024–2026',                                       c:''},
+    {l:tx('kpi_12mo'),  v:USD(son12),          s:'Jul 2025–Jun 2026',                               c:''},
+    {l:tx('kpi_2026'),  v:USD(k.usd_2026),    s:'Jan–Jun',                                         c:''},
+    {l:tx('kpi_2025'),  v:USD(k.usd_2025),    s:(g>0?'▲':'▼')+Math.abs(g)+'% '+(isEN?'vs 2024':'vs 2024'), c:'g'},
+    {l:tx('kpi_2024'),  v:USD(k.usd_2024),    s:isEN?'base year':'baz yıl',                        c:''},
+    {l:tx('kpi_ulke'),  v:k.ulke_sayisi,       s:isEN?'markets':'pazar',                            c:''},
+    {l:tx('kpi_mst'),   v:k.musteri_sayisi,    s:isEN?'active':'aktif',                             c:''},
+    {l:tx('kpi_star'),  v:k.yildiz,            s:'segment',                                         c:'g'},
+    {l:tx('kpi_risk'),  v:k.risk,              s:isEN?'needs follow-up':'takip gerekli',            c:'r'},
   ];
   document.getElementById('kpis').innerHTML=cards.map(c=>
     `<div class="kpi ${c.c}"><label>${c.l}</label><div class="v">${c.v}</div><div class="s">${c.s}</div></div>`
