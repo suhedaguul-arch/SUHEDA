@@ -180,7 +180,6 @@ const SEGCLS = {'Yıldız Müşteri':'by','Sadık Müşteri':'bs','Potansiyel':'
 const SEGBADGE = s => `<span class="badge ${SEGCLS[s]||''}">${s||''}</span>`;
 
 // NAV
-let mapDone=false;
 
 
 function go(id,el){
@@ -322,31 +321,9 @@ let uChart = null;
   window.renderCS();
 })();
 
-const TX = {
-  navTitle:      {en:'🌍 Export Customer Analysis', tr:'🌍 İhracat Müşteri Analizi'},
-  'tab-genel':   {en:'📊 Overview',    tr:'📊 Genel'},
-  'tab-harita':  {en:'🗺️ Map',         tr:'🗺️ Harita'},
-  'tab-musteri': {en:'👥 Customers',   tr:'👥 Müşteriler'},
-  'tab-urun':    {en:'📦 Products',    tr:'📦 Ürünler'},
-  'tab-cross':   {en:'🎯 Cross-Sell',  tr:'🎯 Cross-Sell'},
-  h2Top15:       {en:'🏆 Top 15 Products', tr:'🏆 Top 15 Ürün'},
-  thName:        {en:'Product Name',   tr:'Ürün Adı'},
-  thType:        {en:'Type',           tr:'Tip'},
-  thSeries:      {en:'Series',         tr:'Seri'},
-  thUSD:         {en:'Total USD',      tr:'Toplam USD'},
-  thPay:         {en:'Share %',        tr:'Pay %'},
-  thPrice:       {en:'Price / 1K pcs', tr:'Fiyat / 1K adet'},
-  thQty:         {en:'Total Qty',      tr:'Toplam Adet'},
-  uSrchPH:       {en:'🔍 Search product...', tr:'🔍 Ürün ara...'},
-  allTypes:      {en:'All Types',      tr:'Tüm Tipler'},
-  allSeries:     {en:'All Series',     tr:'Tüm Seriler'},
-};
-
 
 
 // ── PRODUCTS MODULE ──────────────────────────────────────
-let urunChartInst = null;
-let openRows = new Set();
 
 
 
