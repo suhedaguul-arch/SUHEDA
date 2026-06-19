@@ -56,9 +56,7 @@ tr:nth-child(even) td{background:#fafbfd}
     <button class="ntab on" id="tab-genel" onclick="go('genel',this)"></button>
     <button class="ntab" id="tab-harita" onclick="go('harita',this)"></button>
     <button class="ntab" id="tab-musteri" onclick="go('musteri',this)"></button>
-    <button class="ntab" id="tab-urun" onclick="go('urun',this)"></button>
-    <button class="ntab" id="tab-cross" onclick="go('cross',this)"></button>
-  </div>
+    <button class="ntab" id="tab-urun" onclick="go('urun',this)"></button>  </div>
   <div style="display:flex;align-items:center;gap:10px">
     <span style="font-size:11px;opacity:.6">2024–2026</span>
     <div id="langSwitch" onclick="toggleLang()" style="display:flex;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;overflow:hidden;cursor:pointer;user-select:none">
@@ -154,13 +152,7 @@ tr:nth-child(even) td{background:#fafbfd}
       </table>
     </div>
   </div>
-</div>
-
-<div id="pg-cross" class="page">
-  <div class="card" style="background:linear-gradient(135deg,var(--dark),var(--mid));margin-bottom:12px">
-    <h2 style="color:#fff;border-color:rgba(255,255,255,.2)">🎯 Cross-Sell Fırsatları <em style="color:rgba(255,255,255,.7)">✓ aldı · ○ almadı = fırsat</em></h2>
-  </div>
-  <div class="card">
+</div><div class="card">
     <div class="ctrl">
       <input class="sb" id="csSrch" placeholder="🔍 Müşteri ara..." oninput="renderCS()" style="width:220px">
       <select class="sb" id="csSeg" onchange="renderCS()">
@@ -291,35 +283,6 @@ function initMap(){
 let uChart = null;
 
 
-// CROSS-SELL
-(()=>{
-  const segMap={};
-  D.musteri_listesi.forEach(m=>{segMap[String(m.CariKodu)]=m;});
-  document.getElementById('csHead').innerHTML=`<tr>
-    <th>Müşteri</th><th>Ülke</th>
-    ${KATS.map(k=>`<th style="font-size:9px;writing-mode:vertical-lr;transform:rotate(180deg);padding:12px 5px">${k}</th>`).join('')}
-    <th>Aldığı</th><th>Segment</th><th>Toplam USD</th>
-  </tr>`;
-  window.renderCS=function(){
-    const q=document.getElementById('csSrch').value.toLowerCase();
-    const seg=document.getElementById('csSeg').value;
-    const rows=D.cs_matrix.filter(r=>{
-      const info=segMap[String(r.CariKodu)]||{};
-      return(!q||r.Unvan.toLowerCase().includes(q))&&(!seg||(info.Segment||'')===seg);
-    });
-    document.getElementById('csBody').innerHTML=rows.map(r=>{
-      const info=segMap[String(r.CariKodu)]||{};
-      return`<tr>
-        <td><b>${r.Unvan}</b></td><td>${r.Ulke}</td>
-        ${KATS.map(k=>`<td style="text-align:center"><span class="${r[k]?'csyes':'csno'}">${r[k]?'✓':'○'}</span></td>`).join('')}
-        <td style="text-align:center;font-weight:700;color:var(--mid)">${r.AldigiKat}</td>
-        <td>${SEGBADGE(info.Segment||'')}</td>
-        <td>${USD(info.ToplamUSD||0)}</td>
-      </tr>`;
-    }).join('');
-  };
-  window.renderCS();
-})();
 
 
 
@@ -388,7 +351,6 @@ const TX = {
   'tab-harita':  {en:'🗺️ Map',               tr:'🗺️ Harita'},
   'tab-musteri': {en:'👥 Customers',         tr:'👥 Müşteriler'},
   'tab-urun':    {en:'📦 Products',          tr:'📦 Ürünler'},
-  'tab-cross':   {en:'🎯 Cross-Sell',        tr:'🎯 Cross-Sell'},
   h2Trend:   {en:'📈 Monthly Revenue Trend  USD',  tr:'📈 Aylık Ciro Trendi  USD'},
   h2Kat:     {en:'🥧 Product Categories',          tr:'🥧 Ürün Kategorileri'},
   h2Top10:   {en:'🏆 Top 10 Countries  by year',   tr:'🏆 Top 10 Ülke  yıl karşılaştırma'},
@@ -418,7 +380,7 @@ const TX = {
 function tx(key){ return (TX[key]||{})[LANG]||key; }
 
 function applyLang(){
-  ['tab-genel','tab-harita','tab-musteri','tab-urun','tab-cross',
+  ['tab-genel','tab-harita','tab-musteri','tab-urun',
    'h2Trend','h2Kat','h2Top10','h2Seg','h2Map','h2CustList','h2Top15',
    'thName','thType','thSeries','thUSD','thPay','thPrice','thQty'].forEach(id=>{
     const el=document.getElementById(id);
