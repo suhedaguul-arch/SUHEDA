@@ -582,8 +582,6 @@ function renderKPIs(){
     {l:tx('kpi_2024'),  v:USD(k.usd_2024),    s:isEN?'base year':'baz yıl',                        c:''},
     {l:tx('kpi_ulke'),  v:k.ulke_sayisi,       s:isEN?'markets':'pazar',                            c:''},
     {l:tx('kpi_mst'),   v:k.musteri_sayisi,    s:isEN?'active':'aktif',                             c:''},
-    {l:tx('kpi_star'),  v:k.yildiz,            s:'segment',                                         c:'g'},
-    {l:tx('kpi_risk'),  v:k.risk,              s:isEN?'needs follow-up':'takip gerekli',            c:'r'},
   ];
   document.getElementById('kpis').innerHTML=cards.map(c=>
     `<div class="kpi ${c.c}"><label>${c.l}</label><div class="v">${c.v}</div><div class="s">${c.s}</div></div>`
