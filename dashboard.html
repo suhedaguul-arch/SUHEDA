@@ -214,20 +214,57 @@ new Chart(document.getElementById('cKat'),{type:'doughnut',
 
 // HARİTA
 function initMap(){
-  const map=L.map('map').setView([42,20],3);
+  const map=L.map('map').setView([44,18],4);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
-  const mx=Math.max(...D.ulke.map(u=>u.toplam));
-  D.ulke.forEach(u=>{
-    if(!u.lat||!u.lon)return;
-    const r=8+(u.toplam/mx)*42;
-    const bTxt=u.buyume===999?'Yeni Pazar':(u.buyume>0?`▲ ${u.buyume}%`:`▼ ${u.buyume}%`);
-    const col=u.buyume>20?'#27AE60':u.buyume<-20&&u.buyume!==999?'#E74C3C':'#2E6DA4';
-    L.circleMarker([u.lat,u.lon],{radius:r,fillColor:col,color:'#fff',weight:2,opacity:1,fillOpacity:.8})
-      .addTo(map).bindPopup(`<b style="font-size:13px">${u.Ulke}</b><hr style="margin:4px 0">
-        <b>Toplam:</b> ${USD(u.toplam)}<br><b>2024:</b> ${USD(u.usd_2024)}<br>
-        <b>2025:</b> ${USD(u.usd_2025)}<br><b>2026 YTD:</b> ${USD(u.usd_2026)}<br>
-        <b>24→25:</b> ${bTxt}<br><b>Müşteri:</b> ${u.musteri}`);
-  });
+
+  const SEG_COLOR={
+    'Yıldız Müşteri':'#27AE60','Sadık Müşteri':'#2E6DA4',
+    'Potansiyel':'#F39C12','Risk Altında':'#E67E22','Kayıp Müşteri':'#E74C3C',
+    '':'#95a5a6'
+  };
+
+  // Filtre panelini göster
+  const panel=document.getElementById('mapFilterPanel');
+  if(panel) panel.style.display='flex';
+
+  function drawPins(ulkeF){
+    map.eachLayer(l=>{ if(l._fp) map.removeLayer(l); });
+    D.firmalar.forEach(f=>{
+      if(ulkeF && f.Ulke!==ulkeF) return;
+      const col=SEG_COLOR[f.Segment]||'#95a5a6';
+      const r=f.toplam>300000?18:f.toplam>100000?14:f.toplam>30000?10:f.toplam>0?7:5;
+
+      const circle=L.circleMarker([f.lat,f.lon],{
+        radius:r,fillColor:col,color:'#fff',weight:2,opacity:1,fillOpacity:.85
+      });
+      circle._fp=true;
+
+      const lbl=L.marker([f.lat,f.lon],{
+        icon:L.divIcon({
+          className:'',
+          html:'<div style="background:rgba(255,255,255,.92);border:1.5px solid '+col+';border-radius:4px;padding:2px 6px;font-size:11px;font-weight:600;color:#1B3A6B;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.2);margin-left:'+(r+6)+'px;margin-top:-8px;pointer-events:none">'+f.Unvan+'</div>',
+          iconAnchor:[0,8]
+        }),
+        interactive:false,zIndexOffset:-100
+      });
+      lbl._fp=true;
+
+      const bText=f.usd_2024>0?(((f.usd_2025-f.usd_2024)/f.usd_2024)*100).toFixed(1)+'%':'Yeni';
+      circle.bindPopup('<div style="min-width:220px"><b style="font-size:14px;color:#1B3A6B">'+f.Unvan+'</b><div style="margin:3px 0;font-size:11px;color:#888">'+f.Ulke+'</div><span style="background:'+col+';color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">'+(f.Segment||'—')+'</span><hr style="margin:8px 0"><table style="font-size:12px;width:100%"><tr><td>Toplam</td><td><b>$'+f.toplam.toLocaleString('tr-TR')+'</b></td></tr><tr><td>2024</td><td>$'+f.usd_2024.toLocaleString('tr-TR')+'</td></tr><tr><td>2025</td><td>$'+f.usd_2025.toLocaleString('tr-TR')+'</td></tr><tr><td>2026 YTD</td><td>$'+f.usd_2026.toLocaleString('tr-TR')+'</td></tr><tr><td>24→25</td><td>'+bText+'</td></tr><tr><td>Fatura #</td><td>'+f.fatura+'</td></tr></table></div>');
+
+      circle.addTo(map);
+      lbl.addTo(map);
+    });
+  }
+
+  drawPins('');
+
+  const sel=document.getElementById('mapUlkeFilter');
+  if(sel){
+    const ulkeler=[...new Set(D.firmalar.map(f=>f.Ulke))].sort();
+    ulkeler.forEach(u=>{const o=document.createElement('option');o.value=u;o.text=u;sel.add(o);});
+    sel.addEventListener('change',()=>drawPins(sel.value));
+  }
 }
 
 // ÜLKE YIL CHART
