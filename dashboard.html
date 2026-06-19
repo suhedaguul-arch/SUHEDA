@@ -74,7 +74,9 @@ tr:nth-child(even) td{background:#fafbfd}
   </div>
   <div class="g2">
     <div class="card"><h2 id="h2Top10"></h2><canvas id="cUlke"></canvas></div>
-    <div class="card"><h2 id="h2Seg"></h2><canvas id="cRfm"></canvas></div>
+    <div class="card"><h2 id="h2Seg"></h2><canvas id="cRfm"></canvas>
+      <table id="renkTbl" style="width:100%;border-collapse:collapse;margin-top:14px;font-size:12px"></table>
+    </div>
   </div>
 </div>
 
@@ -404,6 +406,33 @@ window.chKat=new Chart(document.getElementById('cKat'),{type:'doughnut',
 })();
 
 // COLOR ANALYSIS BAR (kg per color, tooltip: USD + USD/KG)
+function buildRenkTable(){
+  const ra=D.renk_analiz||[];
+  const tbl=document.getElementById('renkTbl');
+  if(!tbl)return;
+  const hColor=LANG==='en'?'Color':'Renk';
+  const hTon=LANG==='en'?'Tons':'Ton';
+  const hUsd=LANG==='en'?'Total USD':'Toplam USD';
+  const hKg=LANG==='en'?'USD/KG':'USD/KG';
+  let h=`<thead><tr style="background:#f0f4fa;font-weight:700">
+    <th style="padding:5px 8px;text-align:left">${hColor}</th>
+    <th style="padding:5px 8px;text-align:right">${hTon}</th>
+    <th style="padding:5px 8px;text-align:right">${hUsd}</th>
+    <th style="padding:5px 8px;text-align:right">${hKg}</th>
+  </tr></thead><tbody>`;
+  ra.forEach((o,i)=>{
+    const bg=i%2===0?'#fff':'#f9f9f9';
+    const lbl=LANG==='en'?o.renk_en:o.renk;
+    h+=`<tr style="background:${bg}">
+      <td style="padding:5px 8px"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${o.hex};margin-right:6px;border:1px solid #ccc;vertical-align:middle"></span>${lbl}</td>
+      <td style="padding:5px 8px;text-align:right">${(o.kg/1000).toFixed(1)}</td>
+      <td style="padding:5px 8px;text-align:right">$${Math.round(o.usd).toLocaleString('en')}</td>
+      <td style="padding:5px 8px;text-align:right">$${o.usd_kg.toFixed(2)}</td>
+    </tr>`;
+  });
+  h+='</tbody>';
+  tbl.innerHTML=h;
+}
 (()=>{
   const ra=D.renk_analiz||[];
   window.chRenk=new Chart(document.getElementById('cRfm'),{type:'bar',
@@ -419,6 +448,7 @@ window.chKat=new Chart(document.getElementById('cKat'),{type:'doughnut',
       }}}},
       scales:{x:{title:{display:true,text:LANG==='en'?'Tons':'Ton'}}}}
   });
+  buildRenkTable();
 })();
 
 // HARİTA
@@ -487,7 +517,7 @@ function updateCharts(){
   const s=[...D.ulke].sort((a,b)=>b.toplam-a.toplam);
   if(window.chUlkeYil){ window.chUlkeYil.data.labels=s.map(x=>ulkeLabel(x.Ulke)); window.chUlkeYil.update(); }
   if(window.chKat){ window.chKat.data.labels=D.kategori.map(x=>katLabel(x.Kategori)); window.chKat.update(); }
-  if(window.chRenk){ const ra=D.renk_analiz||[]; window.chRenk.data.labels=ra.map(x=>LANG==='en'?x.renk_en:x.renk); window.chRenk.data.datasets[0].label=LANG==='en'?'Tons sold':'Satılan ton'; window.chRenk.options.scales.x.title.text=LANG==='en'?'Tons':'Ton'; window.chRenk.update(); }
+  if(window.chRenk){ const ra=D.renk_analiz||[]; window.chRenk.data.labels=ra.map(x=>LANG==='en'?x.renk_en:x.renk); window.chRenk.data.datasets[0].label=LANG==='en'?'Tons sold':'Satılan ton'; window.chRenk.options.scales.x.title.text=LANG==='en'?'Tons':'Ton'; window.chRenk.update(); buildRenkTable(); }
 }
 function applyLang(){
   ['tab-genel','tab-harita','tab-musteri','tab-urun','navTitle',
@@ -665,5 +695,8 @@ function toggleUrunDetail(u){
 // ── Page load ──────────────────────────────────────────────
 window.addEventListener('load',()=>{ applyLang(); });
 </script>
+<footer style="text-align:center;padding:18px 0 22px;font-size:12px;color:#aaa;border-top:1px solid #e8ecf0;margin-top:24px">
+  Made by Şüheda Gül from scratch
+</footer>
 </body>
 </html>
