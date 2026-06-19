@@ -80,9 +80,9 @@ tr:nth-child(even) td{background:#fafbfd}
 
 <div id="pg-harita" class="page">
   <div class="card" style="margin-bottom:16px">
-    <h2 id="h2MapTitle">🌍 İhracat Haritası <em id="h2MapSub">firma firma konumlar · tıkla = detay</em></h2>
+    <h2 id="h2MapTitle">İhracat Haritası <em id="h2MapSub">firma firma konumlar · tıkla = detay</em></h2>
     <div id="mapFilterPanel" style="display:none;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
-      <select class="sb" id="mapUlkeFilter"><option value="">🌍 Tüm Ülkeler</option></select>
+      <select class="sb" id="mapUlkeFilter"><option value="">Tüm Ülkeler</option></select>
       <div style="display:flex;gap:12px;font-size:12px;align-items:center">
         <span id="legStar" style="background:#27AE60;color:#fff;padding:2px 8px;border-radius:10px">● Yıldız</span>
         <span id="legLoyal" style="background:#2E6DA4;color:#fff;padding:2px 8px;border-radius:10px">● Sadık</span>
@@ -94,12 +94,12 @@ tr:nth-child(even) td{background:#fafbfd}
     </div>
     <div id="map"></div>
   </div>
-  <div class="card"><h2 id="h2UlkeYil">📊 Ülke × Yıl</h2><canvas id="cUlkeYil" height="70"></canvas></div>
+  <div class="card"><h2 id="h2UlkeYil">Ülke × Yıl</h2><canvas id="cUlkeYil" height="70"></canvas></div>
 </div>
 
 <div id="pg-musteri" class="page">
   <div class="card">
-    <h2 id="h2RFM">👥 Müşteri RFM Analizi</h2>
+    <h2 id="h2RFM">Müşteri RFM Analizi</h2>
     <div class="ctrl">
       <input class="sb" id="mSrch" placeholder="🔍 Müşteri ara..." data-tr="🔍 Müşteri ara..." data-en="🔍 Search customer..." oninput="renderM()" style="width:220px">
       <select class="sb" id="mSeg" onchange="renderM()">
@@ -118,7 +118,7 @@ tr:nth-child(even) td{background:#fafbfd}
 <div id="pg-urun" class="page">
   <!-- Top 15 bar chart -->
   <div class="card" style="margin-bottom:16px">
-    <h2 id="h2Top15">🏆 Top 15 Products</h2>
+    <h2 id="h2Top15">Top 15 Products</h2>
     <canvas id="cUrun" height="80"></canvas>
   </div>
   <!-- Filtreler + tablo -->
@@ -211,16 +211,21 @@ function initMap(){
       const col=SEG_COLOR[f.Segment]||'#95a5a6';
       const r=f.toplam>300000?18:f.toplam>100000?14:f.toplam>30000?10:f.toplam>0?7:5;
 
-      const circle=L.circleMarker([f.lat,f.lon],{
-        radius:r,fillColor:col,color:'#fff',weight:2,opacity:1,fillOpacity:.85
+      const pw=Math.round(r*1.7), ph=Math.round(pw*1.35);
+      const pinSvg='<svg width="'+pw+'" height="'+ph+'" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">'
+        +'<path d="M12 0C5.37 0 0 5.37 0 12c0 8.5 12 20 12 20s12-11.5 12-20C24 5.37 18.63 0 12 0z" fill="'+col+'" stroke="#fff" stroke-width="2"/>'
+        +'<circle cx="12" cy="12" r="4.3" fill="#fff"/></svg>';
+      const circle=L.marker([f.lat,f.lon],{
+        icon:L.divIcon({className:'',html:'<div style="pointer-events:auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))">'+pinSvg+'</div>',
+          iconSize:[pw,ph],iconAnchor:[pw/2,ph]})
       });
       circle._fp=true;
 
       const lbl=L.marker([f.lat,f.lon],{
         icon:L.divIcon({
           className:'',
-          html:'<div style="background:rgba(255,255,255,.92);border:1.5px solid '+col+';border-radius:4px;padding:2px 6px;font-size:11px;font-weight:600;color:#1B3A6B;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.2);margin-left:'+(r+6)+'px;margin-top:-8px;pointer-events:none">'+f.Unvan+'</div>',
-          iconAnchor:[0,8]
+          html:'<div style="display:inline-block;background:#fff;border:1.5px solid '+col+';border-left:5px solid '+col+';border-radius:4px;padding:3px 8px;font-size:11px;font-weight:600;color:#1B3A6B;white-space:nowrap;box-shadow:0 1px 5px rgba(0,0,0,.25);margin-left:'+(pw/2+6)+'px;margin-top:-'+(ph-4)+'px;pointer-events:none">'+f.Unvan+'</div>',
+          iconSize:[null,null],iconAnchor:[0,0]
         }),
         interactive:false,zIndexOffset:-100
       });
@@ -352,10 +357,10 @@ window.chKat=new Chart(document.getElementById('cKat'),{type:'doughnut',
 // ═══════════════════════════════════════════════════════════
 const TX = {
   navTitle:      {en:'SmartPack Export Dashboard', tr:'SmartPack İhracat Paneli'},
-  h2RFM:         {en:'👥 Customer RFM Analysis',    tr:'👥 Müşteri RFM Analizi'},
-  h2MapTitle:    {en:'🌍 Export Map',               tr:'🌍 İhracat Haritası'},
+  h2RFM:         {en:'Customer RFM Analysis',    tr:'Müşteri RFM Analizi'},
+  h2MapTitle:    {en:'Export Map',               tr:'İhracat Haritası'},
   h2MapSub:      {en:'company locations · click = details', tr:'firma firma konumlar · tıkla = detay'},
-  h2UlkeYil:     {en:'📊 Country × Year',           tr:'📊 Ülke × Yıl'},
+  h2UlkeYil:     {en:'Country × Year',           tr:'Ülke × Yıl'},
   mapLegendNote: {en:'Circle size = sales volume',  tr:'Çember büyüklüğü = satış hacmi'},
   legStar:  {en:'● Star',     tr:'● Yıldız'},
   legLoyal: {en:'● Loyal',    tr:'● Sadık'},
@@ -375,13 +380,13 @@ const TX = {
   'tab-harita':  {en:'Map',                   tr:'Harita'},
   'tab-musteri': {en:'Customers',             tr:'Müşteriler'},
   'tab-urun':    {en:'Products',              tr:'Ürünler'},
-  h2Trend:   {en:'📈 Monthly Revenue Trend  USD',  tr:'📈 Aylık Ciro Trendi  USD'},
-  h2Kat:     {en:'🥧 Product Categories',          tr:'🥧 Ürün Kategorileri'},
-  h2Top10:   {en:'🏆 Top 10 Countries  by year',   tr:'🏆 Top 10 Ülke  yıl karşılaştırma'},
-  h2Seg:     {en:'👥 Customer Segments',            tr:'👥 Müşteri Segmentleri'},
-  h2Map:     {en:'🗺️ Customer Map',                tr:'🗺️ Müşteri Haritası'},
-  h2CustList:{en:'👥 Customer List',               tr:'👥 Müşteri Listesi'},
-  h2Top15:   {en:'🏆 Top 15 Products',             tr:'🏆 Top 15 Ürün'},
+  h2Trend:   {en:'Monthly Revenue Trend  USD',  tr:'Aylık Ciro Trendi  USD'},
+  h2Kat:     {en:'Product Categories',          tr:'Ürün Kategorileri'},
+  h2Top10:   {en:'Top 10 Countries  by year',   tr:'Top 10 Ülke  yıl karşılaştırma'},
+  h2Seg:     {en:'Customer Segments',            tr:'Müşteri Segmentleri'},
+  h2Map:     {en:'Customer Map',                tr:'Müşteri Haritası'},
+  h2CustList:{en:'Customer List',               tr:'Müşteri Listesi'},
+  h2Top15:   {en:'Top 15 Products',             tr:'Top 15 Ürün'},
   kpi_total: {en:'3-Year Total',      tr:'3 Yıl Toplam'},
   kpi_2024:  {en:'2024 Revenue',      tr:'2024 Ciro'},
   kpi_2025:  {en:'2025 Revenue',      tr:'2025 Ciro'},
@@ -422,7 +427,7 @@ function applyLang(){
     if(el) el.textContent=tx(id);
   });
   const mapF=document.getElementById('mapUlkeFilter');
-  if(mapF&&mapF.options[0]) mapF.options[0].text=LANG==='en'?'🌍 All Countries':'🌍 Tüm Ülkeler';
+  if(mapF&&mapF.options[0]) mapF.options[0].text=LANG==='en'?'All Countries':'Tüm Ülkeler';
   const mapT=document.getElementById('h2MapTitle');
   if(mapT) mapT.innerHTML=tx('h2MapTitle')+' <em id="h2MapSub">'+tx('h2MapSub')+'</em>';
   // customer search + dropdowns
