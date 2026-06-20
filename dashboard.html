@@ -11,7 +11,7 @@
 :root{--dark:#1B3A6B;--mid:#2E6DA4;--light:#D6E4F7;--green:#27AE60;--red:#E74C3C;--orange:#E67E22;--gold:#F39C12;--border:#dde3ed;--gray:#f5f6fa}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#eef2f7;color:#2c3e50}
-nav{background:var(--dark);color:#fff;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+nav{background:#000;color:#fff;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 nav h1{font-size:16px;letter-spacing:.4px}
 .ntabs{display:flex;gap:3px}
 .ntab{color:rgba(255,255,255,.7);padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px;border:none;background:transparent;transition:all .2s}
@@ -51,7 +51,22 @@ tr:nth-child(even) td{background:#fafbfd}
 </head>
 <body>
 <nav>
-  <h1 id="navTitle">SmartPack Export Dashboard</h1>
+  <div style="display:flex;align-items:center;gap:10px">
+    <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="7" fill="#fff"/>
+      <g fill="none" stroke="#111" stroke-width="1.6" stroke-linecap="round">
+        <circle cx="18" cy="18" r="2.2" fill="#111" stroke="none"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(0 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(51.4 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(102.8 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(154.2 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(205.7 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(257.1 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(308.5 18 18)"/>
+      </g>
+    </svg>
+    <h1 id="navTitle">SmartPack Export Dashboard</h1>
+  </div>
   <div class="ntabs">
     <button class="ntab on" id="tab-genel" onclick="go('genel',this)"></button>
     <button class="ntab" id="tab-harita" onclick="go('harita',this)"></button>
@@ -109,7 +124,7 @@ tr:nth-child(even) td{background:#fafbfd}
 
 <div id="pg-musteri" class="page">
   <div class="card">
-    <h2 id="h2RFM">Müşteri RFM Analizi</h2>
+    <h2 id="h2RFM">Müşteri Analizi</h2>
     <div class="ctrl">
       <input class="sb" id="mSrch" placeholder="🔍 Müşteri ara..." data-tr="🔍 Müşteri ara..." data-en="🔍 Search customer..." oninput="renderM()" style="width:220px">
       <select class="sb" id="mSeg" onchange="renderM()">
@@ -282,7 +297,6 @@ function initMap(){
     D.ulke.forEach(u=>{
       if(!u.lat||!u.lon) return;
       const rad=8+Math.sqrt(u.toplam/mx)*32;
-      const price1k=u.miktar>0?(u.toplam/u.miktar*1000):0;
       const bub=L.circleMarker([u.lat,u.lon],{
         radius:rad,fillColor:'#8E44AD',color:'#fff',weight:1.5,opacity:1,fillOpacity:.45
       });
@@ -294,7 +308,6 @@ function initMap(){
         +'<tr><td>'+(LANG==='en'?'Total':'Toplam')+'</td><td><b>$'+Math.round(u.toplam).toLocaleString('tr-TR')+'</b></td></tr>'
         +'<tr><td>'+(LANG==='en'?'Customers':'Müşteri')+'</td><td>'+u.musteri+'</td></tr>'
         +'<tr><td>'+(LANG==='en'?'Qty sold':'Satılan adet')+'</td><td>'+(u.miktar/1e6).toFixed(2)+'M '+(LANG==='en'?'pcs':'adet')+'</td></tr>'
-        +'<tr style="color:#6C3483;font-weight:700"><td>'+(LANG==='en'?'Price / 1K pcs':'Fiyat / 1K adet')+'</td><td>$'+price1k.toFixed(2)+'</td></tr>'
         +(u.kg>0?'<tr style="color:#6C3483;font-weight:700"><td>'+(LANG==='en'?'Price / KG':'Fiyat / KG')+'</td><td>$'+(u.usd_kgcov/u.kg).toFixed(2)+'</td></tr>':'')
         +'<tr><td>2024</td><td>$'+Math.round(u.usd_2024).toLocaleString('tr-TR')+'</td></tr>'
         +'<tr><td>2025</td><td>$'+Math.round(u.usd_2025).toLocaleString('tr-TR')+'</td></tr>'
@@ -458,7 +471,7 @@ function buildRenkTable(){
 // ═══════════════════════════════════════════════════════════
 const TX = {
   navTitle:      {en:'SmartPack Export Dashboard', tr:'SmartPack İhracat Paneli'},
-  h2RFM:         {en:'Customer RFM Analysis',    tr:'Müşteri RFM Analizi'},
+  h2RFM:         {en:'Customer Analysis',          tr:'Müşteri Analizi'},
   h2MapTitle:    {en:'Export Map',               tr:'İhracat Haritası'},
   h2MapSub:      {en:'company locations · click = details', tr:'firma firma konumlar · tıkla = detay'},
   h2UlkeYil:     {en:'Country × Year',           tr:'Ülke × Yıl'},
@@ -699,7 +712,7 @@ function toggleUrunDetail(u){
 window.addEventListener('load',()=>{ applyLang(); });
 </script>
 <footer style="text-align:center;padding:18px 0 22px;font-size:12px;color:#aaa;border-top:1px solid #e8ecf0;margin-top:24px">
-  Made by Şüheda Gül from scratch
+  Made by Şüheda Gül – Version 01
 </footer>
 </body>
 </html>
