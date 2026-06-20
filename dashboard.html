@@ -51,24 +51,21 @@ tr:nth-child(even) td{background:#fafbfd}
 </head>
 <body>
 <nav>
-  <div style="display:flex;align-items:center;gap:12px">
-    <svg width="46" height="46" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-      <rect width="46" height="46" rx="9" fill="#fff"/>
-      <!-- flower petals: 6 bean-shaped petals using cubic bezier -->
-      <g transform="translate(23,23)">
-        <g fill="none" stroke="#111" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
-          <!-- petal template: a rounded kidney shape, rotated 6 times -->
-          <path d="M0,-12 C5,-12 9,-7 9,-2 C9,3 5,7 0,8 C-5,7 -9,3 -9,-2 C-9,-7 -5,-12 0,-12Z" transform="rotate(0)"/>
-          <path d="M0,-12 C5,-12 9,-7 9,-2 C9,3 5,7 0,8 C-5,7 -9,3 -9,-2 C-9,-7 -5,-12 0,-12Z" transform="rotate(60)"/>
-          <path d="M0,-12 C5,-12 9,-7 9,-2 C9,3 5,7 0,8 C-5,7 -9,3 -9,-2 C-9,-7 -5,-12 0,-12Z" transform="rotate(120)"/>
-          <path d="M0,-12 C5,-12 9,-7 9,-2 C9,3 5,7 0,8 C-5,7 -9,3 -9,-2 C-9,-7 -5,-12 0,-12Z" transform="rotate(180)"/>
-          <path d="M0,-12 C5,-12 9,-7 9,-2 C9,3 5,7 0,8 C-5,7 -9,3 -9,-2 C-9,-7 -5,-12 0,-12Z" transform="rotate(240)"/>
-          <path d="M0,-12 C5,-12 9,-7 9,-2 C9,3 5,7 0,8 C-5,7 -9,3 -9,-2 C-9,-7 -5,-12 0,-12Z" transform="rotate(300)"/>
-        </g>
-        <circle cx="0" cy="0" r="2.8" fill="#111"/>
+  <div style="display:flex;align-items:center;gap:10px">
+    <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="7" fill="#fff"/>
+      <g fill="none" stroke="#111" stroke-width="0.7" stroke-linecap="round">
+        <circle cx="18" cy="18" r="2.2" fill="#111" stroke="none"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(0 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(51.4 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(102.8 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(154.2 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(205.7 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(257.1 18 18)"/>
+        <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(308.5 18 18)"/>
       </g>
     </svg>
-    <span style="font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;font-family:'Helvetica Neue',Arial,sans-serif">smartpack</span>
+    <h1 id="navTitle">SmartPack Export Dashboard</h1>
   </div>
   <div class="ntabs">
     <button class="ntab on" id="tab-genel" onclick="go('genel',this)"></button>
@@ -571,19 +568,19 @@ function toggleLang(){
 
 function renderKPIs(){
   const k=D.kpi;
-  const g2425=((k.usd_2025-k.usd_2024)/k.usd_2024*100).toFixed(1);
-  const g2324=k.usd_2023>0?((k.usd_2024-k.usd_2023)/k.usd_2023*100).toFixed(1):null;
+  const g2425=k.p2025!=null?k.p2025:((k.y2025-k.y2024)/(k.y2024||1)*100);
+  const g2324=k.p2024!=null?k.p2024:((k.y2024-k.y2023)/(k.y2023||1)*100);
   const isEN=LANG==='en';
-  const son12 = D.trend.filter(r=>(r.Yil===2025&&r.Ay>=7)||(r.Yil===2026&&r.Ay<=6)).reduce((s,r)=>s+r.USD_Tutar,0);
+  const son12=k.son12||0;
   const cards=[
-    {l:tx('kpi_total'), v:USD(k.toplam),      s:'2023–2026',                                                           c:''},
-    {l:tx('kpi_12mo'),  v:USD(son12),          s:'Jul 2025–Jun 2026',                                                   c:''},
-    {l:tx('kpi_2026'),  v:USD(k.usd_2026),    s:'Jan–Jun',                                                              c:''},
-    {l:tx('kpi_2025'),  v:USD(k.usd_2025),    s:(g2425>0?'▲':'▼')+Math.abs(g2425)+'% vs 2024',                         c:'g'},
-    {l:tx('kpi_2024'),  v:USD(k.usd_2024),    s:g2324?(( g2324>0?'▲':'▼')+Math.abs(g2324)+'% vs 2023'):'base year',   c:''},
-    {l:tx('kpi_2023'),  v:USD(k.usd_2023||0), s:isEN?'base year':'baz yıl',                                            c:''},
-    {l:tx('kpi_ulke'),  v:k.ulke_sayisi,       s:isEN?'markets':'pazar',                                                c:''},
-    {l:tx('kpi_mst'),   v:k.musteri_sayisi,    s:isEN?'active':'aktif',                                                 c:''},
+    {l:tx('kpi_total'), v:USD(k.total4||k.toplam||0), s:'2023–2026',                                                                    c:''},
+    {l:tx('kpi_12mo'),  v:USD(son12),                  s:'Jul 2025–Jun 2026',                                                            c:''},
+    {l:tx('kpi_2026'),  v:USD(k.ytd2026||k.usd_2026||0), s:'Jan–Jun',                                                                   c:''},
+    {l:tx('kpi_2025'),  v:USD(k.y2025||k.usd_2025||0), s:(g2425>=0?'▲':'▼')+Math.abs(+g2425).toFixed(1)+'% vs 2024',                   c:g2425>=0?'g':'r'},
+    {l:tx('kpi_2024'),  v:USD(k.y2024||k.usd_2024||0), s:g2324!=null?(( g2324>=0?'▲':'▼')+Math.abs(+g2324).toFixed(1)+'% vs 2023'):(isEN?'base year':'baz yıl'), c:''},
+    {l:tx('kpi_2023'),  v:USD(k.y2023||k.usd_2023||0), s:isEN?'base year':'baz yıl',                                                    c:''},
+    {l:tx('kpi_ulke'),  v:(k.ulke||k.ulke_sayisi||0),  s:isEN?'markets':'pazar',                                                        c:''},
+    {l:tx('kpi_mst'),   v:(k.musteri||k.musteri_sayisi||0), s:isEN?'active':'aktif',                                                     c:''},
   ];
   document.getElementById('kpis').innerHTML=cards.map(c=>
     `<div class="kpi ${c.c}"><label>${c.l}</label><div class="v">${c.v}</div><div class="s">${c.s}</div></div>`
