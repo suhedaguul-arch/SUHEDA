@@ -419,50 +419,33 @@ window.chKat=new Chart(document.getElementById('cKat'),{type:'doughnut',
   });
 })();
 
-// COLOR ANALYSIS BAR (kg per color, tooltip: USD + USD/KG)
-function buildRenkTable(){
-  const ra=D.renk_analiz||[];
-  const tbl=document.getElementById('renkTbl');
-  if(!tbl)return;
-  const hColor=LANG==='en'?'Color':'Renk';
-  const hTon=LANG==='en'?'Tons':'Ton';
-  const hUsd=LANG==='en'?'Total USD':'Toplam USD';
-  const hKg=LANG==='en'?'USD/KG':'USD/KG';
-  let h=`<thead><tr style="background:#f0f4fa;font-weight:700">
-    <th style="padding:5px 8px;text-align:left">${hColor}</th>
-    <th style="padding:5px 8px;text-align:right">${hTon}</th>
-    <th style="padding:5px 8px;text-align:right">${hUsd}</th>
-    <th style="padding:5px 8px;text-align:right">${hKg}</th>
-  </tr></thead><tbody>`;
-  ra.forEach((o,i)=>{
-    const bg=i%2===0?'#fff':'#f9f9f9';
-    const lbl=LANG==='en'?o.renk_en:o.renk;
-    h+=`<tr style="background:${bg}">
-      <td style="padding:5px 8px"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${o.hex};margin-right:6px;border:1px solid #ccc;vertical-align:middle"></span>${lbl}</td>
-      <td style="padding:5px 8px;text-align:right">${(o.kg/1000).toFixed(1)}</td>
-      <td style="padding:5px 8px;text-align:right">$${Math.round(o.usd).toLocaleString('en')}</td>
-      <td style="padding:5px 8px;text-align:right">$${o.usd_kg.toFixed(2)}</td>
-    </tr>`;
-  });
-  h+='</tbody>';
-  tbl.innerHTML=h;
-}
+// COLOR ANALYSIS BAR
+function buildRenkTable(){ /* no-op: kg data not available */ }
 (()=>{
-  const ra=D.renk_analiz||[];
-  window.chRenk=new Chart(document.getElementById('cRfm'),{type:'bar',
-    data:{labels:ra.map(x=>LANG==='en'?x.renk_en:x.renk),
-          datasets:[{label:LANG==='en'?'Tons sold':'Satılan ton',data:ra.map(x=>+(x.kg/1000).toFixed(1)),
-            backgroundColor:ra.map(x=>x.hex),borderColor:'#ccc',borderWidth:1}]},
-    options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},
-      tooltip:{callbacks:{label:ctx=>{
-        const o=ra[ctx.dataIndex];
-        return [ (LANG==='en'?'Weight: ':'Ağırlık: ')+(o.kg/1000).toFixed(1)+(LANG==='en'?' tons':' ton'),
-                 (LANG==='en'?'Total: $':'Toplam: $')+Math.round(o.usd).toLocaleString('en'),
-                 (LANG==='en'?'USD/KG: $':'USD/KG: $')+o.usd_kg.toFixed(2) ];
-      }}}},
-      scales:{x:{title:{display:true,text:LANG==='en'?'Tons':'Ton'}}}}
+  const el=document.getElementById('cRfm'); if(!el)return;
+  // Aggregate renk_analiz by Renk across all products
+  const agg={};
+  (D.renk_analiz||[]).forEach(o=>{
+    const k=o.Renk||o.renk||'Diğer';
+    if(!agg[k]) agg[k]={renk:k,usd:0};
+    agg[k].usd+=(o.USD_Tutar||o.usd||0);
   });
-  buildRenkTable();
+  const RENK_COLOR={'Beyaz':'#f5f5f0','Siyah':'#2c2c2c','Şeffaf':'#b0d4f1','Kırmızı':'#e74c3c',
+    'Mavi':'#2980b9','Yeşil':'#27ae60','Sarı':'#f1c40f','Gold':'#d4a017','Bej':'#d2b48c',
+    'Turuncu':'#e67e22','Pembe':'#ff69b4','Mor':'#8e44ad','Gri':'#95a5a6','Kahve':'#795548'};
+  const RENK_EN={'Beyaz':'White','Siyah':'Black','Şeffaf':'Clear','Kırmızı':'Red','Mavi':'Blue',
+    'Yeşil':'Green','Sarı':'Yellow','Gold':'Gold','Bej':'Beige','Turuncu':'Orange',
+    'Pembe':'Pink','Mor':'Purple','Gri':'Gray','Kahve':'Brown'};
+  const rows=Object.values(agg).sort((a,b)=>b.usd-a.usd).slice(0,12);
+  window.chRenk=new Chart(el,{type:'bar',
+    data:{labels:rows.map(x=>LANG==='en'?(RENK_EN[x.renk]||x.renk):x.renk),
+          datasets:[{label:'USD',data:rows.map(x=>Math.round(x.usd)),
+            backgroundColor:rows.map(x=>RENK_COLOR[x.renk]||'#aaa'),
+            borderColor:rows.map(x=>x.renk==='Beyaz'?'#ccc':'transparent'),borderWidth:1}]},
+    options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>'$'+ctx.parsed.x.toLocaleString('en')}}},
+      scales:{x:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}
+  });
 })();
 
 // HARİTA
