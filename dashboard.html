@@ -129,8 +129,8 @@ tr:nth-child(even) td{background:#fafbfd}
       <input class="sb" id="mSrch" placeholder="🔍 Müşteri ara..." data-tr="🔍 Müşteri ara..." data-en="🔍 Search customer..." oninput="renderM()" style="width:220px">
       <select class="sb" id="mSeg" onchange="renderM()">
         <option value="">Tüm Segmentler</option>
-        <option value="Yıldız Müşteri">Yıldız Müşteri</option><option value="Sadık Müşteri">Sadık Müşteri</option>
-        <option value="Potansiyel">Potansiyel</option><option value="Risk Altında">Risk Altında</option><option value="Kayıp Müşteri">Kayıp Müşteri</option>
+        <option value="star">Yıldız Müşteri</option><option value="loyal">Sadık Müşteri</option>
+        <option value="potential">Potansiyel</option><option value="risk">Risk Altında</option><option value="lost">Kayıp Müşteri</option>
       </select>
       <select class="sb" id="mUlke" onchange="renderM()"><option value="">Tüm Ülkeler</option></select>
     </div>
@@ -184,9 +184,10 @@ const D = {"ulke":[{"Ulke":"ROMANYA","Ulke_EN":"Romania","toplam":1014434.06,"mu
 
 const USD = v => '$'+Math.round(v).toLocaleString('tr-TR');
 let LANG = 'en';
-const SEGCLS = {'Yıldız Müşteri':'by','Sadık Müşteri':'bs','Potansiyel':'bp','Risk Altında':'br','Kayıp Müşteri':'bk'}
-const SEG_EN = {'Yıldız Müşteri':'Star Customer','Sadık Müşteri':'Loyal Customer','Potansiyel':'Potential','Risk Altında':'At Risk','Kayıp Müşteri':'Lost Customer'};
-function segLabel(s){ return LANG==='en'?(SEG_EN[s]||s):s; }
+const SEGCLS = {'star':'by','loyal':'bs','potential':'bp','risk':'br','lost':'bk'}
+const SEG_EN = {'star':'Star Customer','loyal':'Loyal Customer','potential':'Potential','risk':'At Risk','lost':'Lost Customer'};
+const SEG_TR = {'star':'Yıldız Müşteri','loyal':'Sadık Müşteri','potential':'Potansiyel','risk':'Risk Altında','lost':'Kayıp Müşteri'};
+function segLabel(s){ return LANG==='en'?(SEG_EN[s]||s):(SEG_TR[s]||s); }
 const ULKE_EN={}; (D.ulke||[]).forEach(u=>{ if(u.Ulke_EN) ULKE_EN[u.Ulke]=u.Ulke_EN; });
 function ulkeLabel(u){ return LANG==='en'?(ULKE_EN[u]||u):u; }
 const KAT_EN={'Foam/XPS':'Foam/XPS',"Çatal-Kaşık-Bıçak": "Cutlery", "Aperatif Ürünler": "Appetizer Products", "İçecek Bardakları": "Drinking Cups", "Tatlı Kapları": "Dessert Cups", "Tabaklar": "Plates", "Kaseler": "Bowls", "Sos Kapları": "Sauce Cups", "Kapaklar": "Lids", "Mikrodalga Kaplar": "Microwave Containers", "Köpük Tepsiler": "Foam Trays", "Parti & Karıştırıcılar": "Party & Stirrers", "Diğer": "Other"};
@@ -273,10 +274,8 @@ function initMap(){
 
       const card='<div style="min-width:230px"><b style="font-size:14px;color:#1B3A6B">'+( f.ad||'' )+'</b>'
         +'<div style="margin:3px 0;font-size:11px;color:#888">'+ulkeLabel(f.ulke||'')+'</div>'
-        +'<span style="background:'+col+';color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">'
         +'<hr style="margin:8px 0"><table style="font-size:12px;width:100%">'
         +'<tr style="font-weight:700;color:#1B3A6B"><td>'+(LANG==='en'?'Total purchased':'Bizden aldığı toplam')+'</td><td>$'+Math.round(f.toplam).toLocaleString('tr-TR')+'</td></tr>'
-        
         +'<tr><td>'+(LANG==='en'?'First invoice':'İlk fatura')+'</td><td>'+(f.ilk||'—')+'</td></tr>'
         +'<tr><td>'+(LANG==='en'?'Last invoice':'Son fatura')+'</td><td>'+(f.son||'—')+'</td></tr>'
         +'</table></div>';
@@ -345,23 +344,23 @@ function initMap(){
 // MÜŞTERİ TABLOSU
 (()=>{
   const sel=document.getElementById('mUlke');
-  [...new Set(D.musteri_listesi.map(m=>m.Ulke))].sort().forEach(u=>{
+  [...new Set(D.musteri_listesi.map(m=>m.ulke))].sort().forEach(u=>{
     const o=document.createElement('option');o.value=u;o.text=u;o.dataset.tr=u;sel.add(o);
   });
-  const mx=Math.max(...D.musteri_listesi.map(m=>m.ToplamUSD));
+  const mx=Math.max(...D.musteri_listesi.map(m=>m.toplam));
   window.renderM=function(){
     const q=document.getElementById('mSrch').value.toLowerCase();
     const seg=document.getElementById('mSeg').value;
     const ulke=document.getElementById('mUlke').value;
     const rows=D.musteri_listesi.filter(m=>
-      (!q||m.Unvan.toLowerCase().includes(q))&&(!seg||m.Segment===seg)&&(!ulke||m.Ulke===ulke));
+      (!q||m.ad.toLowerCase().includes(q))&&(!seg||m.seg===seg)&&(!ulke||m.ulke===ulke));
     document.getElementById('mBody').innerHTML=rows.map(m=>`<tr>
-      <td><b>${m.Unvan}</b></td><td>${ulkeLabel(m.Ulke)}</td>
-      <td>${String(m.SonAlis).substring(0,10)}</td>
-      <td style="color:${m.Recency_gun>365?'#E74C3C':m.Recency_gun>180?'#E67E22':'#27AE60'}">${Math.round(m.Recency_gun)} ${LANG==='en'?'days':'gün'}</td>
-      <td style="text-align:center">${m.AlisSikligi}</td>
-      <td>${USD(m.ToplamUSD)}<div class="spark"><div class="sparkf" style="width:${(m.ToplamUSD/mx*100).toFixed(1)}%"></div></div></td>
-      <td>${SEGBADGE(m.Segment)}</td>
+      <td><b>${m.ad}</b></td><td>${ulkeLabel(m.ulke)}</td>
+      <td>${String(m.son_tarih).substring(0,10)}</td>
+      <td style="color:${m.gun>365?'#E74C3C':m.gun>180?'#E67E22':'#27AE60'}">${Math.round(m.gun)} ${LANG==='en'?'days':'gün'}</td>
+      <td style="text-align:center">${m.fatura}</td>
+      <td>${USD(m.toplam)}<div class="spark"><div class="sparkf" style="width:${(m.toplam/mx*100).toFixed(1)}%"></div></div></td>
+      <td>${SEGBADGE(m.seg)}</td>
     </tr>`).join('');
   };
   window.renderM();
