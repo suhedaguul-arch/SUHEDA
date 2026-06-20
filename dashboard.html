@@ -1086,11 +1086,11 @@ let uChart = null;
 // KPI — initial render handled by renderKPIs() below
 
 // TREND
-window.chTrend=new Chart(document.getElementById('cTrend'),{type:'line',
+window.chTrend=new Chart(document.getElementById('cTrend'),{type:'bar',
   data:{labels:(D.trend_monthly||[]).map(t=>t.label),
         datasets:[{label:'Revenue',data:(D.trend_monthly||[]).map(t=>Math.round(t.USD)),
-          borderColor:'#2E6DA4',backgroundColor:'rgba(46,109,164,.08)',fill:true,tension:.3,
-          pointRadius:4,pointHoverRadius:7,pointBackgroundColor:'#2E6DA4',pointBorderColor:'#fff',pointBorderWidth:2}]},
+          backgroundColor:(D.trend_monthly||[]).map(t=>t.yil===2026?'#27AE60':t.yil===2025?'#2E6DA4':t.yil===2024?'#D6E4F7':'#f0e6ff'),
+          borderRadius:3,borderSkipped:false}]},
   options:{responsive:true,
     plugins:{legend:{display:false},
       tooltip:{callbacks:{label:ctx=>'  $'+Math.round(ctx.parsed.y).toLocaleString('en')}}},
