@@ -391,8 +391,8 @@ let uChart = null;
 
 // TREND
 new Chart(document.getElementById('cTrend'),{type:'line',
-  data:{labels:D.trend.map(t=>t.label),
-        datasets:[{label:'USD',data:D.trend.map(t=>Math.round(t.USD_Tutar)),
+  data:{labels:D.trend.map(t=>t.Yil),
+        datasets:[{label:'USD',data:D.trend.map(t=>Math.round(t.USD)),
           borderColor:'#2E6DA4',backgroundColor:'rgba(46,109,164,.1)',fill:true,tension:.4,pointRadius:2}]},
   options:{responsive:true,plugins:{legend:{display:false}},
     scales:{y:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}
@@ -577,17 +577,20 @@ function toggleLang(){
 
 function renderKPIs(){
   const k=D.kpi;
-  const g2425=k.p2025!=null?k.p2025:((k.y2025-k.y2024)/(k.y2024||1)*100);
-  const g2324=k.p2024!=null?k.p2024:((k.y2024-k.y2023)/(k.y2023||1)*100);
+  const y2025=k.y2025||k.usd_2025||0;
+  const y2024=k.y2024||k.usd_2024||0;
+  const y2023=k.y2023||k.usd_2023||0;
+  const g2425=k.p2025!=null?k.p2025:(y2024>0?((y2025-y2024)/y2024*100):null);
+  const g2324=k.p2024!=null?k.p2024:(y2023>0?((y2024-y2023)/y2023*100):null);
   const isEN=LANG==='en';
   const son12=k.son12||0;
   const cards=[
     {l:tx('kpi_total'), v:USD(k.total4||k.toplam||0), s:'2023–2026',                                                                    c:''},
     {l:tx('kpi_12mo'),  v:USD(son12),                  s:'Jul 2025–Jun 2026',                                                            c:''},
     {l:tx('kpi_2026'),  v:USD(k.ytd2026||k.usd_2026||0), s:'Jan–Jun',                                                                   c:''},
-    {l:tx('kpi_2025'),  v:USD(k.y2025||k.usd_2025||0), s:(g2425>=0?'▲':'▼')+Math.abs(+g2425).toFixed(1)+'% vs 2024',                   c:g2425>=0?'g':'r'},
-    {l:tx('kpi_2024'),  v:USD(k.y2024||k.usd_2024||0), s:g2324!=null?(( g2324>=0?'▲':'▼')+Math.abs(+g2324).toFixed(1)+'% vs 2023'):(isEN?'base year':'baz yıl'), c:''},
-    {l:tx('kpi_2023'),  v:USD(k.y2023||k.usd_2023||0), s:isEN?'base year':'baz yıl',                                                    c:''},
+    {l:tx('kpi_2025'),  v:USD(y2025), s:g2425!=null?(g2425>=0?'▲':'▼')+Math.abs(+g2425).toFixed(1)+'% vs 2024':(isEN?'—':'—'),          c:g2425!=null?(g2425>=0?'g':'r'):''},
+    {l:tx('kpi_2024'),  v:USD(y2024), s:g2324!=null?((g2324>=0?'▲':'▼')+Math.abs(+g2324).toFixed(1)+'% vs 2023'):(isEN?'base year':'baz yıl'), c:''},
+    {l:tx('kpi_2023'),  v:USD(y2023), s:isEN?'base year':'baz yıl',                                                                     c:''},
     {l:tx('kpi_ulke'),  v:(k.ulke||k.ulke_sayisi||0),  s:isEN?'markets':'pazar',                                                        c:''},
     {l:tx('kpi_mst'),   v:(k.musteri||k.musteri_sayisi||0), s:isEN?'active':'aktif',                                                     c:''},
   ];
