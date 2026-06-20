@@ -638,7 +638,7 @@ function renderU(){
     if(tip&&u.tip!==tip) return false;
     if(seri&&u.seri!==seri) return false;
     return true;
-  }).sort((a,b)=>b.usd-a.usd);
+  }).sort((a,b)=>b.miktar-a.miktar);
 
   const countEl=document.getElementById('uCount');
   if(countEl) countEl.textContent=LANG==='en'?`${list.length} product${list.length!==1?'s':''}`:`${list.length} ürün`;
