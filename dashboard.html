@@ -54,7 +54,7 @@ tr:nth-child(even) td{background:#fafbfd}
   <div style="display:flex;align-items:center;gap:10px">
     <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
       <rect width="36" height="36" rx="7" fill="#fff"/>
-      <g fill="none" stroke="#111" stroke-width="1.6" stroke-linecap="round">
+      <g fill="none" stroke="#111" stroke-width="0.7" stroke-linecap="round">
         <circle cx="18" cy="18" r="2.2" fill="#111" stroke="none"/>
         <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(0 18 18)"/>
         <ellipse cx="18" cy="11.5" rx="3" ry="4.5" transform="rotate(51.4 18 18)"/>
@@ -247,8 +247,8 @@ function initMap(){
   function drawPins(ulkeF){
     window._companyLayer.clearLayers();
     D.firmalar.forEach(f=>{
-      if(ulkeF && f.Ulke!==ulkeF) return;
-      const col=SEG_COLOR[f.Segment]||'#95a5a6';
+      if(ulkeF && f.ulke!==ulkeF) return;
+      const col='#1B3A6B';
       const r=13;  // equal size pins
 
       const pw=Math.round(r*1.7), ph=Math.round(pw*1.35);
@@ -264,21 +264,21 @@ function initMap(){
       const lbl=L.marker([f.lat,f.lon],{
         icon:L.divIcon({
           className:'',
-          html:'<div style="display:inline-block;background:#fff;border:1.5px solid '+col+';border-left:5px solid '+col+';border-radius:4px;padding:3px 8px;font-size:11px;font-weight:600;color:#1B3A6B;white-space:nowrap;box-shadow:0 1px 5px rgba(0,0,0,.25);margin-left:'+(pw/2+6)+'px;margin-top:-'+(ph-4)+'px;pointer-events:auto;cursor:pointer">'+f.Unvan+'</div>',
+          html:'<div style="display:inline-block;background:#fff;border:1.5px solid '+col+';border-left:5px solid '+col+';border-radius:4px;padding:3px 8px;font-size:11px;font-weight:600;color:#1B3A6B;white-space:nowrap;box-shadow:0 1px 5px rgba(0,0,0,.25);margin-left:'+(pw/2+6)+'px;margin-top:-'+(ph-4)+'px;pointer-events:auto;cursor:pointer">'+( f.ad||'' )+'</div>',
           iconSize:[null,null],iconAnchor:[0,0]
         }),
         interactive:true,zIndexOffset:-100
       });
       lbl._fp=true;
 
-      const card='<div style="min-width:230px"><b style="font-size:14px;color:#1B3A6B">'+f.Unvan+'</b>'
-        +'<div style="margin:3px 0;font-size:11px;color:#888">'+ulkeLabel(f.Ulke)+'</div>'
-        +'<span style="background:'+col+';color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">'+(segLabel(f.Segment)||'—')+'</span>'
+      const card='<div style="min-width:230px"><b style="font-size:14px;color:#1B3A6B">'+( f.ad||'' )+'</b>'
+        +'<div style="margin:3px 0;font-size:11px;color:#888">'+ulkeLabel(f.ulke||'')+'</div>'
+        +'<span style="background:'+col+';color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">'
         +'<hr style="margin:8px 0"><table style="font-size:12px;width:100%">'
         +'<tr style="font-weight:700;color:#1B3A6B"><td>'+(LANG==='en'?'Total purchased':'Bizden aldığı toplam')+'</td><td>$'+Math.round(f.toplam).toLocaleString('tr-TR')+'</td></tr>'
-        +'<tr><td>'+(LANG==='en'?'Invoices #':'Fatura #')+'</td><td>'+f.fatura+'</td></tr>'
-        +'<tr><td>'+(LANG==='en'?'First invoice':'İlk fatura')+'</td><td>'+(f.ilkFatura||'—')+'</td></tr>'
-        +'<tr><td>'+(LANG==='en'?'Last invoice':'Son fatura')+'</td><td>'+(f.sonFatura||'—')+'</td></tr>'
+        
+        +'<tr><td>'+(LANG==='en'?'First invoice':'İlk fatura')+'</td><td>'+(f.ilk||'—')+'</td></tr>'
+        +'<tr><td>'+(LANG==='en'?'Last invoice':'Son fatura')+'</td><td>'+(f.son||'—')+'</td></tr>'
         +'</table></div>';
       circle.bindPopup(card);
       lbl.bindPopup(card);
@@ -321,7 +321,7 @@ function initMap(){
 
   const sel=document.getElementById('mapUlkeFilter');
   if(sel){
-    const ulkeler=[...new Set(D.firmalar.map(f=>f.Ulke))].sort();
+    const ulkeler=[...new Set(D.firmalar.map(f=>f.ulke))].sort();
     ulkeler.forEach(u=>{const o=document.createElement('option');o.value=u;o.text=u;sel.add(o);});
     sel.addEventListener('change',()=>drawPins(sel.value));
   }
