@@ -191,8 +191,24 @@ function segLabel(s){ return LANG==='en'?(SEG_EN[s]||s):(SEG_TR[s]||s); }
 const ULKE_EN={'ÜRDÜN':'Jordan','GÜRCİSTAN':'Georgia','BİLİNMEYEN':'Unknown','TÜRKİYE':'Turkey','İSRAİL':'Israel','İSVİÇRE':'Switzerland','MOLDAVYA':'Moldova','TUNUS':'Tunisia','MOLDOVA':'Moldova','KAZAKİSTAN':'Kazakhstan','AVUSTRALYA':'Australia','KIBRIS':'Cyprus','KUZEY KIBRIS':'Northern Cyprus','HOLLANDA':'Netherlands','MACARİSTAN':'Hungary','İSVEÇ':'Sweden','SLOVENYA':'Slovenia','AVUSTURYA':'Austria','KARADAĞ':'Montenegro','LETONYA':'Latvia','LİTVANYA':'Lithuania','ESTONYA':'Estonia','MALTA':'Malta','MISIR':'Egypt','IRAK':'Iraq','AZERBAYCAN':'Azerbaijan','CEZAYİR':'Algeria','LİBYA':'Libya','BELARUSİ':'Belarus','KROATİSTAN':'Croatia','SUUDİ ARABİSTAN':'Saudi Arabia','PORTEKİZ':'Portugal','ÇEKİYA':'Czechia','SLOVAKYA':'Slovakia','ARNAVUTLUK':'Albania','BOSNA HERSEK':'Bosnia and Herzegovina','ROMANYA':'Romania','KOSOVA':'Kosovo','SERBIA':'Serbia','FAS':'Morocco','BULGARİSTAN':'Bulgaria','POLONYA':'Poland','UKRAYNA':'Ukraine','MAKEDONYA':'North Macedonia','ALMANYA':'Germany','YUNANİSTAN':'Greece','İNGİLTERE':'United Kingdom','İTALYA':'Italy','FRANSA':'France','BELÇİKA':'Belgium','İSPANYA':'Spain'};
 (D.ulke||[]).forEach(u=>{ if(u.Ulke_EN) ULKE_EN[u.Ulke]=u.Ulke_EN; });
 function ulkeLabel(u){ return LANG==='en'?(ULKE_EN[u]||u):u; }
-const KAT_EN={'Foam/XPS':'Foam/XPS',"Çatal-Kaşık-Bıçak": "Cutlery", "Aperatif Ürünler": "Appetizer Products", "İçecek Bardakları": "Drinking Cups", "Tatlı Kapları": "Dessert Cups", "Tabaklar": "Plates", "Kaseler": "Bowls", "Sos Kapları": "Sauce Cups", "Kapaklar": "Lids", "Mikrodalga Kaplar": "Microwave Containers", "Köpük Tepsiler": "Foam Trays", "Parti & Karıştırıcılar": "Party & Stirrers", "Diğer": "Other"};
-function katLabel(k){ return LANG==='en'?(KAT_EN[k]||TIP_EN[k]||k):k; }
+const KAT_EN={
+  'Foam/XPS':'Foam/XPS','Çatal':'Fork','Kaşık':'Spoon','Bıçak':'Knife',
+  'Tatlı Kaşığı':'Dessert Spoon','Dondurma Kaşığı':'Ice Cream Spoon',
+  'Yemek Seti':'Cutlery Set','Köpük Ürünler':'Foam/XPS','Köpük Bardak':'Foam Cup',
+  'Köpük Tabak':'Foam Plate','Sızdırmaz':'Food Container',
+  'Tatlı Kaseleri':'Dessert Cup','Kase ve Tabaklar':'Bowl & Plate',
+  'Tabak':'Plate','Bardak':'Cup/Glass','Karton Bardak':'Paper Cup',
+  'Karton Kase':'Paper Bowl','Kağıt Kase':'Paper Bowl','Kapak':'Lid',
+  'Kahve Karıştırıcı':'Coffee Stirrer','Sos Kabı':'Sauce Cup',
+  'Mikrodalga Kap':'Microwave Container','Aperatif Ürünler':'Appetizer',
+  'Islak Mendil':'Wet Wipe','Streç Film':'Stretch Film','Çöp Torbası':'Trash Bag',
+  'Kapron':'Bag/Film','Pizza Tripod':'Pizza Tripod','PLA':'PLA Cutlery',
+  'Çatal-Kaşık-Bıçak':'Cutlery','İçecek Bardakları':'Drinking Cups',
+  'Tatlı Kapları':'Dessert Cups','Tabaklar':'Plates','Kaseler':'Bowls',
+  'Sos Kapları':'Sauce Cups','Kapaklar':'Lids','Mikrodalga Kaplar':'Microwave Containers',
+  'Köpük Tepsiler':'Foam Trays','Parti & Karıştırıcılar':'Party & Stirrers','Diğer':'Other'
+};
+function katLabel(k){ return LANG==='en'?(KAT_EN[k]||k):k; }
 function applySegDropdowns(){
   const segSel=document.getElementById('mSeg');
   if(segSel){
