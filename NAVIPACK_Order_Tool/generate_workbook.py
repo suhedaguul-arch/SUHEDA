@@ -1,388 +1,328 @@
 import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side, NamedStyle
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.comments import Comment
 from openpyxl.utils import get_column_letter
 
-# ---------------- MASTER PRODUCT DATA ----------------
-# desc, colour, units/box, boxes/row, rows/pallet, box_vol(m3), weight_gr,
-# price L, M, N (per 1000 pcs), family, assumed_arrangement(bool)
+# ---------------- MASTER DATA (NAVIPACK Price Offer 20.06.2026 + Volume 07.07.2026) ----------------
+# desc, colour, pcs/pack(H), packs/box(I), box_vol(K), box/layer(L), layer/pallet(M), weight_gr(G), price/1000(O), family
 P = [
- ("PREMIUM FORK",          "TRANSPARENT / BLACK",       2000, 7, 10, 0.024, 2.8,  6.25, 7.00, 7.50,  "PREMIUM",  False),
- ("PREMIUM SPOON",         "TRANSPARENT / BLACK",       2000, 7,  8, 0.028, 2.8,  6.25, 7.00, 7.50,  "PREMIUM",  False),
- ("PREMIUM KNIFE",         "TRANSPARENT / BLACK",       2000, 7, 11, 0.018, 2.8,  6.25, 7.00, 7.50,  "PREMIUM",  False),
- ("PREMIUM DESSERT SPOON", "TRANSPARENT / BLACK",       2000, 7, 10, 0.019, 2.5,  6.00, 6.70, 7.25,  "PREMIUM",  False),
- ("DIAMOND FORK",          "TRANSPARENT / WHITE / BLACK",2000,12, 10, 0.024, 3.8,  8.25, 9.25,10.00,  "DIAMOND",  False),
- ("DIAMOND SPOON",         "TRANSPARENT / WHITE / BLACK",2000,12,  8, 0.031, 3.8,  8.25, 9.25,10.00,  "DIAMOND",  False),
- ("DIAMOND KNIFE",         "TRANSPARENT / WHITE / BLACK",2000,12, 12, 0.020, 3.8,  8.25, 9.25,10.00,  "DIAMOND",  False),
- ("SMART FORK",            "TRANSPARENT / BLACK",       2000,12, 10, 0.025, 3.7,  8.75, 9.00, 9.75,  "SMART",    True),
- ("WAVY ICE CREAM SPOON",  "COLORED (RED/BLUE/GREEN/ORANGE)",2000,9, 7, 0.025, 2.4, 7.00, 7.85, 8.50, "ICE CREAM", False),
- ("120 CC CHAMPAGNE GLASS","TRANSPARENT (FOOT COLORED)", 300, 6,  6, 0.053,12.5, 80.0, 90.0,100.0,  "GLASS",    False),
- ("170 CC MINI WINE GLASS","TRANSPARENT (FOOT COLORED)", 300, 6,  6, 0.049,12.5,111.0,105.0,100.0,  "GLASS",    True),
- ("185 CC WINE GLASS",     "TRANSPARENT (FOOT COLORED)", 300, 6,  6, 0.060,14.5,130.0,120.0,110.0,  "GLASS",    True),
- ("PIZZA TRIPOD",          "WHITE",                     1000, 9, 10, 0.027, 1.85, 6.50, 7.30, 8.50,  "PIZZA",    False),
+ ("PREMIUM FORK","TRANSPARENT",50,80,0.046,7,10,2.8,7.5,"PREMIUM"),
+ ("PREMIUM FORK","BLACK",50,80,0.046,7,10,2.8,7.5,"PREMIUM"),
+ ("PREMIUM SPOON","TRANSPARENT",50,80,0.056,7,8,2.8,7.5,"PREMIUM"),
+ ("PREMIUM SPOON","BLACK",50,80,0.056,7,8,2.8,7.5,"PREMIUM"),
+ ("PREMIUM KNIFE","TRANSPARENT",50,80,0.035,7,11,2.8,7.5,"PREMIUM"),
+ ("PREMIUM KNIFE","BLACK",50,80,0.035,7,11,2.8,7.5,"PREMIUM"),
+ ("PREMIUM DESSERT SPOON","TRANSPARENT",50,80,0.036,7,9,2.5,7.25,"PREMIUM"),
+ ("PREMIUM DESSERT SPOON","BLACK",50,80,0.036,7,9,2.5,7.25,"PREMIUM"),
+ ("DIAMOND FORK","TRANSPARENT",50,40,0.024,12,10,3.8,10.0,"DIAMOND"),
+ ("DIAMOND FORK","BLACK",50,40,0.024,12,10,3.8,10.0,"DIAMOND"),
+ ("DIAMOND SPOON","TRANSPARENT",50,40,0.031,12,8,3.8,10.0,"DIAMOND"),
+ ("DIAMOND SPOON","BLACK",50,40,0.031,12,8,3.8,10.0,"DIAMOND"),
+ ("DIAMOND KNIFE","TRANSPARENT",50,40,0.020,12,12,3.8,10.0,"DIAMOND"),
+ ("DIAMOND KNIFE","BLACK",50,40,0.020,12,12,3.8,10.0,"DIAMOND"),
+ ("SMART FORK","TRANSPARENT / BLACK",50,40,0.025,12,10,3.7,9.75,"SMART"),
+ ("WAVY ICE CREAM SPOON","COLORED (RED/BLUE/GREEN/ORANGE)",50,40,0.025,9,9,2.4,8.5,"ICE CREAM"),
+ ("120 CC CHAMPAGNE GLASS","TRANSPARENT (FOOT COLORED)",6,50,0.053,6,6,12.5,100.0,"GLASS"),
+ ("170 CC MINI WINE GLASS","TRANSPARENT (FOOT COLORED)",6,50,0.049,6,10,12.5,100.0,"GLASS"),
+ ("185 CC WINE GLASS","TRANSPARENT (FOOT COLORED)",6,50,0.067,6,7,14.5,110.0,"GLASS"),
+ ("PIZZA TRIPOD","WHITE",100,10,0.027,9,11,1.85,8.5,"PIZZA"),
 ]
+TRUCK_DEFAULT = 90   # NAVIPACK standard TIR (m3); double-trailer = 120
 
-# ---------------- STYLE HELPERS ----------------
-BRAND   = "1F3864"   # dark navy
-BRAND2  = "2E5496"
-HEADER  = "305496"
-INPUTBG = "FFF2CC"   # light yellow (input)
-INPUTHD = "BF8F00"   # darker gold header for input col
-OUTBG   = "E2EFDA"   # light green (outputs)
-REFBG   = "F2F2F2"   # light grey (reference)
-ASSUMED = "FCE4D6"   # light orange (assumed / confirm)
-WHITE   = "FFFFFF"
+# ---------------- STYLES ----------------
+BRAND="1F3864"; HEADER="305496"; INPUTBG="FFF2CC"; INPUTHD="BF8F00"
+OUTBG="E2EFDA"; OUTHD="548235"; REFBG="F2F2F2"; REFHD="A6A6A6"
+KPIBG="DDEBF7"; WHITE="FFFFFF"
+thin=Side(style="thin",color="BFBFBF"); med=Side(style="medium",color="808080")
+b_all=Border(left=thin,right=thin,top=thin,bottom=thin)
+b_box=Border(left=med,right=med,top=med,bottom=med)
+def H(c,fill=HEADER,color=WHITE,size=10):
+    c.font=Font(bold=True,color=color,size=size); c.fill=PatternFill("solid",fgColor=fill)
+    c.alignment=Alignment(horizontal="center",vertical="center",wrap_text=True); c.border=b_all
+def money(c):c.number_format='#,##0.00'
+def num0(c):c.number_format='#,##0'
+def vol(c):c.number_format='0.000'
+def wt(c):c.number_format='#,##0.0'
+def pal(c):c.number_format='0.00'
+def pct(c):c.number_format='0.0%'
 
-thin = Side(style="thin", color="BFBFBF")
-med  = Side(style="medium", color="808080")
-border_all = Border(left=thin,right=thin,top=thin,bottom=thin)
-border_box = Border(left=med,right=med,top=med,bottom=med)
+wb=openpyxl.Workbook()
 
-def style_header(c, fill=HEADER, color=WHITE, size=10):
-    c.font = Font(bold=True, color=color, size=size, name="Calibri")
-    c.fill = PatternFill("solid", fgColor=fill)
-    c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-    c.border = border_all
+# ============================================================ SHEET 1 : ORDER
+ws=wb.active; ws.title="SIPARIS - ORDER"; ws.sheet_view.showGridLines=False
 
-def money(c): c.number_format = '#,##0.00'
-def num0(c):  c.number_format = '#,##0'
-def vol(c):   c.number_format = '0.000'
-def wt(c):    c.number_format = '#,##0.0'
-def pal(c):   c.number_format = '0.00'
+# ---- Title ----
+ws.merge_cells("A1:E4")
+t=ws["A1"]; t.value="NAVIPACK LLC\nSIPARIS & HACIM HESAPLAMA\nORDER & VOLUME CALCULATOR"
+t.font=Font(bold=True,color=WHITE,size=13); t.fill=PatternFill("solid",fgColor=BRAND)
+t.alignment=Alignment(horizontal="left",vertical="center",wrap_text=True)
 
-wb = openpyxl.Workbook()
+def lbl(cell,txt):
+    ws[cell]=txt; ws[cell].font=Font(bold=True,size=9); ws[cell].alignment=Alignment(horizontal="right",vertical="center")
+def inp(cell,val,fmt=None):
+    c=ws[cell]; c.value=val; c.fill=PatternFill("solid",fgColor=INPUTBG); c.border=b_box
+    c.alignment=Alignment(horizontal="center",vertical="center"); c.font=Font(bold=True)
+    if fmt:fmt(c); return c
 
-# ============================================================
-# SHEET 1 : ORDER FORM
-# ============================================================
-ws = wb.active
-ws.title = "SIPARIS - ORDER"
+lbl("F1","MUSTERI / CUSTOMER:");        ws.merge_cells("G1:I1"); inp("G1","")
+lbl("F2","TARIH / DATE:");              inp("G2","=TODAY()"); ws["G2"].number_format="dd.mm.yyyy"
+lbl("F3","TIR KAPASITESI (m3):");       inp("G3",TRUCK_DEFAULT)
+_tc=Comment("NAVIPACK standart TIR = 90 m3\nCift dorse (double trailer) = 120 m3\nDolum HACME gore hesaplanir.","NAVIPACK")
+_tc.width=220;_tc.height=80; ws["G3"].comment=_tc
 
-# ---- Title block ----
-ws.merge_cells("A1:D3")
-t = ws["A1"]
-t.value = "NAVIPACK LLC\nSIPARIS & HACIM HESAPLAMA / ORDER & VOLUME CALCULATOR"
-t.font = Font(bold=True, color=WHITE, size=13, name="Calibri")
-t.fill = PatternFill("solid", fgColor=BRAND)
-t.alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
+# ---- KPI band (row 1-4, cols K..S) ----
+kpis=[("K1","TOPLAM HACIM (m3)","=R{tr}","vol"),
+      ("N1","TIR DOLULUK","=IF($G$3=0,0,R{tr}/$G$3)","pct"),
+      ("K3","GEREKEN TIR ADEDI","=IF($G$3=0,0,CEILING(R{tr}/$G$3,1))","int"),
+      ("N3","TOPLAM TUTAR (USD)","=S{tr}","money")]
+# placeholders; fill after we know totals row
 
-ws.merge_cells("E1:J1"); ws["E1"] = "MUSTERI / CUSTOMER:"; ws["E1"].font=Font(bold=True)
-ws.merge_cells("K1:R1"); ws["K1"] = ""; ws["K1"].fill=PatternFill("solid",fgColor=INPUTBG); ws["K1"].border=border_all
-ws.merge_cells("E2:J2"); ws["E2"] = "TARIH / DATE:"; ws["E2"].font=Font(bold=True)
-ws.merge_cells("K2:R2"); ws["K2"] = "=TODAY()"; ws["K2"].number_format="dd.mm.yyyy"; ws["K2"].fill=PatternFill("solid",fgColor=INPUTBG); ws["K2"].border=border_all
-ws.merge_cells("E3:J3"); ws["E3"] = "FIYAT KADEMESI (1=L / 2=M / 3=N) / PRICE TIER:"; ws["E3"].font=Font(bold=True)
-tier = ws["K3"]; tier.value = 3
-tier.fill=PatternFill("solid",fgColor=INPUTBG); tier.border=border_box
-tier.alignment=Alignment(horizontal="center"); tier.font=Font(bold=True, size=12)
-ws.merge_cells("L3:R3")
-ws["L3"]="<-- Buradan 1, 2 veya 3 secin. Secilen kademe J sutununu ve tutari belirler."
-ws["L3"].font=Font(italic=True, size=9, color="808080")
-dv_tier = DataValidation(type="list", formula1='"1,2,3"', allow_blank=False)
-ws.add_data_validation(dv_tier); dv_tier.add(tier)
+HR=6
+cols=[("A","NO",5),("B","URUN / PRODUCT",24),("C","RENK / COLOUR",20),
+ ("D","ADET/KOLI\n(pcs/box)",10),("E","KOLI HACMI\nm3",9),("F","KOLI NET\nkg",8),
+ ("G","KOLI/SIRA\n(box/layer)",10),("H","SIRA/PALET\n(layer/pal)",10),("I","KOLI/PALET\n(box/pal)",9),
+ ("J","FIYAT/1000\nUSD",10),
+ ("K","SIPARIS\n(KOLI) ***",12),
+ ("L","SIPARIS\n(ADET)",11),("M","PALET\n(esdeger)",9),("N","TAM SIRA\n(rows)",8),
+ ("O","NET AGIRLIK\nkg",11),("P","HACIM\nm3",9),("Q","TUTAR\nUSD",12),
+ ("R","AILE / FAMILY",13)]
+for col,txt,w in cols:
+    ws.column_dimensions[col].width=w
+    c=ws[f"{col}{HR}"]; c.value=txt
+    if col=="K": H(c,fill=INPUTHD)
+    elif col in "LMNOPQ": H(c,fill=OUTHD)
+    elif col=="R": H(c,fill=REFHD,size=9)
+    else: H(c)
+ws.row_dimensions[HR].height=30
 
-# ---- Column headers (row 5) ----
-headers = [
- ("A","NO",5),
- ("B","URUN / PRODUCT",26),
- ("C","RENK / COLOUR",22),
- ("D","ADET / KOLI\n(units/box)",10),
- ("E","KOLI / SIRA\n(box/row)",9),
- ("F","SIRA / PALET\n(row/pallet)",9),
- ("G","KOLI / PALET\n(box/pallet)",9),
- ("H","KOLI HACMI\nm3 (vol/box)",10),
- ("I","KOLI NET kg\n(net/box)",9),
- ("J","BIRIM FIYAT\n/1000 (secili)",11),
- ("K","SIPARIS\n(KOLI)  ***",12),
- ("L","SIPARIS\n(ADET)",11),
- ("M","TAM SIRA\n(full rows)",9),
- ("N","PALET\n(esdeger)",9),
- ("O","NET AGIRLIK\nkg",11),
- ("P","HACIM\nm3",9),
- ("Q","TUTAR\nUSD",13),
- ("R","Fiyat-1 (L)",9),
- ("S","Fiyat-2 (M)",9),
- ("T","Fiyat-3 (N)",9),
- ("U","AILE / FAMILY",13),
-]
-HR = 5
-for col,txt,w in headers:
-    ws.column_dimensions[col].width = w
-    c = ws[f"{col}{HR}"]; c.value = txt
-    if col == "K":
-        style_header(c, fill=INPUTHD)
-    elif col in ("L","M","N","O","P","Q"):
-        style_header(c, fill="548235")
-    elif col in ("R","S","T","U"):
-        style_header(c, fill="A6A6A6", size=9)
-    else:
-        style_header(c)
-ws.row_dimensions[HR].height = 30
-
-# ---- Data rows ----
-first = HR+1
+first=HR+1
 for i,row in enumerate(P):
-    r = first+i
-    (desc,colour,upb,bpr,rpp,bvol,wgr,pl,pm,pn,fam,assumed) = row
-    ws[f"A{r}"] = i+1
-    ws[f"B{r}"] = desc
-    ws[f"C{r}"] = colour
-    ws[f"D{r}"] = upb
-    ws[f"E{r}"] = bpr
-    ws[f"F{r}"] = rpp
-    ws[f"G{r}"] = f"=E{r}*F{r}"
-    ws[f"H{r}"] = bvol
-    ws[f"I{r}"] = f"=D{r}*{wgr}/1000"     # net kg per box = units*gr/1000
-    ws[f"R{r}"] = pl
-    ws[f"S{r}"] = pm
-    ws[f"T{r}"] = pn
-    ws[f"J{r}"] = f"=CHOOSE($K$3,R{r},S{r},T{r})"
-    ws[f"U{r}"] = fam
-    # input
-    ws[f"K{r}"] = 0
-    # outputs
-    ws[f"L{r}"] = f"=K{r}*D{r}"
-    ws[f"M{r}"] = f"=IF(E{r}=0,0,K{r}/E{r})"
-    ws[f"N{r}"] = f"=IF(G{r}=0,0,K{r}/G{r})"
-    ws[f"O{r}"] = f"=K{r}*I{r}"
-    ws[f"P{r}"] = f"=K{r}*H{r}"
-    ws[f"Q{r}"] = f"=L{r}/1000*J{r}"
+    r=first+i
+    desc,colour,pp,pb,bvol,bpl,lpp,wgr,price,fam=row
+    ws[f"A{r}"]=i+1
+    ws[f"B{r}"]=desc; ws[f"C{r}"]=colour
+    ws[f"D{r}"]=pp*pb                 # pcs/box
+    ws[f"E{r}"]=bvol
+    ws[f"F{r}"]=f"=D{r}*{wgr}/1000"   # net kg/box
+    ws[f"G{r}"]=bpl; ws[f"H{r}"]=lpp
+    ws[f"I{r}"]=f"=G{r}*H{r}"         # box/pallet
+    ws[f"J{r}"]=price
+    ws[f"K{r}"]=0                     # INPUT boxes
+    ws[f"L{r}"]=f"=K{r}*D{r}"
+    ws[f"M{r}"]=f"=IF(I{r}=0,0,K{r}/I{r})"
+    ws[f"N{r}"]=f"=IF(G{r}=0,0,K{r}/G{r})"
+    ws[f"O{r}"]=f"=K{r}*F{r}"
+    ws[f"P{r}"]=f"=K{r}*E{r}"
+    ws[f"Q{r}"]=f"=L{r}/1000*J{r}"
+    ws[f"R{r}"]=fam
+    num0(ws[f"D{r}"]); vol(ws[f"E{r}"]); wt(ws[f"F{r}"]); money(ws[f"J{r}"])
+    num0(ws[f"K{r}"]); num0(ws[f"L{r}"]); pal(ws[f"M{r}"]); ws[f"N{r}"].number_format='0'
+    wt(ws[f"O{r}"]); vol(ws[f"P{r}"]); money(ws[f"Q{r}"])
+    # styling
+    for col in "ABCDEFGHIJ": ws[f"{col}{r}"].border=b_all
+    ws[f"R{r}"].border=b_all; ws[f"R{r}"].fill=PatternFill("solid",fgColor=REFBG)
+    kc=ws[f"K{r}"]; kc.fill=PatternFill("solid",fgColor=INPUTBG); kc.border=b_box; kc.font=Font(bold=True); kc.alignment=Alignment(horizontal="center")
+    for col in "LMNOPQ": ws[f"{col}{r}"].fill=PatternFill("solid",fgColor=OUTBG); ws[f"{col}{r}"].border=b_all
+    ws[f"B{r}"].font=Font(bold=True); ws[f"A{r}"].alignment=Alignment(horizontal="center")
+    ws[f"C{r}"].font=Font(size=9); ws[f"C{r}"].alignment=Alignment(wrap_text=True,vertical="center")
+    for col in "DEFGHIJ": ws[f"{col}{r}"].alignment=Alignment(horizontal="center")
+    if i%2==1:
+        for col in "ABCDEFGHIJ":
+            if ws[f"{col}{r}"].fill.fgColor.rgb in (None,"00000000"):
+                ws[f"{col}{r}"].fill=PatternFill("solid",fgColor="FAFAFA")
 
-    # number formats
-    num0(ws[f"D{r}"]); vol(ws[f"H{r}"]); wt(ws[f"I{r}"])
-    money(ws[f"J{r}"]); num0(ws[f"K{r}"]); num0(ws[f"L{r}"])
-    ws[f"M{r}"].number_format='0'; pal(ws[f"N{r}"]); wt(ws[f"O{r}"]); vol(ws[f"P{r}"])
-    money(ws[f"Q{r}"]); money(ws[f"R{r}"]); money(ws[f"S{r}"]); money(ws[f"T{r}"])
+last=first+len(P)-1
+tr=last+1
 
-    # fills / borders
-    for col in "ABCDEFGHIJU":
-        cc=ws[f"{col}{r}"]; cc.border=border_all
-        if col in "RST": cc.fill=PatternFill("solid",fgColor=REFBG)
-    for col in "RST":
-        ws[f"{col}{r}"].fill=PatternFill("solid",fgColor=REFBG); ws[f"{col}{r}"].border=border_all
-    ws[f"U{r}"].fill=PatternFill("solid",fgColor=REFBG)
-    kc=ws[f"K{r}"]; kc.fill=PatternFill("solid",fgColor=INPUTBG); kc.border=border_box
-    kc.font=Font(bold=True); kc.alignment=Alignment(horizontal="center")
-    for col in "LMNOPQ":
-        ws[f"{col}{r}"].fill=PatternFill("solid",fgColor=OUTBG); ws[f"{col}{r}"].border=border_all
-    ws[f"B{r}"].font=Font(bold=True)
-    ws[f"A{r}"].alignment=Alignment(horizontal="center")
-    ws[f"C{r}"].alignment=Alignment(horizontal="left", wrap_text=True)
-    ws[f"C{r}"].font=Font(size=9)
-    for col in "DEFGHI": ws[f"{col}{r}"].alignment=Alignment(horizontal="center")
-
-    # highlight assumed arrangements + comment
-    if assumed:
-        for col in ("E","F","G"):
-            ws[f"{col}{r}"].fill=PatternFill("solid",fgColor=ASSUMED)
-        cm = Comment("DIKKAT: Bu urun eldeki volume tablolarinda yok. Palet dizilimi "
-                     "(koli/sira, sira/palet) benzer urunlere gore TAHMIN edilmistir. "
-                     "Lutfen fabrikadan teyit ederek E ve F hucrelerini guncelleyin.\n\n"
-                     "NOTE: arrangement is ASSUMED - please confirm with the factory.", "NAVIPACK")
-        cm.width=300; cm.height=140
-        ws[f"E{r}"].comment = cm
-
-last = first+len(P)-1
-
-# ---- Totals row ----
-tr = last+1
-ws[f"A{tr}"]=""; 
+# ---- Totals ----
 ws.merge_cells(f"A{tr}:J{tr}")
-ws[f"A{tr}"]="TOPLAM / TOTAL"
-ws[f"A{tr}"].font=Font(bold=True, color=WHITE, size=11)
-ws[f"A{tr}"].fill=PatternFill("solid",fgColor=BRAND)
-ws[f"A{tr}"].alignment=Alignment(horizontal="right", vertical="center")
-ws[f"K{tr}"]=f"=SUM(K{first}:K{last})"
-ws[f"L{tr}"]=f"=SUM(L{first}:L{last})"
-ws[f"N{tr}"]=f"=SUM(N{first}:N{last})"
-ws[f"O{tr}"]=f"=SUM(O{first}:O{last})"
-ws[f"P{tr}"]=f"=SUM(P{first}:P{last})"
-ws[f"Q{tr}"]=f"=SUM(Q{first}:Q{last})"
-num0(ws[f"K{tr}"]); num0(ws[f"L{tr}"]); pal(ws[f"N{tr}"]); wt(ws[f"O{tr}"]); vol(ws[f"P{tr}"]); money(ws[f"Q{tr}"])
+a=ws[f"A{tr}"]; a.value="TOPLAM / GRAND TOTAL"; a.font=Font(bold=True,color=WHITE,size=11)
+a.fill=PatternFill("solid",fgColor=BRAND); a.alignment=Alignment(horizontal="right",vertical="center")
+ws[f"K{tr}"]=f"=SUM(K{first}:K{last})"; ws[f"L{tr}"]=f"=SUM(L{first}:L{last})"
+ws[f"M{tr}"]=f"=SUM(M{first}:M{last})"; ws[f"O{tr}"]=f"=SUM(O{first}:O{last})"
+ws[f"P{tr}"]=f"=SUM(P{first}:P{last})"; ws[f"Q{tr}"]=f"=SUM(Q{first}:Q{last})"
+num0(ws[f"K{tr}"]); num0(ws[f"L{tr}"]); pal(ws[f"M{tr}"]); wt(ws[f"O{tr}"]); vol(ws[f"P{tr}"]); money(ws[f"Q{tr}"])
 for col in "KLMNOPQ":
-    c=ws[f"{col}{tr}"]; c.font=Font(bold=True); c.fill=PatternFill("solid",fgColor="D9E1F2"); c.border=border_box
+    c=ws[f"{col}{tr}"]; c.font=Font(bold=True); c.fill=PatternFill("solid",fgColor="D9E1F2"); c.border=b_box
 ws.row_dimensions[tr].height=20
 
-# note about pallets under totals
-nr = tr+1
-ws.merge_cells(f"A{nr}:Q{nr}")
-ws[f"A{nr}"]=("*** SIPARIS (KOLI) sutununa yalnizca ilgili urunun KOLI/SIRA degerinin KATLARI girilebilir "
-             "(1 palet sirasi = 1 tam sira). Ornek: Diamond Fork icin 12,24,36,48... | "
-             "PALET (esdeger) = yarim paletler dahil toplam palet hacmi. Gercek fiziksel palet sayisi icin 'PALET OZETI' sayfasina bakin.")
-ws[f"A{nr}"].font=Font(italic=True, size=9, color="C00000")
-ws[f"A{nr}"].alignment=Alignment(wrap_text=True, vertical="center")
-ws.row_dimensions[nr].height=42
+# ---- Fill KPI band now that tr is known ----
+def kpi(anchor,label,formula,kind):
+    lc=ws[anchor]; 
+    # label cell spans 2, value next
+    r=int(anchor[1:]); col=anchor[0]
+    ws.merge_cells(f"{col}{r}:{chr(ord(col)+1)}{r}")
+    lc.value=label; lc.font=Font(bold=True,size=9,color=BRAND); lc.fill=PatternFill("solid",fgColor=KPIBG)
+    lc.alignment=Alignment(horizontal="center",vertical="center",wrap_text=True); lc.border=b_all
+    vcol=chr(ord(col)+2); vc=ws[f"{vcol}{r}"]
+    ws.merge_cells(f"{vcol}{r}:{chr(ord(col)+3)}{r}")
+    vc.value=formula.format(tr=tr); vc.font=Font(bold=True,size=12,color="C00000")
+    vc.alignment=Alignment(horizontal="center",vertical="center"); vc.fill=PatternFill("solid",fgColor=WHITE); vc.border=b_box
+    if kind=="vol":vol(vc)
+    elif kind=="pct":pct(vc)
+    elif kind=="int":vc.number_format='0'
+    elif kind=="money":money(vc)
+kpi("K1","TOPLAM\nHACIM m3","=P{tr}","vol")
+kpi("K3","GEREKEN\nTIR ADEDI","=IF($G$3=0,0,CEILING(P{tr}/$G$3,1))","int")
+kpi("O1","TIR\nDOLULUK %","=IF($G$3=0,0,P{tr}/$G$3)","pct")
+kpi("O3","TOPLAM\nTUTAR USD","=Q{tr}","money")
+ws.row_dimensions[1].height=26; ws.row_dimensions[3].height=26
 
-# ---- Data validation: order must be multiple of boxes/row ----
-dv = DataValidation(
-    type="custom",
-    formula1=f"=AND(K{first}>=0,MOD(K{first},E{first})=0)",
-    allow_blank=True, showInputMessage=True, showErrorMessage=True)
-dv.promptTitle = "SIPARIS ADEDI / ORDER (BOXES)"
-dv.prompt = ("Bu urunu KOLI cinsinden girin. Deger, KOLI/SIRA sutununun (E) KATLARI olmalidir.\n"
-             "Cunku her palet sirasi tek urunle DOLU olmali; boylece kalan yarim paletler duzgun birlestirilir.\n"
-             "Ornek Diamond Fork (12/sira): 12, 24, 36, 48, 60 ...\n\n"
-             "Enter the order in BOXES. Must be a MULTIPLE of BOXES/ROW (column E).")
-dv.errorTitle = "GECERSIZ ADET"
-dv.error = ("Girdiginiz sayi KOLI/SIRA degerinin (E sutunu) tam kati degil!\n"
-            "Lutfen tam sira olacak sekilde girin (or. 12'nin katlari: 12,24,36,48...).")
-ws.add_data_validation(dv)
-dv.sqref = f"K{first}:K{last}"
+# ---- note ----
+nr=tr+1
+ws.merge_cells(f"A{nr}:R{nr}")
+ws[f"A{nr}"]=("*** SIPARIS (KOLI) sutununa yalnizca KOLI/SIRA (G sutunu) degerinin KATLARI girilebilir "
+ "(1 palet sirasi = 1 tam sira; ornek Diamond Fork 12/sira -> 12,24,36,48...). Yanlis katta Excel uyari verir. | "
+ "PALET (esdeger) yarim paletleri de kapsar; gercek fiziksel palet ve TIR dolulugu icin 'PALET & TIR OZETI' sayfasina bakin. | "
+ "NAVIPACK standart TIR = 90 m3 (dolum hacme gore hesaplanir).")
+ws[f"A{nr}"].font=Font(italic=True,size=9,color="C00000"); ws[f"A{nr}"].alignment=Alignment(wrap_text=True,vertical="center")
+ws.row_dimensions[nr].height=48
 
-# header comment on K
-kh = ws[f"K{HR}"]
-kc = Comment("Siparisi KOLI (koli) cinsinden girin. Her hucre yalnizca KOLI/SIRA'nin katlarini kabul eder "
-             "- boylece her palet sirasi tek urunle dolar ve yarim paletler duzgun birlesir.", "NAVIPACK")
-kc.width=280; kc.height=110
-kh.comment = kc
+# ---- validation ----
+dv=DataValidation(type="custom",formula1=f"=AND(K{first}>=0,MOD(K{first},G{first})=0)",
+    allow_blank=True,showInputMessage=True,showErrorMessage=True)
+dv.promptTitle="SIPARIS (KOLI)"; dv.prompt=("KOLI cinsinden girin. KOLI/SIRA (G) sutununun KATI olmalidir; "
+ "boylece her palet sirasi tek urunle dolar ve yarim paletler duzgun birlesir.\nOrnek Diamond Fork (12/sira): 12,24,36,48,60...")
+dv.errorTitle="GECERSIZ ADET"; dv.error=("Girdiginiz sayi KOLI/SIRA (G sutunu) degerinin tam kati degil. "
+ "Lutfen tam sira olacak sekilde girin (or. 12'nin katlari).")
+ws.add_data_validation(dv); dv.sqref=f"K{first}:K{last}"
+kc=Comment("Siparisi KOLI cinsinden girin. Her hucre sadece KOLI/SIRA katlarini kabul eder.","NAVIPACK"); kc.width=260;kc.height=90
+ws[f"K{HR}"].comment=kc
 
-ws.freeze_panes = "A6"
-ws.sheet_view.showGridLines = False
+ws.freeze_panes=f"A{first}"
 
-# ============================================================
-# SHEET 2 : PALLET SUMMARY (consolidation by family)
-# ============================================================
-ps = wb.create_sheet("PALET OZETI - PALLETS")
-ps.sheet_view.showGridLines = False
-ps.merge_cells("A1:F2")
-ps["A1"]="PALET OZETI / PALLET CONSOLIDATION SUMMARY"
-ps["A1"].font=Font(bold=True,color=WHITE,size=13)
-ps["A1"].fill=PatternFill("solid",fgColor=BRAND)
+# ============================================================ SHEET 2 : PALLET & TRUCK
+ps=wb.create_sheet("PALET & TIR OZETI"); ps.sheet_view.showGridLines=False
+ps.merge_cells("A1:G2"); ps["A1"]="PALET & TIR OZETI / PALLET & TRUCK CONSOLIDATION"
+ps["A1"].font=Font(bold=True,color=WHITE,size=13); ps["A1"].fill=PatternFill("solid",fgColor=BRAND)
 ps["A1"].alignment=Alignment(horizontal="left",vertical="center")
+ps.merge_cells("A3:G4")
+ps["A3"]=("Yarim paletler ONCELIKLE ayni urun ailesi icinde birlestirilir (Diamond'lar Diamond'larla, Premium'lar "
+ "Premium'larla, kasiklar kasiklarla). Cok az sayidaki kalanlar 'palet ustu dokme' olarak mevcut paletlerin "
+ "ustune yuklenebilir. 'GERCEK PALET' = her ailenin palet-esdegerinin yukari yuvarlanmisi.")
+ps["A3"].font=Font(italic=True,size=9,color="404040"); ps["A3"].alignment=Alignment(wrap_text=True,vertical="center")
 
-ps.merge_cells("A3:F4")
-ps["A3"]=("Yarim paletler ONCELIKLE ayni urun ailesi icinde birlestirilir (Diamond'lar Diamond'larla, "
-          "Premium'lar Premium'larla, kasiklar kendi icinde...). Asagidaki 'GERCEK PALET' sutunu her aile icin "
-          "yukari yuvarlanmis fiziksel palet sayisidir. / Half-pallets are combined within the same product family first.")
-ps["A3"].font=Font(italic=True,size=9,color="404040")
-ps["A3"].alignment=Alignment(wrap_text=True,vertical="center")
-
-ph = 6
-phead = ["AILE / FAMILY","SIPARIS KOLI\n(boxes)","PALET ESDEGER\n(pallet equiv.)","TAM PALET\n(full)","GERCEK PALET\n(actual, rounded up)","NET AGIRLIK kg"]
-widths=[24,14,15,12,16,15]
-for j,(txt,w) in enumerate(zip(phead,widths)):
-    col=get_column_letter(j+1)
-    ps.column_dimensions[col].width=w
-    c=ps[f"{col}{ph}"]; c.value=txt; style_header(c, fill=HEADER)
+oref="'SIPARIS - ORDER'"
+ph=6
+phdr=["AILE / FAMILY","SIPARIS KOLI","PALET ESDEGER","TAM PALET","GERCEK PALET\n(yuvarlanmis)","NET AGIRLIK kg","HACIM m3"]
+pw=[22,13,14,11,15,14,12]
+for j,(txt,w) in enumerate(zip(phdr,pw)):
+    col=get_column_letter(j+1); ps.column_dimensions[col].width=w
+    H(ps[f"{col}{ph}"],fill=HEADER)
 ps.row_dimensions[ph].height=30
-
-families = ["DIAMOND","PREMIUM","SMART","ICE CREAM","GLASS","PIZZA"]
-famlabel = {"DIAMOND":"DIAMOND CUTLERY","PREMIUM":"PREMIUM CUTLERY","SMART":"SMART FORK",
-            "ICE CREAM":"ICE CREAM SPOON","GLASS":"GLASSES / CUPS","PIZZA":"PIZZA TRIPOD"}
-oref = "'SIPARIS - ORDER'"
-prow0 = ph+1
-for k,fam in enumerate(families):
-    r=prow0+k
-    ps[f"A{r}"]=famlabel[fam]
-    ps[f"B{r}"]=f"=SUMIF({oref}!$U${first}:$U${last},$A{r}_x,{oref}!$K${first}:$K${last})"
-    # need family CODE match; store code in helper column H
-    ps[f"H{r}"]=fam
-    ps[f"B{r}"]=f"=SUMIF({oref}!$U${first}:$U${last},$H{r},{oref}!$K${first}:$K${last})"
-    ps[f"C{r}"]=f"=SUMIF({oref}!$U${first}:$U${last},$H{r},{oref}!$N${first}:$N${last})"
+fams=["DIAMOND","PREMIUM","SMART","ICE CREAM","GLASS","PIZZA"]
+flabel={"DIAMOND":"DIAMOND CUTLERY","PREMIUM":"PREMIUM CUTLERY","SMART":"SMART FORK","ICE CREAM":"ICE CREAM SPOON","GLASS":"GLASSES / CUPS","PIZZA":"PIZZA TRIPOD"}
+p0=ph+1
+for k,fam in enumerate(fams):
+    r=p0+k
+    ps[f"A{r}"]=flabel[fam]; ps[f"A{r}"].font=Font(bold=True)
+    ps[f"I{r}"]=fam; ps.column_dimensions["I"].hidden=True
+    ps[f"B{r}"]=f"=SUMIF({oref}!$R${first}:$R${last},$I{r},{oref}!$K${first}:$K${last})"
+    ps[f"C{r}"]=f"=SUMIF({oref}!$R${first}:$R${last},$I{r},{oref}!$M${first}:$M${last})"
     ps[f"D{r}"]=f"=INT(C{r})"
     ps[f"E{r}"]=f"=IF(C{r}=0,0,CEILING(C{r},1))"
-    ps[f"F{r}"]=f"=SUMIF({oref}!$U${first}:$U${last},$H{r},{oref}!$O${first}:$O${last})"
-    num0(ps[f"B{r}"]); pal(ps[f"C{r}"]); ps[f"D{r}"].number_format='0'; ps[f"E{r}"].number_format='0'; wt(ps[f"F{r}"])
-    ps[f"A{r}"].font=Font(bold=True)
-    for col in "ABCDEF":
-        cc=ps[f"{col}{r}"]; cc.border=border_all
+    ps[f"F{r}"]=f"=SUMIF({oref}!$R${first}:$R${last},$I{r},{oref}!$O${first}:$O${last})"
+    ps[f"G{r}"]=f"=SUMIF({oref}!$R${first}:$R${last},$I{r},{oref}!$P${first}:$P${last})"
+    num0(ps[f"B{r}"]); pal(ps[f"C{r}"]); ps[f"D{r}"].number_format='0'; ps[f"E{r}"].number_format='0'; wt(ps[f"F{r}"]); vol(ps[f"G{r}"])
+    for col in "ABCDEFG":
+        cc=ps[f"{col}{r}"]; cc.border=b_all
         if col=="E": cc.fill=PatternFill("solid",fgColor=OUTBG); cc.font=Font(bold=True)
-    ps[f"H{r}"].font=Font(color="FFFFFF")  # hide code visually
-ps.column_dimensions["H"].hidden = True
+pt=p0+len(fams)
+ps[f"A{pt}"]="TOPLAM / GRAND TOTAL"; ps[f"A{pt}"].font=Font(bold=True,color=WHITE)
+ps[f"A{pt}"].fill=PatternFill("solid",fgColor=BRAND); ps[f"A{pt}"].alignment=Alignment(horizontal="right")
+for col in "BCDEFG":
+    ps[f"{col}{pt}"]=f"=SUM({col}{p0}:{col}{pt-1})"
+num0(ps[f"B{pt}"]); pal(ps[f"C{pt}"]); ps[f"D{pt}"].number_format='0'; ps[f"E{pt}"].number_format='0'; wt(ps[f"F{pt}"]); vol(ps[f"G{pt}"])
+for col in "BCDEFG":
+    c=ps[f"{col}{pt}"]; c.font=Font(bold=True); c.fill=PatternFill("solid",fgColor="D9E1F2"); c.border=b_box
 
-ptot=prow0+len(families)
-ps[f"A{ptot}"]="TOPLAM / GRAND TOTAL"
-ps[f"A{ptot}"].font=Font(bold=True,color=WHITE)
-ps[f"A{ptot}"].fill=PatternFill("solid",fgColor=BRAND)
-ps[f"A{ptot}"].alignment=Alignment(horizontal="right")
-ps[f"B{ptot}"]=f"=SUM(B{prow0}:B{ptot-1})"
-ps[f"C{ptot}"]=f"=SUM(C{prow0}:C{ptot-1})"
-ps[f"D{ptot}"]=f"=SUM(D{prow0}:D{ptot-1})"
-ps[f"E{ptot}"]=f"=SUM(E{prow0}:E{ptot-1})"
-ps[f"F{ptot}"]=f"=SUM(F{prow0}:F{ptot-1})"
-num0(ps[f"B{ptot}"]); pal(ps[f"C{ptot}"]); ps[f"D{ptot}"].number_format='0'; ps[f"E{ptot}"].number_format='0'; wt(ps[f"F{ptot}"])
-for col in "BCDEF":
-    c=ps[f"{col}{ptot}"]; c.font=Font(bold=True); c.fill=PatternFill("solid",fgColor="D9E1F2"); c.border=border_box
+# ---- TRUCK block ----
+tb=pt+2
+ps.merge_cells(f"A{tb}:G{tb}"); ps[f"A{tb}"]="TIR / TRUCK YUKLEME (hacme gore / by volume)"
+ps[f"A{tb}"].font=Font(bold=True,color=WHITE,size=11); ps[f"A{tb}"].fill=PatternFill("solid",fgColor="833C00")
+ps[f"A{tb}"].alignment=Alignment(vertical="center"); ps.row_dimensions[tb].height=20
+def trow(r,label,formula,kind,hl=False):
+    ps.merge_cells(f"A{r}:D{r}"); ps[f"A{r}"]=label; ps[f"A{r}"].font=Font(bold=True,size=10)
+    ps[f"A{r}"].alignment=Alignment(horizontal="right",vertical="center")
+    ps.merge_cells(f"E{r}:G{r}"); c=ps[f"E{r}"]; c.value=formula; c.alignment=Alignment(horizontal="center",vertical="center")
+    c.font=Font(bold=True,size=12,color="C00000" if hl else "000000"); c.border=b_box
+    if hl: c.fill=PatternFill("solid",fgColor="FCE4D6")
+    if kind=="vol":vol(c)
+    elif kind=="int":c.number_format='0'
+    elif kind=="pct":pct(c)
+    elif kind=="m":money(c)
+    for col in "ABCD": ps[f"{col}{r}"].border=b_all
+trow(tb+1,"TIR KAPASITESI (m3):",f"='SIPARIS - ORDER'!$G$3","vol")
+trow(tb+2,"TOPLAM SIPARIS HACMI (m3):",f"=G{pt}","vol")
+trow(tb+3,"TIR DOLULUK ORANI:",f"=IF(E{tb+1}=0,0,G{pt}/E{tb+1})","pct")
+trow(tb+4,"GEREKEN TIR ADEDI:",f"=IF(E{tb+1}=0,0,CEILING(G{pt}/E{tb+1},1))","int",hl=True)
+trow(tb+5,"SON TIR'DA BOS HACIM (m3):",f"=IF(E{tb+1}=0,0,E{tb+4}*E{tb+1}-G{pt})","vol")
 
-note_r=ptot+2
-ps.merge_cells(f"A{note_r}:F{note_r+2}")
-ps[f"A{note_r}"]=("NOT: 'GERCEK PALET', her ailenin toplam palet-esdegerinin yukari yuvarlanmasiyla bulunur "
-                  "(yarim paletler ayni aile icinde birlesir). Farkli aileler ancak koli yukseklikleri uyumluysa "
-                  "ayni palette birlestirilebilir - bu durumda toplam daha da dusebilir. Nihai istifleme fabrikada "
-                  "fiziksel olarak teyit edilmelidir. Her palet sirasi TEK urunle dolmalidir.")
-ps[f"A{note_r}"].font=Font(italic=True,size=9,color="404040")
-ps[f"A{note_r}"].alignment=Alignment(wrap_text=True,vertical="top")
+note=tb+7
+ps.merge_cells(f"A{note}:G{note+3}")
+ps[f"A{note}"]=("NOT: TIR dolulugu HACME gore hesaplanir (NAVIPACK standart TIR = 90 m3; cift dorse = 120 m3 - "
+ "ust taraftaki kapasiteyi degistirebilirsiniz). Farkli aileler yalnizca koli yukseklikleri uyumluysa ayni palette "
+ "birlestirilebilir; bu durumda palet sayisi daha da dusebilir. Nihai istifleme fabrikada fiziksel olarak teyit edilir. "
+ "Her palet sirasi TEK urunle dolmalidir.")
+ps[f"A{note}"].font=Font(italic=True,size=9,color="404040"); ps[f"A{note}"].alignment=Alignment(wrap_text=True,vertical="top")
 
-# ============================================================
-# SHEET 3 : NOTES / INSTRUCTIONS
-# ============================================================
-nt = wb.create_sheet("ACIKLAMA - NOTES")
-nt.sheet_view.showGridLines=False
-nt.column_dimensions["A"].width=3
-nt.column_dimensions["B"].width=110
-nt.merge_cells("B1:B1")
-lines = [
- ("NAVIPACK - SIPARIS & HACIM HESAPLAMA TABLOSU / ORDER & VOLUME CALCULATOR", "title"),
- ("", ""),
- ("NASIL KULLANILIR / HOW TO USE", "h"),
- ("1) 'SIPARIS - ORDER' sayfasinda SADECE sari 'SIPARIS (KOLI)' sutununa (K) veri girin.", "n"),
- ("   Diger tum sutunlar otomatik hesaplanir. Ust taraftan Musteri, Tarih ve Fiyat Kademesi secin.", "n"),
- ("2) Siparis KOLI (koli) cinsinden girilir. Her urun icin girilen deger, o urunun", "n"),
- ("   KOLI/SIRA degerinin KATI olmalidir (1 palet sirasi = 1 tam sira).", "n"),
- ("   Ornek: Diamond Fork 1 sirada 12 koli -> yalnizca 12, 24, 36, 48, 60 ... girilebilir.", "n"),
- ("   (Yanlis kat girilirse Excel uyari verir.)", "n"),
- ("", ""),
- ("NEDEN KATLAR? / WHY MULTIPLES OF A ROW?", "h"),
- ("Musteri her zaman paletli (100x120 cm buyuk palet) yukleme yapar. Kalan yarim paletler,", "n"),
- ("diger yarim paletlerle birlestirilir. Bir palet sirasina FARKLI urunler dizilirse, koli", "n"),
- ("yukseklikleri farkli olacagindan palet dengesiz yukselir. Bu yuzden her sira TEK urunle", "n"),
- ("DOLU olmalidir; yani siparis daima tam sira (KOLI/SIRA'nin kati) olmalidir.", "n"),
- ("", ""),
- ("ADET -> KOLI DONUSUMU / UNITS -> BOXES", "h"),
- ("Siparisler cogu zaman ADET olarak konusulur. 1 kolideki adet 'ADET/KOLI' sutunundadir.", "n"),
- ("Ornek: 600.000 adet Diamond Fork / 2.000 adet-koli = 300 koli. 1 palet = 120 koli ->", "n"),
- ("300 koli = 2 tam palet + yarim palet (60 koli). Tabloya KOLI olarak 300 girilir (12'nin kati).", "n"),
- ("", ""),
- ("YARIM PALETLERIN BIRLESTIRILMESI / HALF-PALLET CONSOLIDATION", "h"),
- ("Oncelik ayni urun ailesidir: Diamond'lar Diamond'larla (siyah+seffaf), Premium'lar", "n"),
- ("Premium'larla, kasiklar kasiklarla birlestirilir. 'PALET OZETI' sayfasi bu birlestirmeyi", "n"),
- ("aile bazinda yapar ve her aile icin GERCEK (yukari yuvarlanmis) palet sayisini gosterir.", "n"),
- ("", ""),
- ("HESAPLAMALAR / FORMULAS", "h"),
- ("SIPARIS (ADET)   = Siparis Koli x Adet/Koli", "n"),
- ("TAM SIRA         = Siparis Koli / (Koli/Sira)", "n"),
- ("PALET (esdeger)  = Siparis Koli / (Koli/Palet)   [yarim paletler dahil hacim]", "n"),
- ("NET AGIRLIK kg   = Siparis Koli x Koli Net kg     (Koli Net = Adet/Koli x urun agirligi gr /1000)", "n"),
- ("HACIM m3         = Siparis Koli x Koli Hacmi m3", "n"),
- ("TUTAR USD        = (Siparis Adet /1000) x Birim Fiyat (secili kademe)", "n"),
- ("", ""),
- ("RENK KODLARI / COLOUR LEGEND", "h"),
- ("Sari  = veri girisi (siz doldurun) | Yesil = otomatik sonuc | Gri = referans (fiyat/aile)", "n"),
- ("Turuncu (Koli/Sira, Sira/Palet) = palet dizilimi eldeki volume tablolarinda YOK, TAHMINdir - teyit edin.", "n"),
- ("", ""),
- ("KAYNAKLAR / SOURCES", "h"),
- ("Urun listesi & fiyatlar: NAVIPACK Price Offer 10.06.2026.", "n"),
- ("Palet dizilimleri: NAVIPACK Volume Calculation tablolari (11.08.2025 & 01.09.2025).", "n"),
+# ============================================================ SHEET 3 : NOTES
+nt=wb.create_sheet("ACIKLAMA - NOTES"); nt.sheet_view.showGridLines=False
+nt.column_dimensions["A"].width=3; nt.column_dimensions["B"].width=112
+lines=[
+ ("NAVIPACK - SIPARIS & HACIM HESAPLAMA / ORDER & VOLUME CALCULATOR (v2)","title"),
+ ("","" ),
+ ("NASIL KULLANILIR / HOW TO USE","h"),
+ ("1) 'SIPARIS - ORDER' sayfasinda SADECE sari 'SIPARIS (KOLI)' sutununu (K) doldurun.","n"),
+ ("   Ustten Musteri, Tarih ve TIR Kapasitesini (varsayilan 90 m3) girin.","n"),
+ ("2) Ust bantta anlik KPI'lar: Toplam Hacim, TIR Doluluk %, Gereken TIR adedi, Toplam Tutar.","n"),
+ ("3) 'PALET & TIR OZETI' sayfasi paletleri aile bazinda birlestirir ve TIR dolulugunu gosterir.","n"),
+ ("","" ),
+ ("NEDEN KOLI/SIRA'NIN KATLARI? / WHY MULTIPLES OF BOX-PER-LAYER?","h"),
+ ("Musteri her zaman paletli (100x120 cm) yukleme yapar. Bir palet sirasina FARKLI urun dizilirse koli","n"),
+ ("yukseklikleri farkli olur ve palet dengesiz yukselir. Bu yuzden her sira TEK urunle DOLU olmalidir;","n"),
+ ("siparis daima tam sira (KOLI/SIRA'nin kati) girilir. Boylece kalan yarim paletler duzgun birlesir.","n"),
+ ("Ornek: Diamond Fork 1 sirada 12 koli -> 12, 24, 36, 48 ... (45 yerine 48).","n"),
+ ("","" ),
+ ("ADET -> KOLI / UNITS -> BOXES","h"),
+ ("Siparis cogu zaman ADET konusulur. 1 kolideki adet 'ADET/KOLI' sutunundadir (or. Diamond 2.000).","n"),
+ ("600.000 adet Diamond Fork / 2.000 = 300 koli. 1 palet = 120 koli -> 300 koli = 2 tam palet + yarim palet.","n"),
+ ("","" ),
+ ("YARIM PALET BIRLESTIRME & PALET USTU DOKME","h"),
+ ("Oncelik ayni aile: Diamond'lar Diamond'larla, Premium'lar Premium'larla, kasiklar kasiklarla.","n"),
+ ("Cok az sayidaki kalan koliler (or. birkac koli Wavy/Shot Glass) 'palet ustu dokme' olarak mevcut","n"),
+ ("paletlerin ustune yerlestirilebilir. 'PALET & TIR OZETI' bu birlestirmeyi ozetler.","n"),
+ ("","" ),
+ ("TIR / TRUCK","h"),
+ ("NAVIPACK standart TIR = 90 m3 (dolum HACME gore). Cift dorse TIR = 120 m3.","n"),
+ ("Gereken TIR = Toplam Hacim / Kapasite (yukari yuvarlanir). FERPROM gibi tamamen dokme yukleyen","n"),
+ ("firmalarda palet yoktur; sadece toplam hacim TIR'a sigacak sekilde hesaplanir.","n"),
+ ("","" ),
+ ("HESAPLAMALAR / FORMULAS","h"),
+ ("SIPARIS (ADET)  = Siparis Koli x Adet/Koli","n"),
+ ("PALET (esdeger) = Siparis Koli / (Koli/Palet)     [Koli/Palet = Koli/Sira x Sira/Palet]","n"),
+ ("TAM SIRA        = Siparis Koli / (Koli/Sira)","n"),
+ ("NET AGIRLIK kg  = Siparis Koli x (Adet/Koli x urun agirligi gr / 1000)","n"),
+ ("HACIM m3        = Siparis Koli x Koli Hacmi m3","n"),
+ ("TUTAR USD       = (Siparis Adet / 1000) x Birim Fiyat","n"),
+ ("","" ),
+ ("RENK KODLARI / LEGEND","h"),
+ ("Sari = veri girisi (siz doldurun) | Yesil = otomatik sonuc | Gri = referans (aile) | Mavi bant = KPI.","n"),
+ ("","" ),
+ ("KAYNAKLAR / SOURCES","h"),
+ ("Urun listesi, fiyatlar ve palet dizilimleri: NAVIPACK Price Offer 20.06.2026.","n"),
+ ("Palet dogrulama & palet ustu dokme: NAVIPACK Volume Calculation 07.07.2026.","n"),
+ ("TIR kapasiteleri: NAVIPACK standart 90 m3, FERPROM cift dorse 120 m3.","n"),
 ]
 r=1
 for txt,kind in lines:
-    cell=nt[f"B{r}"]
-    cell.value=txt
-    if kind=="title":
-        cell.font=Font(bold=True,color=WHITE,size=13); cell.fill=PatternFill("solid",fgColor=BRAND)
-        nt.row_dimensions[r].height=24
-        cell.alignment=Alignment(vertical="center")
-    elif kind=="h":
-        cell.font=Font(bold=True,color=BRAND,size=11)
-        cell.fill=PatternFill("solid",fgColor="D9E1F2")
-    else:
-        cell.font=Font(size=10)
-        cell.alignment=Alignment(wrap_text=False)
+    c=nt[f"B{r}"]; c.value=txt
+    if kind=="title": c.font=Font(bold=True,color=WHITE,size=13); c.fill=PatternFill("solid",fgColor=BRAND); nt.row_dimensions[r].height=24; c.alignment=Alignment(vertical="center")
+    elif kind=="h": c.font=Font(bold=True,color=BRAND,size=11); c.fill=PatternFill("solid",fgColor="D9E1F2")
+    else: c.font=Font(size=10)
     r+=1
 
-# order the sheets: Notes first? keep order form first
-wb.active = wb.sheetnames.index("SIPARIS - ORDER")
-
-out = "NAVIPACK_Siparis_Hacim_Hesaplama.xlsx"
-wb.save(out)
-print("SAVED", out)
+wb.active=wb.sheetnames.index("SIPARIS - ORDER")
+out="NAVIPACK_Siparis_Hacim_Hesaplama.xlsx"
+wb.save(out); print("SAVED",out,"rows",first,"-",last,"total row",tr)
