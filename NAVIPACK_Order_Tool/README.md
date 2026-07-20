@@ -1,44 +1,48 @@
-# NAVIPACK – Sipariş & Hacim Hesaplama Tablosu (v2)
+# Sipariş & Hacim Hesaplama Araçları
 
-Müşterinin siparişlerini **koli** girerek **palet sayısı, TIR doluluğu, hacim (m³),
-ağırlık (kg) ve tutarı (USD)** otomatik gören Excel aracı.
+İki firma için sipariş + hacim + yükleme hesaplama Excel araçları.
 
 ## Dosyalar
-- `NAVIPACK_Siparis_Hacim_Hesaplama.xlsx` — müşteriye gönderilecek tablo.
-- `generate_workbook.py` — tabloyu üreten Python (openpyxl) betiği. Ürün/fiyat/palet
-  verisi değişirse betikteki `P` listesini güncelleyip yeniden çalıştırın.
+| Dosya | Firma | Yükleme |
+|---|---|---|
+| `NAVIPACK_Siparis_Hacim_Hesaplama.xlsx` | NAVIPACK | **Paletli** (100×120 cm), TIR = 90 m³ |
+| `FERPROM_Dokme_Siparis_Hacim.xlsx` | FERPROM | **Dökme / bulk** (palet yok), çift dorse = 120 m³ |
+| `generate_workbook.py` | — | NAVIPACK tablosunu üreten betik |
+| `generate_ferprom.py` + `ferprom_master.json` | — | FERPROM tablosunu üreten betik + ürün verisi |
 
-## Sayfalar
-1. **SIPARIS - ORDER** — Müşteri yalnızca sarı **SİPARİŞ (KOLİ)** sütununu doldurur.
-   Üstte anlık KPI bandı: **Toplam Hacim, TIR Doluluk %, Gereken TIR adedi, Toplam Tutar**.
-   TIR kapasitesi düzenlenebilir (varsayılan 90 m³).
-2. **PALET & TIR OZETI** — Yarım paletleri ürün ailesi bazında birleştirir
-   (Diamond'lar Diamond'larla, Premium'lar Premium'larla …), **gerçek palet sayısını**
-   ve **TIR yüklemesini (hacme göre)** verir.
-3. **ACIKLAMA - NOTES** — Kullanım ve mantık açıklaması (TR/EN).
+---
 
-## Temel Kurallar
-- Sipariş **KOLİ** cinsinden ve her ürünün **KOLİ/SIRA** (box/layer) değerinin **KATI**
-  olmalı (1 palet sırası = 1 tam sıra). Yanlış girişte Excel uyarı verir.
-  Örn. Diamond Fork (12/sıra): 12, 24, 36, 48 … → 45 yerine 48 koli.
-- Palet: 100×120 cm.
-- **TIR (dolum HACME göre):** NAVIPACK standart = **90 m³**, çift dorse = **120 m³**.
-- Çok az sayıdaki kalan koliler **"palet üstü dökme"** olarak mevcut paletlerin üstüne
-  yüklenebilir (bkz. 07.07.2026 volume tablosu).
+## NAVIPACK (paletli) — v3
+**SIPARIS - ORDER**: Müşteri sarı **SİPARİŞ (KOLİ)** sütununu doldurur. Üstte KPI:
+Toplam Hacim, TIR Doluluk %, Gereken TIR adedi, Toplam Tutar. TIR kapasitesi
+düzenlenebilir (varsayılan **90 m³**).
 
-## v2'de Neler Değişti
-- Veriler **NAVIPACK Price Offer 20.06.2026**'ya güncellendi (tek fiyat kolonu,
-  Premium koliler 4000 adet, renklere göre ayrı satırlar).
-- Palet dizilimleri artık **resmi tekliften** geliyor — tahmin yok.
-- **TIR kapasitesi / doluluk / gereken TIR adedi** KPI'ları eklendi (NAVIPACK 90 m³).
-- Palet özeti sayfasına TIR yükleme bloğu eklendi.
+**Yükleme tipi** sütunu (yeni): her satır **PALET** veya **DÖKME**.
+- **PALET**: Sipariş, ürünün **KOLİ/SIRA** değerinin **KATI** olmalı (tam sıra).
+  Örn. Diamond Fork 12/sıra → 12, 24, 36, 48 … Yanlış katta Excel uyarır.
+- **DÖKME** (palet üstü dökme / bulk): serbest adet; palet oluşturmaz, sadece
+  **hacme** katkı verir (mevcut paletlerin üstüne yüklenir).
 
-## Bulk (Dökme) Karşılaştırması
-FERPROM gibi **tamamen dökme** yükleyen firmalarda palet yoktur; yükleme yalnızca
-**toplam hacmin TIR'a sığması** ile hesaplanır (FERPROM çift dorse = 120 m³).
-NAVIPACK paletli olduğu için bu araç palet + sıra mantığını da içerir.
+**PALET & TIR OZETI**: yarım paletleri aile bazında birleştirir (Diamond↔Diamond,
+Premium↔Premium), gerçek palet sayısını + TIR yüklemesini verir; dökme ürünler için
+ayrı satır.
+
+**Ekstra ürünler** (NAVIPACK volume tablosunda var, fiyat teklifinde yok): PANDA Ice
+Cream Spoon (palet), 95 mm Flat Ice Cream Spoon (dökme), Shot Glass (dökme). Bunların
+**FİYAT/1000** hücresi sarıdır — siparişe göre elle girilir.
+
+## FERPROM (dökme / bulk)
+FERPROM tamamen dökme yükler — **palet yoktur**. Müşteri her ürün için istediği koli
+adedini serbest girer; yükleme yalnızca **toplam hacmin TIR'a sığması** ile hesaplanır
+(çift dorse = **120 m³**). 49 ürünlük katalog (FERPROM Price Offer 20.07.2026 +
+Proforma 26094).
+
+---
+
+## Temel Fark (neden iki ayrı araç)
+- **NAVIPACK paletli** → koli/sıra, palet ve tam-sıra kısıtı var.
+- **FERPROM dökme** → sadece hacim önemli, palet mantığı yok.
 
 ## Kaynaklar
-- Ürün listesi, fiyatlar, palet dizilimleri: NAVIPACK Price Offer 20.06.2026
-- Palet doğrulama & palet üstü dökme: NAVIPACK Volume Calculation 07.07.2026
-- TIR kapasiteleri: NAVIPACK standart 90 m³, FERPROM çift dorse 120 m³
+- NAVIPACK: Price Offer 20.06.2026 + Volume Calculation 07.07.2026 (TIR 90 m³)
+- FERPROM: Price Offer 20.07.2026 + Proforma 26094 (çift dorse 120 m³)

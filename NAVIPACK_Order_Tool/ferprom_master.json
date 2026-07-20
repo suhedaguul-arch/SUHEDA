@@ -1,0 +1,443 @@
+[
+[
+1,
+"ECO DESSERT SPOON",
+"WHITE",
+10000,
+0.044,
+3.6,
+1.2
+],
+[
+2,
+"ECO FORK",
+"WHITE",
+7000,
+0.043,
+4,
+1.5
+],
+[
+3,
+"ECO SPOON",
+"WHITE",
+7000,
+0.055,
+5.25,
+1.85
+],
+[
+4,
+"ECO KNIFE",
+"WHITE",
+7000,
+0.043,
+5,
+1.6
+],
+[
+5,
+"EURO FORK",
+"TRANSPARENT",
+2000,
+0.029,
+7.3,
+3.25
+],
+[
+6,
+"DIAMOND SPOON",
+"TRANSPARENT",
+2000,
+0.032,
+8.5,
+3.8
+],
+[
+7,
+"PREMIUM KNIFE",
+"TRANSPARENT",
+4000,
+0.039,
+6.75,
+2.8
+],
+[
+8,
+"ECO FORK (10 pcs/pack)",
+"WHITE",
+1000,
+0.013,
+5.6,
+1.5
+],
+[
+9,
+"ECO SPOON (10 pcs/pack)",
+"WHITE",
+1500,
+0.021,
+7.35,
+1.85
+],
+[
+10,
+"ECO KNIFE (10 pcs/pack)",
+"WHITE",
+1500,
+0.012,
+7,
+1.6
+],
+[
+11,
+"EURO FORK (25 pcs/pack)",
+"TRANSPARENT",
+2000,
+0.029,
+8,
+3.25
+],
+[
+12,
+"DIAMOND SPOON (25 pcs/pack)",
+"TRANSPARENT",
+2000,
+0.032,
+9.5,
+3.8
+],
+[
+13,
+"PREMIUM KNIFE (25 pcs/pack)",
+"TRANSPARENT",
+2000,
+0.022,
+7.5,
+2.8
+],
+[
+14,
+"CUTLERY SET 4 in 1 2,80 gr Fork + 2,80 gr Knife + Napkin",
+"TRANSPARENT",
+1000,
+0.096,
+32,
+6.5
+],
+[
+15,
+"CUTLERY SET 3 in 1 2,80 gr Fork + 2,80 gr Knife + Napkin",
+"TRANSPARENT",
+1000,
+0.072,
+25,
+6.5
+],
+[
+16,
+"CUTLERY SET 3 in 1 2,80 gr Fork + 2,80 gr Spoon + Napkin",
+"TRANSPARENT",
+1000,
+0.096,
+25,
+6.5
+],
+[
+17,
+"CUTLERY SET 1 by 1 2,80 gr Fork",
+"TRANSPARENT",
+1000,
+0.036,
+14,
+3.8
+],
+[
+18,
+"CUTLERY SET 1 by 1 2,80 gr Spoon",
+"TRANSPARENT",
+1000,
+0.064,
+14,
+3.8
+],
+[
+19,
+"WAVY ICE CREAM SPOON",
+"BLACK",
+2000,
+0.025,
+6.5,
+2.4
+],
+[
+20,
+"WAVY ICE CREAM SPOON",
+"WHITE",
+2000,
+0.025,
+6.5,
+2.4
+],
+[
+21,
+"FLAT ICE CREAM SPOON",
+"COLORED",
+18000,
+0.083,
+5.5,
+1.3
+],
+[
+22,
+"PANDA ICE CREAM SPOON",
+"COLORED",
+8000,
+0.047,
+4,
+1
+],
+[
+23,
+"50 CC  SHOT GLASS",
+"TRANSPARENT",
+2000,
+0.035,
+18,
+3.2
+],
+[
+24,
+"120 CC CHAMPAGNE GLASS",
+"TRANSPARENT (OPTIONAL COLORED FOOT)",
+300,
+0.053,
+75,
+12.5
+],
+[
+25,
+"175 CC COCKTAIL GLASS",
+"TRANSPARENT",
+300,
+0.038,
+70,
+14
+],
+[
+26,
+"170 CC CRYSTAL CUP",
+"TRANSPARENT",
+1000,
+0.05,
+17,
+7
+],
+[
+27,
+"180 CC CRYSTAL CUP",
+"TRANSPARENT",
+1000,
+0.055,
+19,
+8.2
+],
+[
+28,
+"170 CC MINI WINE GLASS",
+"TRANSPARENT (OPTIONAL COLORED FOOT)",
+300,
+0.049,
+75,
+12.5
+],
+[
+29,
+"185 CC WINE GLASS",
+"TRANSPARENT (OPTIONAL COLORED FOOT)",
+300,
+0.067,
+95,
+14.5
+],
+[
+30,
+"220 CC WHISKEY GLASS (SQUARE  BOTTOM)",
+"TRANSPARENT",
+300,
+0.044,
+80,
+17.5
+],
+[
+31,
+"290 CC TUMBLER",
+"TRANSPARENT",
+500,
+0.043,
+75,
+15.5
+],
+[
+32,
+"180 CC CRYSTAL CUP",
+"TRANSPARENT",
+1000,
+0.055,
+23,
+8.2
+],
+[
+33,
+"290 CC TUMBLER (5 pcs/pack)",
+"TRANSPARENT",
+125,
+0.043,
+90,
+15.5
+],
+[
+34,
+"60 CC PRIZMA CUP",
+"TRANSPARENT",
+1000,
+0.018,
+35,
+6.5
+],
+[
+35,
+"120 CC PRIZMA CUP",
+"TRANSPARENT",
+1000,
+0.028,
+50,
+9
+],
+[
+36,
+"200 CC PRIZMA CUP",
+"TRANSPARENT",
+1000,
+0.041,
+70,
+12.5
+],
+[
+37,
+"180 CC BODEGA CUP",
+"TRANSPARENT",
+300,
+0.028,
+80,
+14.25
+],
+[
+38,
+"250 CC BODEGA CUP",
+"TRANSPARENT",
+300,
+0.033,
+90,
+17
+],
+[
+39,
+"200 CC FOOTED CUP",
+"TRANSPARENT",
+500,
+0.071,
+50,
+10.5
+],
+[
+40,
+"DOME LID (FOR 200 CC FOOTED CUP)",
+"TRANSPARENT",
+1000,
+0.053,
+11,
+3.1
+],
+[
+41,
+"160 CC ROUND BOWL",
+"TRANSPARENT",
+1000,
+0.125,
+60,
+12
+],
+[
+42,
+"160 CC CRYSTAL BOWL",
+"TRANSPARENT",
+1000,
+0.128,
+60,
+12
+],
+[
+43,
+"ASYMMETRIC CUP",
+"TRANSPARENT",
+300,
+0.082,
+95,
+20.5
+],
+[
+44,
+"9 INCH PARTY PLATE",
+"COLORED",
+144,
+0.021,
+130,
+35
+],
+[
+45,
+"PIZZA TRIPOD",
+"WHITE GREEN RED",
+1000,
+0.027,
+8,
+1.8
+],
+[
+46,
+"LUX CHIP FORK",
+"COLORED",
+15000,
+0.039,
+3.5,
+0.55
+],
+[
+47,
+"CHIP FORK",
+"BLACK RED BLUE WHITE",
+25000,
+0.049,
+2.5,
+0.45
+],
+[
+48,
+"SWORD PICKS",
+"BLUE RED",
+25000,
+0.049,
+2.5,
+0.35
+],
+[
+49,
+"67 MM STIRRER (MIXER)",
+"TRANSPARENT WHITE",
+30000,
+0.074,
+2.5,
+0.34
+]
+]
