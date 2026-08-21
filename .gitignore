@@ -1,0 +1,4 @@
+# Pipeline çalışma çıktıları
+dashboard_yeni.html
+*.pyc
+__pycache__/

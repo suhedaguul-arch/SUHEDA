@@ -1,0 +1,137 @@
+{
+ "ROMANYA": {
+  "lat": 45.94,
+  "lon": 24.97,
+  "Ulke_EN": "Romania"
+ },
+ "SERBIA": {
+  "lat": 44.02,
+  "lon": 21.01,
+  "Ulke_EN": "Serbia"
+ },
+ "KOSOVA": {
+  "lat": 42.6,
+  "lon": 20.9,
+  "Ulke_EN": "Kosovo"
+ },
+ "FAS": {
+  "lat": 31.79,
+  "lon": -7.09,
+  "Ulke_EN": "Morocco"
+ },
+ "BULGARİSTAN": {
+  "lat": 42.73,
+  "lon": 25.49,
+  "Ulke_EN": "Bulgaria"
+ },
+ "POLONYA": {
+  "lat": 51.92,
+  "lon": 19.15,
+  "Ulke_EN": "Poland"
+ },
+ "UKRAYNA": {
+  "lat": 48.38,
+  "lon": 31.17,
+  "Ulke_EN": "Ukraine"
+ },
+ "MAKEDONYA": {
+  "lat": 41.61,
+  "lon": 21.75,
+  "Ulke_EN": "North Macedonia"
+ },
+ "ALMANYA": {
+  "lat": 51.17,
+  "lon": 10.45,
+  "Ulke_EN": "Germany"
+ },
+ "ÜRDÜN": {
+  "lat": 31.24,
+  "lon": 36.51,
+  "Ulke_EN": "Jordan"
+ },
+ "MACARİSTAN": {
+  "lat": 47.16,
+  "lon": 19.5,
+  "Ulke_EN": "Hungary"
+ },
+ "ARNAVUTLUK": {
+  "lat": 41.15,
+  "lon": 20.17,
+  "Ulke_EN": "Albania"
+ },
+ "İNGİLTERE": {
+  "lat": 51.51,
+  "lon": -0.13,
+  "Ulke_EN": "İNGİLTERE"
+ },
+ "YUNANİSTAN": {
+  "lat": 39.07,
+  "lon": 21.82,
+  "Ulke_EN": "Greece"
+ },
+ "İTALYA": {
+  "lat": 41.9,
+  "lon": 12.5,
+  "Ulke_EN": "İTALYA"
+ },
+ "BOSNA HERSEK": {
+  "lat": 44.17,
+  "lon": 17.68,
+  "Ulke_EN": "Bosnia and Herzegovina"
+ },
+ "GÜRCİSTAN": {
+  "lat": 42.32,
+  "lon": 43.36,
+  "Ulke_EN": "Georgia"
+ },
+ "FRANSA": {
+  "lat": 46.23,
+  "lon": 2.21,
+  "Ulke_EN": "France"
+ },
+ "BELÇİKA": {
+  "lat": 50.5,
+  "lon": 4.47,
+  "Ulke_EN": "Belgium"
+ },
+ "TÜRKİYE": {
+  "lat": 38.96,
+  "lon": 35.24,
+  "Ulke_EN": "Turkey"
+ },
+ "İSRAİL": {
+  "lat": 31.05,
+  "lon": 34.85,
+  "Ulke_EN": "Israel"
+ },
+ "İSPANYA": {
+  "lat": 40.46,
+  "lon": -3.75,
+  "Ulke_EN": "Spain"
+ },
+ "SLOVENYA": {
+  "lat": 46.15,
+  "lon": 14.99,
+  "Ulke_EN": "Slovenia"
+ },
+ "AVUSTURYA": {
+  "lat": 47.52,
+  "lon": 14.55,
+  "Ulke_EN": "Austria"
+ },
+ "İSVİÇRE": {
+  "lat": 46.82,
+  "lon": 8.23,
+  "Ulke_EN": "Switzerland"
+ },
+ "MOLDAVYA": {
+  "lat": 47.41,
+  "lon": 28.37,
+  "Ulke_EN": "Moldova"
+ },
+ "TUNUS": {
+  "lat": 33.89,
+  "lon": 9.54,
+  "Ulke_EN": "Tunisia"
+ }
+}
