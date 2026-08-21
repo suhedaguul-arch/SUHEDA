@@ -1,0 +1,1829 @@
+[
+ {
+  "fno": "RNS2026000000602",
+  "tarih": "03-07-2026",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE",
+  "kod": "0459",
+  "miktar": 50000.0,
+  "tutar": 900.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000602",
+  "tarih": "03-07-2026",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE",
+  "kod": "0915",
+  "miktar": 115000.0,
+  "tutar": 1150.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000602",
+  "tarih": "03-07-2026",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE",
+  "kod": "0839",
+  "miktar": 75000.0,
+  "tutar": 2587.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000602",
+  "tarih": "03-07-2026",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE",
+  "kod": "1549",
+  "miktar": 99000.0,
+  "tutar": 1410.75,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000501",
+  "tarih": "09-06-2026",
+  "buyer": "FOLYOTERM AMBALAJ PLASTİK SANAYİ VE",
+  "kod": "0436",
+  "miktar": 735000.0,
+  "tutar": 3924.9,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000501",
+  "tarih": "09-06-2026",
+  "buyer": "FOLYOTERM AMBALAJ PLASTİK SANAYİ VE",
+  "kod": "0001",
+  "miktar": 700000.0,
+  "tutar": 4242.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000501",
+  "tarih": "09-06-2026",
+  "buyer": "FOLYOTERM AMBALAJ PLASTİK SANAYİ VE",
+  "kod": "0003",
+  "miktar": 448000.0,
+  "tutar": 2714.88,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000501",
+  "tarih": "09-06-2026",
+  "buyer": "FOLYOTERM AMBALAJ PLASTİK SANAYİ VE",
+  "kod": "0005",
+  "miktar": 420000.0,
+  "tutar": 2545.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000469",
+  "tarih": "22-05-2026",
+  "buyer": "SURAPACK AMBALAJ SANAYİ VE DIŞ TİCARET",
+  "kod": "1480",
+  "miktar": 50000.0,
+  "tutar": 9000.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2026000000237",
+  "tarih": "18-03-2026",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0638",
+  "miktar": 1320000.0,
+  "tutar": 5940.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000237",
+  "tarih": "18-03-2026",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0447",
+  "miktar": 67500.0,
+  "tutar": 1417.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000153",
+  "tarih": "16-02-2026",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0818",
+  "miktar": 768000.0,
+  "tutar": 4992.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000153",
+  "tarih": "16-02-2026",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0447",
+  "miktar": 77500.0,
+  "tutar": 1627.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000009",
+  "tarih": "07-01-2026",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "1233",
+  "miktar": 2504000.0,
+  "tutar": 9515.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000009",
+  "tarih": "07-01-2026",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0638",
+  "miktar": 748000.0,
+  "tutar": 2992.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2026000000009",
+  "tarih": "07-01-2026",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0447",
+  "miktar": 9500.0,
+  "tutar": 199.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000910",
+  "tarih": "25-12-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0569",
+  "miktar": 1003000.0,
+  "tutar": 12036.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000910",
+  "tarih": "25-12-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0940",
+  "miktar": 30250.0,
+  "tutar": 1694.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000910",
+  "tarih": "25-12-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "1120",
+  "miktar": 56750.0,
+  "tutar": 3121.25,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000910",
+  "tarih": "25-12-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0357",
+  "miktar": 15250.0,
+  "tutar": 838.75,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000908",
+  "tarih": "24-12-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0831",
+  "miktar": 1157000.0,
+  "tutar": 11570.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000908",
+  "tarih": "24-12-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0638",
+  "miktar": 598000.0,
+  "tutar": 2392.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000908",
+  "tarih": "24-12-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0133",
+  "miktar": 25000.0,
+  "tutar": 525.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1328",
+  "miktar": 80000.0,
+  "tutar": 2432.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1329",
+  "miktar": 48000.0,
+  "tutar": 2736.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1330",
+  "miktar": 24000.0,
+  "tutar": 1482.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1331",
+  "miktar": 24000.0,
+  "tutar": 1710.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1332",
+  "miktar": 36000.0,
+  "tutar": 2052.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1333",
+  "miktar": 192000.0,
+  "tutar": 3192.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1334",
+  "miktar": 30000.0,
+  "tutar": 1995.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1335",
+  "miktar": 25956.0,
+  "tutar": 1767.17,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1336",
+  "miktar": 33750.0,
+  "tutar": 2671.88,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1337",
+  "miktar": 151000.0,
+  "tutar": 1348.43,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1338",
+  "miktar": 150000.0,
+  "tutar": 1653.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1339",
+  "miktar": 460000.0,
+  "tutar": 1651.86,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1340",
+  "miktar": 500000.0,
+  "tutar": 1795.5,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1341",
+  "miktar": 500000.0,
+  "tutar": 1795.5,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1342",
+  "miktar": 460800.0,
+  "tutar": 10506.24,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000902",
+  "tarih": "22-12-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1343",
+  "miktar": 472320.0,
+  "tutar": 10768.9,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000705",
+  "tarih": "23-10-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0510",
+  "miktar": 4320000.0,
+  "tutar": 146880.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2025000000701",
+  "tarih": "22-10-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0437",
+  "miktar": 1016000.0,
+  "tutar": 12192.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000701",
+  "tarih": "22-10-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0439",
+  "miktar": 163000.0,
+  "tutar": 1956.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000701",
+  "tarih": "22-10-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0577",
+  "miktar": 99000.0,
+  "tutar": 792.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000701",
+  "tarih": "22-10-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0357",
+  "miktar": 78759.0,
+  "tutar": 4331.74,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000700",
+  "tarih": "22-10-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0437",
+  "miktar": 1016000.0,
+  "tutar": 16256.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000700",
+  "tarih": "22-10-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0439",
+  "miktar": 163000.0,
+  "tutar": 2608.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000700",
+  "tarih": "22-10-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0577",
+  "miktar": 99000.0,
+  "tutar": 792.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000700",
+  "tarih": "22-10-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0357",
+  "miktar": 78759.0,
+  "tutar": 4410.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000661",
+  "tarih": "10-10-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0447",
+  "miktar": 215500.0,
+  "tutar": 4525.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000605",
+  "tarih": "19-09-2025",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE",
+  "kod": "1111",
+  "miktar": 118000.0,
+  "tutar": 1534.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000605",
+  "tarih": "19-09-2025",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE",
+  "kod": "0839",
+  "miktar": 60000.0,
+  "tutar": 1740.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000607",
+  "tarih": "19-09-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0831",
+  "miktar": 1023000.0,
+  "tutar": 10997.25,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000572",
+  "tarih": "10-09-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1020",
+  "miktar": 956000.0,
+  "tutar": 10038.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000572",
+  "tarih": "10-09-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1021",
+  "miktar": 482000.0,
+  "tutar": 5061.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000572",
+  "tarih": "10-09-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1022",
+  "miktar": 78000.0,
+  "tutar": 819.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000572",
+  "tarih": "10-09-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1023",
+  "miktar": 290000.0,
+  "tutar": 2247.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000541",
+  "tarih": "30-08-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0437",
+  "miktar": 303000.0,
+  "tutar": 3636.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000541",
+  "tarih": "30-08-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0439",
+  "miktar": 160000.0,
+  "tutar": 1920.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000541",
+  "tarih": "30-08-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0357",
+  "miktar": 62500.0,
+  "tutar": 3437.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000541",
+  "tarih": "30-08-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "1120",
+  "miktar": 19750.0,
+  "tutar": 1086.25,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000541",
+  "tarih": "30-08-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM",
+  "kod": "0353",
+  "miktar": 13250.0,
+  "tutar": 424.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000537",
+  "tarih": "29-08-2025",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE",
+  "kod": "1111",
+  "miktar": 89000.0,
+  "tutar": 1157.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000537",
+  "tarih": "29-08-2025",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE",
+  "kod": "1086",
+  "miktar": 198000.0,
+  "tutar": 1584.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000516",
+  "tarih": "20-08-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0709",
+  "miktar": 200000.0,
+  "tutar": 1540.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000516",
+  "tarih": "20-08-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0708",
+  "miktar": 200000.0,
+  "tutar": 1680.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000516",
+  "tarih": "20-08-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0706",
+  "miktar": 20000.0,
+  "tutar": 172.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000506",
+  "tarih": "15-08-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE",
+  "kod": "0063",
+  "miktar": 57500.0,
+  "tutar": 1035.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000439",
+  "tarih": "21-07-2025",
+  "buyer": "UPLASS HAVACILIK ÜRÜNLERİ SANAYİ VE TİCARET ANONİM",
+  "kod": "0483",
+  "miktar": 50000.0,
+  "tutar": 1500.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000422",
+  "tarih": "14-07-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0819",
+  "miktar": 1766000.0,
+  "tutar": 10154.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000350",
+  "tarih": "18-06-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1020",
+  "miktar": 680000.0,
+  "tutar": 6460.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000350",
+  "tarih": "18-06-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1021",
+  "miktar": 500000.0,
+  "tutar": 4750.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000350",
+  "tarih": "18-06-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1022",
+  "miktar": 80000.0,
+  "tutar": 760.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000350",
+  "tarih": "18-06-2025",
+  "buyer": "VENTEKS DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "1023",
+  "miktar": 500000.0,
+  "tutar": 3125.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000337",
+  "tarih": "12-06-2025",
+  "buyer": "UPLASS AMBALAJ SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+  "kod": "0484",
+  "miktar": 614000.0,
+  "tutar": 23332.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000337",
+  "tarih": "12-06-2025",
+  "buyer": "UPLASS AMBALAJ SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+  "kod": "0895",
+  "miktar": 1310000.0,
+  "tutar": 5109.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2025000000293",
+  "tarih": "27-05-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0419",
+  "miktar": 240000.0,
+  "tutar": 1848.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000293",
+  "tarih": "27-05-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0422",
+  "miktar": 80000.0,
+  "tutar": 672.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000293",
+  "tarih": "27-05-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0422",
+  "miktar": 80000.0,
+  "tutar": 672.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000293",
+  "tarih": "27-05-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0483",
+  "miktar": 10000.0,
+  "tutar": 276.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000245",
+  "tarih": "07-05-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0817",
+  "miktar": 1546000.0,
+  "tutar": 7343.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000217",
+  "tarih": "23-04-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0568",
+  "miktar": 16000.0,
+  "tutar": 608.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000217",
+  "tarih": "23-04-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0447",
+  "miktar": 56250.0,
+  "tutar": 1012.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000182",
+  "tarih": "08-04-2025",
+  "buyer": "FOLYOTERM AMBALAJ PLASTİK SANAYİ VE TİCARET",
+  "kod": "0454",
+  "miktar": 910000.0,
+  "tutar": 3503.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000182",
+  "tarih": "08-04-2025",
+  "buyer": "FOLYOTERM AMBALAJ PLASTİK SANAYİ VE TİCARET",
+  "kod": "0436",
+  "miktar": 910000.0,
+  "tutar": 4413.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000182",
+  "tarih": "08-04-2025",
+  "buyer": "FOLYOTERM AMBALAJ PLASTİK SANAYİ VE TİCARET",
+  "kod": "0453",
+  "miktar": 210000.0,
+  "tutar": 1018.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000147",
+  "tarih": "14-03-2025",
+  "buyer": "PLASAN DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "0578",
+  "miktar": 20000.0,
+  "tutar": 544.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000135",
+  "tarih": "11-03-2025",
+  "buyer": "ORİON AMBALAJ SANAYİ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "0545",
+  "miktar": 30000.0,
+  "tutar": 45000.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2025000000135",
+  "tarih": "11-03-2025",
+  "buyer": "ORİON AMBALAJ SANAYİ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "0894",
+  "miktar": 20000.0,
+  "tutar": 2720.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2025000000117",
+  "tarih": "02-03-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM ÜRÜNLERİ İNŞAAT",
+  "kod": "0357",
+  "miktar": 40500.0,
+  "tutar": 2268.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000117",
+  "tarih": "02-03-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM ÜRÜNLERİ İNŞAAT",
+  "kod": "0577",
+  "miktar": 90000.0,
+  "tutar": 720.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000117",
+  "tarih": "02-03-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM ÜRÜNLERİ İNŞAAT",
+  "kod": "0437",
+  "miktar": 432000.0,
+  "tutar": 6912.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000117",
+  "tarih": "02-03-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM ÜRÜNLERİ İNŞAAT",
+  "kod": "0930",
+  "miktar": 439000.0,
+  "tutar": 5707.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000117",
+  "tarih": "02-03-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM ÜRÜNLERİ İNŞAAT",
+  "kod": "0439",
+  "miktar": 241000.0,
+  "tutar": 3856.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000117",
+  "tarih": "02-03-2025",
+  "buyer": "ASNE AMBALAJ GIDA NAKLİYAT TARIM ÜRÜNLERİ İNŞAAT",
+  "kod": "0940",
+  "miktar": 79500.0,
+  "tutar": 4770.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000110",
+  "tarih": "27-02-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0819",
+  "miktar": 1452000.0,
+  "tutar": 9728.4,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000102",
+  "tarih": "19-02-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0586",
+  "miktar": 200000.0,
+  "tutar": 2200.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000102",
+  "tarih": "19-02-2025",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0422",
+  "miktar": 200000.0,
+  "tutar": 1600.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2025000000078",
+  "tarih": "12-02-2025",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0819",
+  "miktar": 500000.0,
+  "tutar": 3350.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000760",
+  "tarih": "25-12-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0007",
+  "miktar": 352000.0,
+  "tutar": 2182.4,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000760",
+  "tarih": "25-12-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0009",
+  "miktar": 464000.0,
+  "tutar": 2876.8,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000760",
+  "tarih": "25-12-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0011",
+  "miktar": 424000.0,
+  "tutar": 2628.8,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000760",
+  "tarih": "25-12-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0374",
+  "miktar": 352000.0,
+  "tutar": 2041.6,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000760",
+  "tarih": "25-12-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0376",
+  "miktar": 92000.0,
+  "tutar": 533.6,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000760",
+  "tarih": "25-12-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0378",
+  "miktar": 220000.0,
+  "tutar": 1276.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000760",
+  "tarih": "25-12-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0867",
+  "miktar": 12000.0,
+  "tutar": 372.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000760",
+  "tarih": "25-12-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0585",
+  "miktar": 24000.0,
+  "tutar": 540.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000754",
+  "tarih": "23-12-2024",
+  "buyer": "ELF PAK AMBALAJ İÇ VE DIŞ TİCARET LİMİTED ŞİRKETİ",
+  "kod": "0119",
+  "miktar": 65000.0,
+  "tutar": 975.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000714",
+  "tarih": "04-12-2024",
+  "buyer": "ATMİN SAĞLIK TURİZMİ VE HİZMETLERİ HASTA",
+  "kod": "0851",
+  "miktar": 704000.0,
+  "tutar": 5632.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000695",
+  "tarih": "27-11-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0854",
+  "miktar": 216000.0,
+  "tutar": 1447.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000695",
+  "tarih": "27-11-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0586",
+  "miktar": 200000.0,
+  "tutar": 2200.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0638",
+  "miktar": 1280000.0,
+  "tutar": 6400.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0653",
+  "miktar": 1500000.0,
+  "tutar": 7125.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0589",
+  "miktar": 440000.0,
+  "tutar": 1760.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0819",
+  "miktar": 594000.0,
+  "tutar": 3979.8,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0818",
+  "miktar": 308000.0,
+  "tutar": 2094.4,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0545",
+  "miktar": 45000.0,
+  "tutar": 2250.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0847",
+  "miktar": 22500.0,
+  "tutar": 270.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0848",
+  "miktar": 22500.0,
+  "tutar": 270.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0715",
+  "miktar": 144.0,
+  "tutar": 21.6,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0716",
+  "miktar": 144.0,
+  "tutar": 21.6,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0717",
+  "miktar": 144.0,
+  "tutar": 21.6,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0718",
+  "miktar": 144.0,
+  "tutar": 21.6,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0337",
+  "miktar": 7400.0,
+  "tutar": 281.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000659",
+  "tarih": "09-11-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0341",
+  "miktar": 10000.0,
+  "tutar": 380.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000645",
+  "tarih": "04-11-2024",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE TİCARET LİMİTED",
+  "kod": "0007",
+  "miktar": 80000.0,
+  "tutar": 560.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000645",
+  "tarih": "04-11-2024",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE TİCARET LİMİTED",
+  "kod": "0009",
+  "miktar": 80000.0,
+  "tutar": 560.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000645",
+  "tarih": "04-11-2024",
+  "buyer": "PAKPLAS PLASTİK TEKSTİL SANAYİ VE TİCARET LİMİTED",
+  "kod": "0797",
+  "miktar": 12000.0,
+  "tutar": 240.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000621",
+  "tarih": "22-10-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0831",
+  "miktar": 1200000.0,
+  "tutar": 12900.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000593",
+  "tarih": "04-10-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0638",
+  "miktar": 1536000.0,
+  "tutar": 7680.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000593",
+  "tarih": "04-10-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0817",
+  "miktar": 1800000.0,
+  "tutar": 8550.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000593",
+  "tarih": "04-10-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0589",
+  "miktar": 960000.0,
+  "tutar": 3840.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000593",
+  "tarih": "04-10-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0819",
+  "miktar": 396000.0,
+  "tutar": 2653.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000593",
+  "tarih": "04-10-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0818",
+  "miktar": 154000.0,
+  "tutar": 1047.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000593",
+  "tarih": "04-10-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0577",
+  "miktar": 192000.0,
+  "tutar": 1920.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000593",
+  "tarih": "04-10-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0339",
+  "miktar": 13700.0,
+  "tutar": 520.6,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000593",
+  "tarih": "04-10-2024",
+  "buyer": "CAPP ALÜMİNYUM FOLYO İMALAT SANAYİ VE TİCARET",
+  "kod": "0341",
+  "miktar": 10500.0,
+  "tutar": 399.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000514",
+  "tarih": "14-08-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0484",
+  "miktar": 50.0,
+  "tutar": 1900.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2024000000514",
+  "tarih": "14-08-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0476",
+  "miktar": 50.0,
+  "tutar": 2400.0,
+  "dov": "USD"
+ },
+ {
+  "fno": "RNS2024000000310",
+  "tarih": "13-05-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0374",
+  "miktar": 200000.0,
+  "tutar": 1380.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000310",
+  "tarih": "13-05-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0007",
+  "miktar": 200000.0,
+  "tutar": 1380.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000310",
+  "tarih": "13-05-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0419",
+  "miktar": 40000.0,
+  "tutar": 356.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000310",
+  "tarih": "13-05-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0417",
+  "miktar": 40000.0,
+  "tutar": 356.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000310",
+  "tarih": "13-05-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0467",
+  "miktar": 60000.0,
+  "tutar": 300.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000310",
+  "tarih": "13-05-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0673",
+  "miktar": 30000.0,
+  "tutar": 150.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000217",
+  "tarih": "03-04-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0708",
+  "miktar": 504000.0,
+  "tutar": 3780.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000217",
+  "tarih": "03-04-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0709",
+  "miktar": 600000.0,
+  "tutar": 4500.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000186",
+  "tarih": "25-03-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0653",
+  "miktar": 300000.0,
+  "tutar": 1020.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000186",
+  "tarih": "25-03-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0638",
+  "miktar": 300000.0,
+  "tutar": 1320.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000186",
+  "tarih": "25-03-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0704",
+  "miktar": 300000.0,
+  "tutar": 1200.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000186",
+  "tarih": "25-03-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0374",
+  "miktar": 504000.0,
+  "tutar": 2167.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000186",
+  "tarih": "25-03-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0009",
+  "miktar": 196000.0,
+  "tutar": 1019.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000186",
+  "tarih": "25-03-2024",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0578",
+  "miktar": 20000.0,
+  "tutar": 640.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000152",
+  "tarih": "08-03-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0420",
+  "miktar": 12000.0,
+  "tutar": 106.95,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000152",
+  "tarih": "08-03-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0417",
+  "miktar": 10000.0,
+  "tutar": 89.12,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000121",
+  "tarih": "23-02-2024",
+  "buyer": "PEGASUS AMBALAJ MALZEMELERİ İÇ VE DIŞ TİCARET",
+  "kod": "0651",
+  "miktar": 750000.0,
+  "tutar": 4312.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000121",
+  "tarih": "23-02-2024",
+  "buyer": "PEGASUS AMBALAJ MALZEMELERİ İÇ VE DIŞ TİCARET",
+  "kod": "0652",
+  "miktar": 1605000.0,
+  "tutar": 9228.75,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0597",
+  "miktar": 7500.0,
+  "tutar": 225.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0374",
+  "miktar": 20000.0,
+  "tutar": 120.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0376",
+  "miktar": 20000.0,
+  "tutar": 120.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0378",
+  "miktar": 20000.0,
+  "tutar": 120.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0417",
+  "miktar": 10000.0,
+  "tutar": 77.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0420",
+  "miktar": 10000.0,
+  "tutar": 77.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0423",
+  "miktar": 10000.0,
+  "tutar": 77.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0419",
+  "miktar": 10000.0,
+  "tutar": 77.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0422",
+  "miktar": 10000.0,
+  "tutar": 77.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0425",
+  "miktar": 10000.0,
+  "tutar": 77.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0019",
+  "miktar": 2000.0,
+  "tutar": 13.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0446",
+  "miktar": 2000.0,
+  "tutar": 13.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0469",
+  "miktar": 2000.0,
+  "tutar": 13.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0517",
+  "miktar": 2000.0,
+  "tutar": 13.5,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0483",
+  "miktar": 5000.0,
+  "tutar": 175.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0484",
+  "miktar": 5000.0,
+  "tutar": 225.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0476",
+  "miktar": 5000.0,
+  "tutar": 275.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0485",
+  "miktar": 900.0,
+  "tutar": 180.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0486",
+  "miktar": 900.0,
+  "tutar": 210.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0545",
+  "miktar": 1000.0,
+  "tutar": 275.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0562",
+  "miktar": 2000.0,
+  "tutar": 26.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0117",
+  "miktar": 1000.0,
+  "tutar": 20.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000013",
+  "tarih": "05-01-2024",
+  "buyer": "FAOPACK GIDA AMBALAJ SANAYİ VE TİCARET LİMİTED",
+  "kod": "0581",
+  "miktar": 2000.0,
+  "tutar": 25.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2024000000001",
+  "tarih": "03-01-2024",
+  "buyer": "VİTALAB İLAÇ SANAYİ ANONİM ŞİRKETİ",
+  "kod": "0417",
+  "miktar": 10000.0,
+  "tutar": 2682.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2024000000001",
+  "tarih": "03-01-2024",
+  "buyer": "VİTALAB İLAÇ SANAYİ ANONİM ŞİRKETİ",
+  "kod": "0420",
+  "miktar": 10000.0,
+  "tutar": 2682.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2024000000001",
+  "tarih": "03-01-2024",
+  "buyer": "VİTALAB İLAÇ SANAYİ ANONİM ŞİRKETİ",
+  "kod": "0423",
+  "miktar": 10000.0,
+  "tutar": 2682.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2024000000001",
+  "tarih": "03-01-2024",
+  "buyer": "VİTALAB İLAÇ SANAYİ ANONİM ŞİRKETİ",
+  "kod": "0419",
+  "miktar": 10000.0,
+  "tutar": 2682.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2024000000001",
+  "tarih": "03-01-2024",
+  "buyer": "VİTALAB İLAÇ SANAYİ ANONİM ŞİRKETİ",
+  "kod": "0422",
+  "miktar": 10000.0,
+  "tutar": 2682.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2024000000001",
+  "tarih": "03-01-2024",
+  "buyer": "VİTALAB İLAÇ SANAYİ ANONİM ŞİRKETİ",
+  "kod": "0425",
+  "miktar": 10000.0,
+  "tutar": 2682.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2023000000735",
+  "tarih": "24-10-2023",
+  "buyer": "PEGASUS AMBALAJ MALZEMELERİ İÇ VE DIŞ TİCARET",
+  "kod": "0360",
+  "miktar": 196000.0,
+  "tutar": 1127.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000735",
+  "tarih": "24-10-2023",
+  "buyer": "PEGASUS AMBALAJ MALZEMELERİ İÇ VE DIŞ TİCARET",
+  "kod": "0357",
+  "miktar": 252000.0,
+  "tutar": 1449.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000713",
+  "tarih": "17-10-2023",
+  "buyer": "ALTUNSAN GIDA TARIM HAYVANCILIK AMBALAJ",
+  "kod": "0009",
+  "miktar": 1960.0,
+  "tutar": 33320.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2023000000713",
+  "tarih": "17-10-2023",
+  "buyer": "ALTUNSAN GIDA TARIM HAYVANCILIK AMBALAJ",
+  "kod": "0007",
+  "miktar": 5040.0,
+  "tutar": 85680.0,
+  "dov": "TL"
+ },
+ {
+  "fno": "RNS2023000000684",
+  "tarih": "03-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0530",
+  "miktar": 520000.0,
+  "tutar": 1820.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000684",
+  "tarih": "03-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0536",
+  "miktar": 216000.0,
+  "tutar": 1026.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000684",
+  "tarih": "03-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0537",
+  "miktar": 312000.0,
+  "tutar": 1435.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000684",
+  "tarih": "03-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0533",
+  "miktar": 660000.0,
+  "tutar": 3762.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000684",
+  "tarih": "03-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0534",
+  "miktar": 576000.0,
+  "tutar": 3283.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000684",
+  "tarih": "03-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0535",
+  "miktar": 208000.0,
+  "tutar": 1185.6,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000684",
+  "tarih": "03-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM",
+  "kod": "0366",
+  "miktar": 208000.0,
+  "tutar": 624.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000675",
+  "tarih": "01-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0530",
+  "miktar": 520000.0,
+  "tutar": 1820.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000675",
+  "tarih": "01-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0536",
+  "miktar": 216000.0,
+  "tutar": 1026.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000675",
+  "tarih": "01-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0537",
+  "miktar": 312000.0,
+  "tutar": 1435.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000675",
+  "tarih": "01-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0533",
+  "miktar": 660000.0,
+  "tutar": 3762.0,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000675",
+  "tarih": "01-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0534",
+  "miktar": 576000.0,
+  "tutar": 3283.2,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000675",
+  "tarih": "01-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0535",
+  "miktar": 208000.0,
+  "tutar": 1185.6,
+  "dov": "EUR"
+ },
+ {
+  "fno": "RNS2023000000675",
+  "tarih": "01-10-2023",
+  "buyer": "ORTAK AMBALAJ SANAYİ TİCARET ANONİM ŞİRKETİ",
+  "kod": "0366",
+  "miktar": 208000.0,
+  "tutar": 624.0,
+  "dov": "EUR"
+ }
+]
