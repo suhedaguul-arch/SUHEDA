@@ -74,6 +74,12 @@ TAX_COLS = {
 
 YEARS = [2023, 2024, 2025, 2026]
 
+# Renk -> İngilizce (dashboard renk kırılımı alt satırları için)
+COLOR_EN = {"Şeffaf":"Clear","Beyaz":"White","Siyah":"Black","Kırmızı":"Red",
+            "Mavi":"Blue","Yeşil":"Green","Sarı":"Yellow","Gold":"Gold","Gümüş":"Silver",
+            "Bej":"Beige","Turuncu":"Orange","Pembe":"Pink","Mor":"Purple","Gri":"Gray",
+            "Kahve":"Brown","Renkli":"Colored","Krem":"Cream","Diğer":"Other"}
+
 # ══════════════════════════════════════════════════════════════════
 #  YARDIMCILAR
 # ══════════════════════════════════════════════════════════════════
@@ -207,6 +213,7 @@ def load_facts_from_dia(dia_dir, tax, cari_country, rates, report):
             facts.append({
                 "dt":dt, "yil":dt.year if dt else 0, "ay":dt.month if dt else 0,
                 "cari":cari, "unvan":(r[DIA_COLS["Unvan"]] or "").strip(),
+                "fno":str(r[DIA_COLS["FaturaNo"]] or "").strip(),
                 "ulke":cc.get("ulke",""), "ulke_en":cc.get("ulke_en",""),
                 "stok":code, "genel":ident["GenelUrunAdi"], "tip":ident["UrunTipi"],
                 "seri":ident["Seri"], "renk":ident["Renk"],
@@ -239,6 +246,7 @@ def load_facts_from_indirect(path, tax, rates, report):
         facts.append({
             "dt":dt, "yil":dt.year if dt else 0, "ay":dt.month if dt else 0,
             "cari":"IND_"+(it.get("buyer","")[:20]), "unvan":it.get("buyer",""),
+            "fno":str(it.get("fno","")).strip(),
             "ulke":IND_MARKET, "ulke_en":IND_MARKET_EN,
             "stok":code, "genel":ident["GenelUrunAdi"], "tip":ident["UrunTipi"],
             "seri":ident["Seri"], "renk":ident["Renk"],
@@ -263,10 +271,10 @@ def build_D(facts, tax, ref, report):
     # ---- ÜLKE ----
     ulke_agg = defaultdict(lambda: {
         "miktar":0.0, "usd_2023":0.0,"usd_2024":0.0,"usd_2025":0.0,"usd_2026":0.0,
-        "musteriler":set(), "fatura":0, "toplam":0.0, "Ulke_EN":""})
+        "musteriler":set(), "faturalar":set(), "toplam":0.0, "Ulke_EN":""})
     # ---- MÜŞTERİ ----
     cari_agg = defaultdict(lambda: {
-        "ad":"", "ulke":"", "toplam":0.0, "fatura":0,
+        "ad":"", "ulke":"", "toplam":0.0, "faturalar":set(),
         "son":None, "ilk":None})
     # ---- ÜRÜN (GenelUrunAdi) ----
     urun_agg = defaultdict(lambda: {
@@ -281,23 +289,25 @@ def build_D(facts, tax, ref, report):
     trend_y  = defaultdict(float)
     trend_m  = defaultdict(float)
 
-    for f in facts:
+    for idx, f in enumerate(facts):
         u, c, g = f["ulke"], f["cari"], f["genel"]
         usd, mik, yil = f["usd"], f["miktar"], f["yil"]
+        # Fatura No: farklı fatura say (yoksa satır bazında benzersiz)
+        fno = f.get("fno") or f"__line{idx}"
 
         # Ülke
         if u:
             a = ulke_agg[u]
             a["miktar"] += mik; a["toplam"] += usd
             if yil in YEARS: a[f"usd_{yil}"] += usd
-            a["musteriler"].add(c); a["fatura"] += 1
+            a["musteriler"].add(c); a["faturalar"].add(fno)
             a["Ulke_EN"] = f["ulke_en"] or country_geo.get(u,{}).get("Ulke_EN", u)
 
         # Müşteri
         m = cari_agg[c]
         m["ad"] = f["unvan"] or (str(c).zfill(8) if isinstance(c,int) else str(c))
         m["ulke"] = u
-        m["toplam"] += usd; m["fatura"] += 1
+        m["toplam"] += usd; m["faturalar"].add(fno)
         if f["dt"]:
             if m["son"] is None or f["dt"] > m["son"]: m["son"] = f["dt"]
             if m["ilk"] is None or f["dt"] < m["ilk"]: m["ilk"] = f["dt"]
@@ -333,7 +343,7 @@ def build_D(facts, tax, ref, report):
             "Ulke":u, "miktar":round(a["miktar"]),
             "usd_2023":round(a["usd_2023"],2),"usd_2024":round(a["usd_2024"],2),
             "usd_2025":round(a["usd_2025"],2),"usd_2026":round(a["usd_2026"],2),
-            "musteri":len(a["musteriler"]), "fatura":a["fatura"],
+            "musteri":len(a["musteriler"]), "fatura":len(a["faturalar"]),
             "Ulke_EN":a["Ulke_EN"] or geo.get("Ulke_EN",u),
             "buyume":buyume,
             "lat":geo.get("lat",0), "lon":geo.get("lon",0),
@@ -346,11 +356,12 @@ def build_D(facts, tax, ref, report):
     mus_list = []
     for c, m in cari_agg.items():
         gun = (max_dt - m["son"]).days if m["son"] else 9999
-        seg = rfm_segment(gun, m["toplam"], m["fatura"])
+        nfat = len(m["faturalar"])
+        seg = rfm_segment(gun, m["toplam"], nfat)
         mus_list.append({
             "kod": str(c).zfill(8) if isinstance(c,int) else str(c),
             "ad": m["ad"], "ulke": m["ulke"],
-            "toplam": round(m["toplam"],2), "fatura": m["fatura"],
+            "toplam": round(m["toplam"],2), "fatura": nfat,
             "son_tarih": m["son"].strftime("%Y-%m-%d") if m["son"] else "",
             "ilk_tarih": m["ilk"].strftime("%Y-%m-%d") if m["ilk"] else "",
             "gun": gun, "seg": seg,
@@ -358,13 +369,20 @@ def build_D(facts, tax, ref, report):
     mus_list.sort(key=lambda x:-x["toplam"])
 
     # ---------- FİRMALAR (koordinatı olan müşteriler) ----------
+    firma_geo = ref.get("firma_geo", {})
     firmalar = []
     for m in mus_list:
-        geo = country_geo.get(m["ulke"])
-        if not geo or not geo.get("lat"): continue
+        # önce firma-özel koordinat (ör. TR ihraç kayıtlı firmalar adres/şehir bazında)
+        fg = firma_geo.get(m["kod"])
+        if fg and fg.get("lat"):
+            lat, lon = fg["lat"], fg["lon"]
+        else:
+            geo = country_geo.get(m["ulke"])
+            if not geo or not geo.get("lat"): continue
+            lat, lon = geo["lat"], geo["lon"]
         firmalar.append({
             "ad":m["ad"], "ulke":m["ulke"],
-            "lat":geo["lat"], "lon":geo["lon"],
+            "lat":lat, "lon":lon,
             "toplam":m["toplam"], "fatura":m["fatura"],
             "ilk":m["ilk_tarih"], "son":m["son_tarih"],
         })
@@ -373,7 +391,8 @@ def build_D(facts, tax, ref, report):
     toplam_usd = sum(p["usd"] for p in urun_agg.values()) or 1
     urunler = []
     for g, p in urun_agg.items():
-        renkler = [{"Renk":rk,"usd":round(rv["usd"],2),"miktar":round(rv["miktar"])}
+        renkler = [{"renk":rk,"renk_en":COLOR_EN.get(rk,rk),
+                    "usd":round(rv["usd"],2),"miktar":round(rv["miktar"])}
                    for rk,rv in p["renkler"].items()]
         renkler.sort(key=lambda x:-x["miktar"])   # QTY büyükten küçüğe
         urunler.append({
@@ -504,6 +523,7 @@ def main():
         "seri_cat":     load_json(os.path.join(REF,"seri_cat.json")),
         "country_geo":  load_json(os.path.join(REF,"country_geo.json")),
         "cari_country": load_json(os.path.join(REF,"cari_country.json")),
+        "firma_geo":    load_json(os.path.join(REF,"firma_geo.json")),
         "exchange_rates": load_json(os.path.join(REF,"exchange_rates.json"),
                                      {"USD":1.0,"EUR":1.08,"GBP":1.27,"TRY":0.031}),
     }

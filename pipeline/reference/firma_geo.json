@@ -1,0 +1,87 @@
+{
+ "IND_PAKPLAS PLASTİK TEKS": {
+  "lat": 40.2057,
+  "lon": 28.8408,
+  "city": "Bursa"
+ },
+ "IND_FOLYOTERM AMBALAJ PL": {
+  "lat": 40.927,
+  "lon": 28.7848,
+  "city": "İstanbul"
+ },
+ "IND_SURAPACK AMBALAJ SAN": {
+  "lat": 40.8773,
+  "lon": 29.1286,
+  "city": "İstanbul"
+ },
+ "IND_CAPP ALÜMİNYUM FOLYO": {
+  "lat": 39.7973,
+  "lon": 33.0086,
+  "city": "Ankara"
+ },
+ "IND_ASNE AMBALAJ GIDA NA": {
+  "lat": 36.7673,
+  "lon": 30.8486,
+  "city": "Antalya"
+ },
+ "IND_VENTEKS DIŞ TİCARET ": {
+  "lat": 41.0257,
+  "lon": 28.7608,
+  "city": "İstanbul"
+ },
+ "IND_ORTAK AMBALAJ SANAYİ": {
+  "lat": 40.9633,
+  "lon": 29.1925,
+  "city": "İstanbul"
+ },
+ "IND_UPLASS HAVACILIK ÜRÜ": {
+  "lat": 40.8328,
+  "lon": 28.9417,
+  "city": "İstanbul"
+ },
+ "IND_UPLASS AMBALAJ SANAY": {
+  "lat": 41.1619,
+  "lon": 28.8619,
+  "city": "İstanbul"
+ },
+ "IND_PLASAN DIŞ TİCARET L": {
+  "lat": 41.1791,
+  "lon": 29.0555,
+  "city": "İstanbul"
+ },
+ "IND_ORİON AMBALAJ SANAYİ": {
+  "lat": 40.8436,
+  "lon": 29.0639,
+  "city": "İstanbul"
+ },
+ "IND_ELF PAK AMBALAJ İÇ V": {
+  "lat": 40.98,
+  "lon": 27.51,
+  "city": "Teki̇rdağ"
+ },
+ "IND_ATMİN SAĞLIK TURİZMİ": {
+  "lat": 40.0573,
+  "lon": 29.2086,
+  "city": "Bursa"
+ },
+ "IND_FAOPACK GIDA AMBALAJ": {
+  "lat": 40.2995,
+  "lon": 29.2346,
+  "city": "Bursa"
+ },
+ "IND_PEGASUS AMBALAJ MALZ": {
+  "lat": 41.0863,
+  "lon": 28.7807,
+  "city": "İstanbul"
+ },
+ "IND_VİTALAB İLAÇ SANAYİ ": {
+  "lat": 41.0639,
+  "lon": 29.1899,
+  "city": "İstanbul"
+ },
+ "IND_ALTUNSAN GIDA TARIM ": {
+  "lat": 40.0128,
+  "lon": 29.0217,
+  "city": "Bursa"
+ }
+}
