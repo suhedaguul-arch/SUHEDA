@@ -134,9 +134,9 @@
   "lon": 9.54,
   "Ulke_EN": "Tunisia"
  },
- "İHRAÇ KAYITLI": {
-  "lat": 0,
-  "lon": 0,
-  "Ulke_EN": "Export-Registered"
+ "İNDİREKT İHRACAT": {
+  "lat": 38.96,
+  "lon": 35.24,
+  "Ulke_EN": "Indirect Export"
  }
 }

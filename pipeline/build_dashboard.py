@@ -49,9 +49,9 @@ DIR_DIA   = os.path.join(DATA, "dia")                   # ham DIA fatura xlsx kl
 SHEET_HAM = "📋 Ham Veri (Power BI)"
 SHEET_TAX = "STOK TAKSONOMİSİ"
 
-# İhraç kayıtlı satışların pazar etiketi (yurtiçi aracı firmalar üzerinden)
-IND_MARKET    = "İHRAÇ KAYITLI"
-IND_MARKET_EN = "Export-Registered"
+# İhraç kayıtlı satışlar: Türkiye konumunda, "İndirekt İhracat" etiketiyle
+IND_MARKET    = "İNDİREKT İHRACAT"
+IND_MARKET_EN = "Indirect Export"
 
 # Ham DIA "AYRINTILI İHRACAT FATURALARI" formatı: başlık 4. satır, veri 6.+
 # Kolonlar (0-tabanlı): 4=CariKodu 5=Ünvan 6=StokKodu 7=Açıklama 8=Miktar
