@@ -43,9 +43,22 @@ REF       = os.path.join(HERE, "reference")
 PATH_HAM  = os.path.join(DATA, "ham_veri.xlsx")
 PATH_TAX  = os.path.join(DATA, "taksonomi.xlsx")
 PATH_HTML = os.path.join(ROOT, "dashboard.html")
+PATH_IND  = os.path.join(DATA, "ihrac_kayitli.json")   # ihraç kayıtlı (indirekt)
+DIR_DIA   = os.path.join(DATA, "dia")                   # ham DIA fatura xlsx klasörü
 
 SHEET_HAM = "📋 Ham Veri (Power BI)"
 SHEET_TAX = "STOK TAKSONOMİSİ"
+
+# İhraç kayıtlı satışların pazar etiketi (yurtiçi aracı firmalar üzerinden)
+IND_MARKET    = "İHRAÇ KAYITLI"
+IND_MARKET_EN = "Export-Registered"
+
+# Ham DIA "AYRINTILI İHRACAT FATURALARI" formatı: başlık 4. satır, veri 6.+
+# Kolonlar (0-tabanlı): 4=CariKodu 5=Ünvan 6=StokKodu 7=Açıklama 8=Miktar
+#                       10=BirimFiyat 11=ToplamTutar 12=SatırDövizi, 2=Tarih
+DIA_COLS = {"Tarih":2,"FaturaNo":3,"CariKodu":4,"Unvan":5,"StokKodu":6,
+            "Aciklama":7,"Miktar":8,"Birim":9,"BirimFiyat":10,
+            "ToplamTutar":11,"Doviz":12}
 
 # Ham veri kolon indeksleri (0-tabanlı) — başlık satırından doğrulanır
 HAM_COLS = {
@@ -161,6 +174,79 @@ def load_facts(path, tax, rates, report):
         })
     wb.close()
     report["unknown_codes"] = dict(unknown_codes)
+    return facts
+
+# ══════════════════════════════════════════════════════════════════
+#  2b) HAM DIA FATURALARI  (AYRINTILI İHRACAT FATURALARI xlsx)
+# ══════════════════════════════════════════════════════════════════
+def load_facts_from_dia(dia_dir, tax, cari_country, rates, report):
+    """data/dia/ altındaki tüm 'AYRINTILI İHRACAT FATURALARI' xlsx dosyalarını
+    okur. Ülke bilgisi cari_country ile CariKodu üzerinden eklenir."""
+    facts = []
+    unknown_codes = Counter()
+    unknown_cari  = Counter()
+    if not os.path.isdir(dia_dir):
+        return facts
+    files = sorted(f for f in os.listdir(dia_dir) if f.lower().endswith((".xlsx",".xls")))
+    for fn in files:
+        wb = openpyxl.load_workbook(os.path.join(dia_dir, fn), read_only=True, data_only=True)
+        ws = wb[wb.sheetnames[0]]
+        for r in ws.iter_rows(min_row=6, values_only=True):
+            if r is None or len(r) <= DIA_COLS["Doviz"]: continue
+            code = norm_stok(r[DIA_COLS["StokKodu"]])
+            if code is None: continue
+            ident = tax.get(code)
+            if ident is None:
+                unknown_codes[code] += 1; continue
+            dt   = parse_date(r[DIA_COLS["Tarih"]])
+            cari = norm_stok(r[DIA_COLS["CariKodu"]])
+            cc   = cari_country.get(str(cari), {})
+            if not cc: unknown_cari[cari] += 1
+            doviz = str(r[DIA_COLS["Doviz"]] or "USD").strip().upper()
+            usd   = num(r[DIA_COLS["ToplamTutar"]]) * rates.get(doviz, 1.0)
+            facts.append({
+                "dt":dt, "yil":dt.year if dt else 0, "ay":dt.month if dt else 0,
+                "cari":cari, "unvan":(r[DIA_COLS["Unvan"]] or "").strip(),
+                "ulke":cc.get("ulke",""), "ulke_en":cc.get("ulke_en",""),
+                "stok":code, "genel":ident["GenelUrunAdi"], "tip":ident["UrunTipi"],
+                "seri":ident["Seri"], "renk":ident["Renk"],
+                "miktar":num(r[DIA_COLS["Miktar"]]), "usd":usd,
+            })
+        wb.close()
+    report.setdefault("unknown_codes", {})
+    for k,v in unknown_codes.items(): report["unknown_codes"][k] = report["unknown_codes"].get(k,0)+v
+    report["unknown_cari"] = dict(unknown_cari)
+    report["dia_files"] = files
+    return facts
+
+# ══════════════════════════════════════════════════════════════════
+#  2c) İHRAÇ KAYITLI (indirekt) — PDF'ten çıkarılmış JSON
+# ══════════════════════════════════════════════════════════════════
+def load_facts_from_indirect(path, tax, rates, report):
+    """İhraç kayıtlı satışlar (yurtiçi aracı firmalar). Pazar = İHRAÇ KAYITLI."""
+    facts = []
+    unknown = Counter()
+    if not os.path.exists(path): return facts
+    items = json.load(open(path, encoding="utf-8"))
+    for it in items:
+        code = norm_stok(it.get("kod"))
+        if code is None or not it.get("tutar"): continue
+        ident = tax.get(code)
+        if ident is None:
+            unknown[code] += 1; continue
+        dt = parse_date(it.get("tarih"))
+        usd = num(it["tutar"]) * rates.get(str(it.get("dov","EUR")).upper(), 1.0)
+        facts.append({
+            "dt":dt, "yil":dt.year if dt else 0, "ay":dt.month if dt else 0,
+            "cari":"IND_"+(it.get("buyer","")[:20]), "unvan":it.get("buyer",""),
+            "ulke":IND_MARKET, "ulke_en":IND_MARKET_EN,
+            "stok":code, "genel":ident["GenelUrunAdi"], "tip":ident["UrunTipi"],
+            "seri":ident["Seri"], "renk":ident["Renk"],
+            "miktar":num(it.get("miktar")), "usd":usd,
+        })
+    report.setdefault("unknown_codes", {})
+    for k,v in unknown.items(): report["unknown_codes"][k] = report["unknown_codes"].get(k,0)+v
+    report["indirect_lines"] = len(facts)
     return facts
 
 # ══════════════════════════════════════════════════════════════════
@@ -414,21 +500,41 @@ def main():
     print("═"*64)
 
     ref = {
-        "product_en":  load_json(os.path.join(REF,"product_en.json")),
-        "seri_cat":    load_json(os.path.join(REF,"seri_cat.json")),
-        "country_geo": load_json(os.path.join(REF,"country_geo.json")),
+        "product_en":   load_json(os.path.join(REF,"product_en.json")),
+        "seri_cat":     load_json(os.path.join(REF,"seri_cat.json")),
+        "country_geo":  load_json(os.path.join(REF,"country_geo.json")),
+        "cari_country": load_json(os.path.join(REF,"cari_country.json")),
         "exchange_rates": load_json(os.path.join(REF,"exchange_rates.json"),
                                      {"USD":1.0,"EUR":1.08,"GBP":1.27,"TRY":0.031}),
     }
+    rates = ref["exchange_rates"]
     report = {}
 
     print(f"► Taksonomi okunuyor: {os.path.basename(args.tax)}")
     tax = load_taxonomy(args.tax)
     print(f"  {len(tax)} stok kodu yüklendi")
 
-    print(f"► Ham fatura okunuyor: {os.path.basename(args.ham)}")
-    facts = load_facts(args.ham, tax, ref["exchange_rates"], report)
-    print(f"  {len(facts)} geçerli fatura satırı")
+    facts = []
+    # 1) Ham DIA fatura dosyaları (varsa öncelikli), yoksa hazır ham_veri tablosu
+    if os.path.isdir(DIR_DIA) and any(f.lower().endswith((".xlsx",".xls"))
+                                       for f in os.listdir(DIR_DIA)):
+        print(f"► Ham DIA faturaları okunuyor: data/dia/")
+        dia_facts = load_facts_from_dia(DIR_DIA, tax, ref["cari_country"], rates, report)
+        print(f"  {len(dia_facts)} direkt ihracat satırı ({len(report.get('dia_files',[]))} dosya)")
+        facts += dia_facts
+    else:
+        print(f"► Ham fatura okunuyor: {os.path.basename(args.ham)}")
+        facts += load_facts(args.ham, tax, rates, report)
+        print(f"  {len(facts)} direkt satır")
+
+    # 2) İhraç kayıtlı (indirekt) satışlar
+    if os.path.exists(PATH_IND):
+        print(f"► İhraç kayıtlı satışlar okunuyor: {os.path.basename(PATH_IND)}")
+        ind_facts = load_facts_from_indirect(PATH_IND, tax, rates, report)
+        print(f"  {len(ind_facts)} ihraç kayıtlı satır")
+        facts += ind_facts
+
+    print(f"► Toplam {len(facts)} geçerli fatura satırı")
 
     print("► Veri derleniyor...")
     D = build_D(facts, tax, ref, report)
@@ -460,7 +566,8 @@ def main():
     if missing_en:
         print(f"\n  ⚠ {len(missing_en)} ürünün İngilizce adı eksik "
               f"(product_en.json): {missing_en[:5]}")
-    missing_geo = sorted({u["Ulke"] for u in D["ulke"] if not u["lat"]})
+    missing_geo = sorted({u["Ulke"] for u in D["ulke"]
+                          if not u["lat"] and u["Ulke"] != IND_MARKET})
     if missing_geo:
         print(f"  ⚠ Koordinatı eksik ülke(ler): {missing_geo} "
               f"→ country_geo.json'a ekleyin")

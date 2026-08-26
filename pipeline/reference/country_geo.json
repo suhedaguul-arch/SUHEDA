@@ -62,7 +62,7 @@
  "İNGİLTERE": {
   "lat": 51.51,
   "lon": -0.13,
-  "Ulke_EN": "İNGİLTERE"
+  "Ulke_EN": "United Kingdom"
  },
  "YUNANİSTAN": {
   "lat": 39.07,
@@ -72,7 +72,7 @@
  "İTALYA": {
   "lat": 41.9,
   "lon": 12.5,
-  "Ulke_EN": "İTALYA"
+  "Ulke_EN": "Italy"
  },
  "BOSNA HERSEK": {
   "lat": 44.17,
@@ -133,5 +133,10 @@
   "lat": 33.89,
   "lon": 9.54,
   "Ulke_EN": "Tunisia"
+ },
+ "İHRAÇ KAYITLI": {
+  "lat": 0,
+  "lon": 0,
+  "Ulke_EN": "Export-Registered"
  }
 }
