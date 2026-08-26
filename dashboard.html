@@ -872,6 +872,11 @@ const ULKE_EN={'ÜRDÜN':'Jordan','GÜRCİSTAN':'Georgia','BİLİNMEYEN':'Unknow
 (D.ulke||[]).forEach(u=>{ if(u.Ulke_EN) ULKE_EN[u.Ulke]=u.Ulke_EN; });
 function ulkeLabel(u){ return LANG==='en'?(ULKE_EN[u]||u):u; }
 const KAT_EN={
+  'Kase':'Bowl','Köpük Tepsi':'Foam Tray','İçecek Bardağı':'Drinking Cup',
+  'Tatlı Kabı':'Dessert Cup','Kokteyl Karıştırıcı':'Cocktail Stirrer',
+  'Yemek Kutusu':'Food Box','Çay Kaşığı':'Tea Spoon','Coffee Stopper':'Coffee Stopper',
+  'Eldiven':'Glove','Ham Madde':'Raw Material','Kapron İp':'Cord',
+  'Makine/Parça':'Machine/Part','Sarf Malzeme':'Consumable',
   'Foam/XPS':'Foam/XPS','Çatal':'Fork','Kaşık':'Spoon','Bıçak':'Knife',
   'Tatlı Kaşığı':'Dessert Spoon','Dondurma Kaşığı':'Ice Cream Spoon',
   'Yemek Seti':'Cutlery Set','Köpük Ürünler':'Foam/XPS','Köpük Bardak':'Foam Cup',
@@ -1321,7 +1326,11 @@ const COLOR_EN={'Şeffaf':'Transparent','Beyaz':'White','Siyah':'Black','Kırmı
 
 const SERI_EN={'Eko':'Eco','Standart':'Standard'};
 function seriLabel(s){ return LANG==='en'?(SERI_EN[s]||s):s; }
-const TIP_EN={'Çatal':'Fork','Kaşık':'Spoon','Bıçak':'Knife','Tatlı Kaşığı':'Dessert Spoon',
+const TIP_EN={'Kase':'Bowl','Köpük Tepsi':'Foam Tray','İçecek Bardağı':'Drinking Cup',
+  'Tatlı Kabı':'Dessert Cup','Kokteyl Karıştırıcı':'Cocktail Stirrer','Yemek Kutusu':'Food Box',
+  'Çay Kaşığı':'Tea Spoon','Coffee Stopper':'Coffee Stopper','Eldiven':'Glove',
+  'Ham Madde':'Raw Material','Kapron İp':'Cord','Makine/Parça':'Machine/Part','Sarf Malzeme':'Consumable',
+  'Çatal':'Fork','Kaşık':'Spoon','Bıçak':'Knife','Tatlı Kaşığı':'Dessert Spoon',
   'Yemek Seti':'Cutlery Set','Köpük Ürünler':'Foam/XPS','Köpük Bardak':'Foam Cup',
   'Sızdırmaz':'Food Container','Tatlı Kaseleri':'Dessert Cup','Kase ve Tabaklar':'Bowl & Plate',
   'Tabak':'Plate','Bardak':'Cup/Glass','Karton Bardak':'Paper Cup','Karton Kase':'Paper Bowl',
