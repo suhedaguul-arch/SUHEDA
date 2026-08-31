@@ -280,7 +280,8 @@ def build_D(facts, tax, ref, report):
     urun_agg = defaultdict(lambda: {
         "tip":"", "seri":"", "miktar":0.0, "usd":0.0,
         "usd_2023":0.0,"usd_2024":0.0,"usd_2025":0.0,"usd_2026":0.0,
-        "renkler":defaultdict(lambda:{"usd":0.0,"miktar":0.0})})
+        "renkler":defaultdict(lambda:{"usd":0.0,"miktar":0.0,
+                    "usd_2023":0.0,"usd_2024":0.0,"usd_2025":0.0,"usd_2026":0.0})})
     # ---- RENK ----
     renk_agg = defaultdict(lambda: {"USD_Tutar":0.0,"miktar":0.0})
     # ---- KATEGORİ (UrunTipi) ----
@@ -319,6 +320,7 @@ def build_D(facts, tax, ref, report):
         if yil in YEARS: p[f"usd_{yil}"] += usd
         p["renkler"][f["renk"]]["usd"] += usd
         p["renkler"][f["renk"]]["miktar"] += mik
+        if yil in YEARS: p["renkler"][f["renk"]][f"usd_{yil}"] += usd
 
         # Renk (ürün bazında)
         rk = (g, f["renk"])
@@ -370,6 +372,8 @@ def build_D(facts, tax, ref, report):
 
     # ---------- FİRMALAR (koordinatı olan müşteriler) ----------
     firma_geo = ref.get("firma_geo", {})
+    import math
+    ulke_seen = defaultdict(int)   # aynı ülkedeki firmaları hafifçe dağıtmak için
     firmalar = []
     for m in mus_list:
         # önce firma-özel koordinat (ör. TR ihraç kayıtlı firmalar adres/şehir bazında)
@@ -380,6 +384,12 @@ def build_D(facts, tax, ref, report):
             geo = country_geo.get(m["ulke"])
             if not geo or not geo.get("lat"): continue
             lat, lon = geo["lat"], geo["lon"]
+            # aynı ülkede birden çok firma varsa üst üste binmesin (altın açı dağıtımı)
+            i = ulke_seen[m["ulke"]]; ulke_seen[m["ulke"]] += 1
+            if i:
+                ang = i * 2.399963
+                lat = round(lat + 0.35 * math.cos(ang), 4)
+                lon = round(lon + 0.45 * math.sin(ang), 4)
         firmalar.append({
             "ad":m["ad"], "ulke":m["ulke"],
             "lat":lat, "lon":lon,
@@ -392,7 +402,9 @@ def build_D(facts, tax, ref, report):
     urunler = []
     for g, p in urun_agg.items():
         renkler = [{"renk":rk,"renk_en":COLOR_EN.get(rk,rk),
-                    "usd":round(rv["usd"],2),"miktar":round(rv["miktar"])}
+                    "usd":round(rv["usd"],2),"miktar":round(rv["miktar"]),
+                    "usd_2023":round(rv["usd_2023"],2),"usd_2024":round(rv["usd_2024"],2),
+                    "usd_2025":round(rv["usd_2025"],2),"usd_2026":round(rv["usd_2026"],2)}
                    for rk,rv in p["renkler"].items()]
         renkler.sort(key=lambda x:-x["miktar"])   # QTY büyükten küçüğe
         urunler.append({
