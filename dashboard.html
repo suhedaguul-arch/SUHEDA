@@ -1055,6 +1055,7 @@ function initMap(){
       (!q||m.ad.toLowerCase().includes(q))&&(!ulke||m.ulke===ulke))
       .map(m=>({...m, avg:(m.fatura>0?m.toplam/m.fatura:0)}));
     // sıralama
+    if(!window._mSort) window._mSort={col:'toplam',dir:'desc'};
     const col=window._mSort.col, dir=window._mSort.dir;
     const strCols={ad:1,ulke:1,son_tarih:1};
     rows.sort((a,b)=>{
