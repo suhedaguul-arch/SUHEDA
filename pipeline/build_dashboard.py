@@ -379,10 +379,9 @@ def build_D(facts, tax, ref, report):
     # ---------- FİRMALAR (koordinatı olan müşteriler) ----------
     firma_geo = ref.get("firma_geo", {})
     import math
-    ulke_seen = defaultdict(int)   # aynı ülkedeki firmaları hafifçe dağıtmak için
     firmalar = []
     for m in mus_list:
-        # önce firma-özel koordinat (ör. TR ihraç kayıtlı firmalar adres/şehir bazında)
+        # önce firma-özel koordinat (adres/şehir bazında), yoksa ülke merkezi
         fg = firma_geo.get(m["kod"])
         if fg and fg.get("lat"):
             lat, lon = fg["lat"], fg["lon"]
@@ -390,18 +389,24 @@ def build_D(facts, tax, ref, report):
             geo = country_geo.get(m["ulke"])
             if not geo or not geo.get("lat"): continue
             lat, lon = geo["lat"], geo["lon"]
-            # aynı ülkede birden çok firma varsa üst üste binmesin (altın açı dağıtımı)
-            i = ulke_seen[m["ulke"]]; ulke_seen[m["ulke"]] += 1
-            if i:
-                ang = i * 2.399963
-                lat = round(lat + 0.35 * math.cos(ang), 4)
-                lon = round(lon + 0.45 * math.sin(ang), 4)
         firmalar.append({
             "ad":m["ad"], "ulke":m["ulke"],
             "lat":lat, "lon":lon,
             "toplam":m["toplam"], "fatura":m["fatura"],
             "ilk":m["ilk_tarih"], "son":m["son_tarih"],
         })
+
+    # Aynı noktayı paylaşan firmaları okunabilir biçimde dağıt (büyüyen spiral)
+    groups = defaultdict(list)
+    for f in firmalar:
+        groups[(round(f["lat"],2), round(f["lon"],2))].append(f)
+    for (blat, blon), grp in groups.items():
+        if len(grp) < 2: continue
+        for i, f in enumerate(grp):
+            ang = i * 2.399963                       # altın açı
+            rad = 0.28 * math.sqrt(i)                # yarıçap firma sayısıyla büyür
+            f["lat"] = round(blat + rad * math.cos(ang), 4)
+            f["lon"] = round(blon + rad * math.sin(ang) / max(math.cos(math.radians(blat)), 0.3), 4)
 
     # ---------- ÜRÜNLER ----------
     toplam_usd = sum(p["usd"] for p in urun_agg.values()) or 1

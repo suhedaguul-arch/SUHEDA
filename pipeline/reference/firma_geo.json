@@ -1,472 +1,374 @@
 {
  "IND_PAKPLAS PLASTİK TEKS": {
-  "lat": 40.2057,
-  "lon": 28.8408,
-  "city": "Bursa"
+  "lat": 40.18,
+  "lon": 29.06
  },
  "IND_FOLYOTERM AMBALAJ PL": {
-  "lat": 40.927,
-  "lon": 28.7848,
-  "city": "İstanbul"
+  "lat": 41.01,
+  "lon": 28.98
  },
  "IND_SURAPACK AMBALAJ SAN": {
-  "lat": 40.8773,
-  "lon": 29.1286,
-  "city": "İstanbul"
+  "lat": 41.01,
+  "lon": 28.98
  },
  "IND_CAPP ALÜMİNYUM FOLYO": {
-  "lat": 39.7973,
-  "lon": 33.0086,
-  "city": "Ankara"
+  "lat": 39.93,
+  "lon": 32.86
  },
  "IND_ASNE AMBALAJ GIDA NA": {
-  "lat": 36.7673,
-  "lon": 30.8486,
-  "city": "Antalya"
+  "lat": 36.9,
+  "lon": 30.7
  },
  "IND_VENTEKS DIŞ TİCARET ": {
-  "lat": 41.0257,
-  "lon": 28.7608,
-  "city": "İstanbul"
+  "lat": 41.03,
+  "lon": 28.85
  },
  "IND_ORTAK AMBALAJ SANAYİ": {
-  "lat": 40.9633,
-  "lon": 29.1925,
-  "city": "İstanbul"
+  "lat": 41.03,
+  "lon": 28.85
  },
  "IND_UPLASS HAVACILIK ÜRÜ": {
-  "lat": 40.8328,
-  "lon": 28.9417,
-  "city": "İstanbul"
+  "lat": 41.18,
+  "lon": 28.74
  },
  "IND_UPLASS AMBALAJ SANAY": {
-  "lat": 41.1619,
-  "lon": 28.8619,
-  "city": "İstanbul"
+  "lat": 41.18,
+  "lon": 28.74
  },
  "IND_PLASAN DIŞ TİCARET L": {
-  "lat": 41.1791,
-  "lon": 29.0555,
-  "city": "İstanbul"
+  "lat": 41.0,
+  "lon": 28.64
  },
  "IND_ORİON AMBALAJ SANAYİ": {
-  "lat": 40.8436,
-  "lon": 29.0639,
-  "city": "İstanbul"
+  "lat": 41.03,
+  "lon": 28.85
  },
  "IND_ELF PAK AMBALAJ İÇ V": {
-  "lat": 40.98,
-  "lon": 27.51,
-  "city": "Teki̇rdağ"
+  "lat": 41.28,
+  "lon": 27.99
  },
  "IND_ATMİN SAĞLIK TURİZMİ": {
-  "lat": 40.0573,
-  "lon": 29.2086,
-  "city": "Bursa"
+  "lat": 40.18,
+  "lon": 29.06
  },
  "IND_FAOPACK GIDA AMBALAJ": {
-  "lat": 40.2995,
-  "lon": 29.2346,
-  "city": "Bursa"
+  "lat": 40.19,
+  "lon": 29.06
  },
  "IND_PEGASUS AMBALAJ MALZ": {
-  "lat": 41.0863,
-  "lon": 28.7807,
-  "city": "İstanbul"
+  "lat": 41.01,
+  "lon": 28.98
  },
  "IND_VİTALAB İLAÇ SANAYİ ": {
-  "lat": 41.0639,
-  "lon": 29.1899,
-  "city": "İstanbul"
+  "lat": 41.0,
+  "lon": 28.64
  },
  "IND_ALTUNSAN GIDA TARIM ": {
-  "lat": 40.0128,
-  "lon": 29.0217,
-  "city": "Bursa"
+  "lat": 40.18,
+  "lon": 29.06
  },
  "00001671": {
   "lat": 52.2,
-  "lon": 0.12,
-  "city": "Cambridge"
+  "lon": 0.12
  },
  "00001634": {
   "lat": 33.57,
-  "lon": -7.59,
-  "city": "Casablanca"
+  "lon": -7.59
  },
  "00001573": {
   "lat": 50.07,
-  "lon": 22.23,
-  "city": "Lancut"
+  "lon": 22.23
  },
  "00001568": {
   "lat": 44.53,
-  "lon": 26.23,
-  "city": "Ilfov"
+  "lon": 26.23
  },
  "00001566": {
   "lat": 34.02,
-  "lon": -6.83,
-  "city": "Rabat"
+  "lon": -6.83
  },
  "00001535": {
   "lat": 42.66,
-  "lon": 21.16,
-  "city": "Prishtine"
+  "lon": 21.16
  },
  "00001529": {
   "lat": 47.01,
-  "lon": 28.86,
-  "city": "Chisinau"
+  "lon": 28.86
  },
  "00001520": {
   "lat": 50.45,
-  "lon": 30.52,
-  "city": "Kyiv"
+  "lon": 30.52
  },
  "00001499": {
   "lat": 49.55,
-  "lon": 25.59,
-  "city": "Ternopil"
+  "lon": 25.59
  },
  "00001496": {
   "lat": 40.8,
-  "lon": 14.54,
-  "city": "Poggiomarino"
+  "lon": 14.54
  },
  "00001491": {
   "lat": 45.6,
-  "lon": 10.22,
-  "city": "Concesio"
+  "lon": 10.22
  },
  "00001481": {
   "lat": 45.89,
-  "lon": 13.61,
-  "city": "Miren"
+  "lon": 13.61
  },
  "00001474": {
   "lat": 51.66,
-  "lon": 16.09,
-  "city": "Głogów"
+  "lon": 16.09
  },
  "00001471": {
-  "lat": 44.4415,
-  "lon": 26.3313,
-  "city": "Ilfov"
+  "lat": 44.53,
+  "lon": 26.23
  },
  "00001429": {
   "lat": 40.85,
-  "lon": 14.27,
-  "city": "Napoli"
+  "lon": 14.27
  },
  "00001428": {
   "lat": 37.18,
-  "lon": -3.6,
-  "city": "Granada"
+  "lon": -3.6
  },
  "00001422": {
   "lat": 47.5,
-  "lon": 19.04,
-  "city": "Budapest"
+  "lon": 19.04
  },
  "00001420": {
-  "lat": 33.9315,
-  "lon": -6.7287,
-  "city": "Rabat"
+  "lat": 34.02,
+  "lon": -6.83
  },
  "00001384": {
   "lat": 49.79,
-  "lon": 18.96,
-  "city": "Międzyrzecze"
+  "lon": 18.96
  },
  "00001357": {
   "lat": 41.33,
-  "lon": 19.82,
-  "city": "Tirana"
+  "lon": 19.82
  },
  "00001339": {
   "lat": 41.01,
-  "lon": 28.98,
-  "city": "İstanbul"
+  "lon": 28.98
  },
  "00001314": {
   "lat": 48.99,
-  "lon": 2.38,
-  "city": "Sarcelles"
+  "lon": 2.38
  },
  "00001311": {
-  "lat": 40.9215,
-  "lon": 29.0813,
-  "city": "İstanbul"
+  "lat": 41.01,
+  "lon": 28.98
  },
  "00001303": {
-  "lat": 41.0205,
-  "lon": 28.8306,
-  "city": "İstanbul"
+  "lat": 41.01,
+  "lon": 28.98
  },
  "00001300": {
   "lat": 43.85,
-  "lon": 18.36,
-  "city": "Sarajevo"
+  "lon": 18.36
  },
  "00001297": {
   "lat": 36.9,
-  "lon": 30.7,
-  "city": "Antalya"
+  "lon": 30.7
  },
  "00001296": {
   "lat": 59.91,
-  "lon": 10.75,
-  "city": "Oslo"
+  "lon": 10.75
  },
  "00001294": {
   "lat": 52.02,
-  "lon": 8.53,
-  "city": "Bielefeld"
+  "lon": 8.53
  },
  "00001279": {
   "lat": 42.21,
-  "lon": 20.74,
-  "city": "Prizren"
+  "lon": 20.74
  },
  "00001276": {
-  "lat": 50.3615,
-  "lon": 30.6213,
-  "city": "Kyiv"
+  "lat": 50.45,
+  "lon": 30.52
  },
  "00001264": {
   "lat": 53.75,
-  "lon": -2.48,
-  "city": "Blackburn"
+  "lon": -2.48
  },
  "00001249": {
   "lat": 40.64,
-  "lon": 22.94,
-  "city": "Thessaloniki"
+  "lon": 22.94
  },
  "00001235": {
   "lat": 40.19,
-  "lon": 29.06,
-  "city": "Bursa"
+  "lon": 29.06
  },
  "00001234": {
   "lat": 41.33,
-  "lon": 19.82,
-  "city": "Tirane"
+  "lon": 19.82
  },
  "00001219": {
   "lat": 41.99,
-  "lon": 21.43,
-  "city": "Skopje"
+  "lon": 21.43
  },
  "00001197": {
-  "lat": 34.0305,
-  "lon": -6.9794,
-  "city": "Rabat"
+  "lat": 34.02,
+  "lon": -6.83
  },
  "00001141": {
   "lat": 41.72,
-  "lon": 44.78,
-  "city": "Tbilisi"
+  "lon": 44.78
  },
  "00001133": {
   "lat": 47.29,
-  "lon": 7.95,
-  "city": "Zofingen"
+  "lon": 7.95
  },
  "00001131": {
   "lat": 39.93,
-  "lon": 32.86,
-  "city": "Ankara"
+  "lon": 32.86
  },
  "00001126": {
   "lat": 51.51,
-  "lon": 7.47,
-  "city": "Dortmund"
+  "lon": 7.47
  },
  "00001102": {
-  "lat": 41.6315,
-  "lon": 44.8813,
-  "city": "Tbilisi"
+  "lat": 41.72,
+  "lon": 44.78
  },
  "00001082": {
   "lat": 41.72,
-  "lon": 44.78,
-  "city": "Tiblis"
+  "lon": 44.78
  },
  "00001063": {
   "lat": 51.22,
-  "lon": 4.4,
-  "city": "Antwerpen"
+  "lon": 4.4
  },
  "00001059": {
-  "lat": 47.4115,
-  "lon": 19.1413,
-  "city": "Budapest"
+  "lat": 47.5,
+  "lon": 19.04
  },
  "00001058": {
   "lat": 50.99,
-  "lon": 3.8,
-  "city": "Melle"
+  "lon": 3.8
  },
  "00001055": {
   "lat": 48.21,
-  "lon": 16.37,
-  "city": "Wien"
+  "lon": 16.37
  },
  "00001053": {
-  "lat": 48.1215,
-  "lon": 16.4713,
-  "city": "Wien"
+  "lat": 48.21,
+  "lon": 16.37
  },
  "00001009": {
-  "lat": 41.2415,
-  "lon": 19.9213,
-  "city": "Tirane"
+  "lat": 41.33,
+  "lon": 19.82
  },
  "00001007": {
   "lat": 42.7,
-  "lon": 23.32,
-  "city": "Sofia"
+  "lon": 23.32
  },
  "00000965": {
   "lat": 52.15,
-  "lon": 10.33,
-  "city": "Salzgitter"
+  "lon": 10.33
  },
  "00000944": {
   "lat": 47.1,
-  "lon": 2.36,
-  "city": "Saint-Doulchard"
+  "lon": 2.36
  },
  "00000943": {
   "lat": 43.58,
-  "lon": 21.33,
-  "city": "Krusevac"
+  "lon": 21.33
  },
  "00000876": {
   "lat": 31.53,
-  "lon": 35.1,
-  "city": "Hebron"
+  "lon": 35.1
  },
  "00000875": {
-  "lat": 33.4815,
-  "lon": -7.4887,
-  "city": "Casablanca"
+  "lat": 33.57,
+  "lon": -7.59
  },
  "00000836": {
-  "lat": 33.5805,
-  "lon": -7.7394,
-  "city": "Casablanca"
+  "lat": 33.57,
+  "lon": -7.59
  },
  "00000799": {
-  "lat": 33.643,
-  "lon": -7.471,
-  "city": "Casablanca"
+  "lat": 33.57,
+  "lon": -7.59
  },
  "00000798": {
   "lat": 41.48,
-  "lon": 22.64,
-  "city": "Vasilevo"
+  "lon": 22.64
  },
  "00000770": {
   "lat": 41.93,
-  "lon": 25.56,
-  "city": "Haskovo"
+  "lon": 25.56
  },
  "00000768": {
   "lat": 31.95,
-  "lon": 35.91,
-  "city": "Amman"
+  "lon": 35.91
  },
  "00000763": {
-  "lat": 42.6115,
-  "lon": 23.4213,
-  "city": "Sofia"
+  "lat": 42.7,
+  "lon": 23.32
  },
  "00000686": {
   "lat": 44.79,
-  "lon": 20.45,
-  "city": "Belgrad"
+  "lon": 20.45
  },
  "00000597": {
-  "lat": 44.5405,
-  "lon": 26.0806,
-  "city": "Ilfov"
+  "lat": 44.53,
+  "lon": 26.23
  },
  "00000564": {
-  "lat": 44.603,
-  "lon": 26.349,
-  "city": "Ilfov"
+  "lat": 44.53,
+  "lon": 26.23
  },
  "00000563": {
   "lat": 42.52,
-  "lon": 21.13,
-  "city": "Lipijan"
+  "lon": 21.13
  },
  "00000561": {
-  "lat": 42.5715,
-  "lon": 21.2613,
-  "city": "Prishtine"
- },
- "00000480": {
-  "lat": 47.5,
-  "lon": 19.04,
-  "city": "Bp,"
+  "lat": 42.66,
+  "lon": 21.16
  },
  "00000434": {
-  "lat": 48.2205,
-  "lon": 16.2206,
-  "city": "Wien"
+  "lat": 48.21,
+  "lon": 16.37
  },
  "00000386": {
   "lat": 42.66,
-  "lon": 27.73,
-  "city": "Nessebar"
+  "lon": 27.73
  },
  "00000382": {
   "lat": 40.77,
-  "lon": 29.95,
-  "city": "Kocaeli̇"
+  "lon": 29.95
  },
  "00000259": {
-  "lat": 41.083,
-  "lon": 29.099,
-  "city": "İstanbul"
+  "lat": 41.09,
+  "lon": 28.8
  },
  "00000202": {
   "lat": 42.14,
-  "lon": 24.75,
-  "city": "Plovdiv"
+  "lon": 24.75
  },
  "00000165": {
   "lat": 41.12,
-  "lon": 20.8,
-  "city": "Ohrid"
+  "lon": 20.8
  },
  "00000160": {
   "lat": 50.94,
-  "lon": 6.96,
-  "city": "Koln"
+  "lon": 6.96
  },
  "00000143": {
-  "lat": 44.4118,
-  "lon": 26.2039,
-  "city": "Ilfov"
+  "lat": 44.53,
+  "lon": 26.23
  },
  "00000099": {
   "lat": 42.66,
-  "lon": 21.16,
-  "city": "Pristhine"
+  "lon": 21.16
  },
  "00000094": {
   "lat": 48.21,
-  "lon": 16.37,
-  "city": "Vi̇yena"
+  "lon": 16.37
  },
  "00000048": {
-  "lat": 42.7105,
-  "lon": 23.1706,
-  "city": "Sofia"
+  "lat": 42.7,
+  "lon": 23.32
  }
 }
