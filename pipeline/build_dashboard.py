@@ -185,12 +185,15 @@ def load_facts(path, tax, rates, report):
 # ══════════════════════════════════════════════════════════════════
 #  2b) HAM DIA FATURALARI  (AYRINTILI İHRACAT FATURALARI xlsx)
 # ══════════════════════════════════════════════════════════════════
-def load_facts_from_dia(dia_dir, tax, cari_country, rates, report):
+def load_facts_from_dia(dia_dir, tax, cari_country, rates, report, exclude_cari=None):
     """data/dia/ altındaki tüm 'AYRINTILI İHRACAT FATURALARI' xlsx dosyalarını
-    okur. Ülke bilgisi cari_country ile CariKodu üzerinden eklenir."""
+    okur. Ülke bilgisi cari_country ile CariKodu üzerinden eklenir.
+    exclude_cari: dashboard dışı bırakılacak cari kodları (ör. alakasız satışlar)."""
     facts = []
     unknown_codes = Counter()
     unknown_cari  = Counter()
+    excl = set(str(int(float(x))) for x in (exclude_cari or []))
+    excluded_lines = 0
     if not os.path.isdir(dia_dir):
         return facts
     files = sorted(f for f in os.listdir(dia_dir) if f.lower().endswith((".xlsx",".xls")))
@@ -199,13 +202,15 @@ def load_facts_from_dia(dia_dir, tax, cari_country, rates, report):
         ws = wb[wb.sheetnames[0]]
         for r in ws.iter_rows(min_row=6, values_only=True):
             if r is None or len(r) <= DIA_COLS["Doviz"]: continue
+            cari = norm_stok(r[DIA_COLS["CariKodu"]])
+            if cari is not None and str(cari) in excl:
+                excluded_lines += 1; continue     # hariç tutulan firma
             code = norm_stok(r[DIA_COLS["StokKodu"]])
             if code is None: continue
             ident = tax.get(code)
             if ident is None:
                 unknown_codes[code] += 1; continue
             dt   = parse_date(r[DIA_COLS["Tarih"]])
-            cari = norm_stok(r[DIA_COLS["CariKodu"]])
             cc   = cari_country.get(str(cari), {})
             if not cc: unknown_cari[cari] += 1
             doviz = str(r[DIA_COLS["Doviz"]] or "USD").strip().upper()
@@ -224,6 +229,7 @@ def load_facts_from_dia(dia_dir, tax, cari_country, rates, report):
     for k,v in unknown_codes.items(): report["unknown_codes"][k] = report["unknown_codes"].get(k,0)+v
     report["unknown_cari"] = dict(unknown_cari)
     report["dia_files"] = files
+    report["excluded_lines"] = excluded_lines
     return facts
 
 # ══════════════════════════════════════════════════════════════════
@@ -540,6 +546,7 @@ def main():
                                      {"USD":1.0,"EUR":1.08,"GBP":1.27,"TRY":0.031}),
     }
     rates = ref["exchange_rates"]
+    exclude_cari = load_json(os.path.join(REF,"excluded_cari.json"), [])
     report = {}
 
     print(f"► Taksonomi okunuyor: {os.path.basename(args.tax)}")
@@ -551,8 +558,9 @@ def main():
     if os.path.isdir(DIR_DIA) and any(f.lower().endswith((".xlsx",".xls"))
                                        for f in os.listdir(DIR_DIA)):
         print(f"► Ham DIA faturaları okunuyor: data/dia/")
-        dia_facts = load_facts_from_dia(DIR_DIA, tax, ref["cari_country"], rates, report)
-        print(f"  {len(dia_facts)} direkt ihracat satırı ({len(report.get('dia_files',[]))} dosya)")
+        dia_facts = load_facts_from_dia(DIR_DIA, tax, ref["cari_country"], rates, report, exclude_cari)
+        print(f"  {len(dia_facts)} direkt ihracat satırı ({len(report.get('dia_files',[]))} dosya)"
+              + (f", {report.get('excluded_lines',0)} satır hariç tutuldu" if report.get('excluded_lines') else ""))
         facts += dia_facts
     else:
         print(f"► Ham fatura okunuyor: {os.path.basename(args.ham)}")
