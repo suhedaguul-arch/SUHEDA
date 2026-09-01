@@ -73,6 +73,7 @@ TAX_COLS = {
 }
 
 YEARS = [2023, 2024, 2025, 2026]
+EXCLUDED_STOK = set()   # dashboard dışı ürün kodları (main'de doldurulur)
 
 # Renk -> İngilizce (dashboard renk kırılımı alt satırları için)
 COLOR_EN = {"Şeffaf":"Clear","Beyaz":"White","Siyah":"Black","Kırmızı":"Red",
@@ -116,13 +117,14 @@ def num(v, d=0.0):
 # ══════════════════════════════════════════════════════════════════
 #  1) TAKSONOMİ  (StokKodu -> ürün kimliği)
 # ══════════════════════════════════════════════════════════════════
-def load_taxonomy(path):
+def load_taxonomy(path, exclude_stok=None):
+    excl = set(norm_stok(x) for x in (exclude_stok or []))
     wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
     ws = wb[SHEET_TAX] if SHEET_TAX in wb.sheetnames else wb[wb.sheetnames[0]]
     tax = {}
     for r in ws.iter_rows(min_row=2, values_only=True):
         code = norm_stok(r[TAX_COLS["StokKodu"]])
-        if code is None: continue
+        if code is None or code in excl: continue   # hariç tutulan ürün kodları
         genel = r[TAX_COLS["GenelUrunAdi"]]
         if not genel: continue
         tax[code] = {
@@ -148,7 +150,7 @@ def load_facts(path, tax, rates, report):
         if r is None or r[HAM_COLS["Tarih"]] is None:
             continue
         code = norm_stok(r[HAM_COLS["StokKodu"]])
-        if code is None:
+        if code is None or code in EXCLUDED_STOK:
             continue
         ident = tax.get(code)
         if ident is None:
@@ -206,7 +208,7 @@ def load_facts_from_dia(dia_dir, tax, cari_country, rates, report, exclude_cari=
             if cari is not None and str(cari) in excl:
                 excluded_lines += 1; continue     # hariç tutulan firma
             code = norm_stok(r[DIA_COLS["StokKodu"]])
-            if code is None: continue
+            if code is None or code in EXCLUDED_STOK: continue
             ident = tax.get(code)
             if ident is None:
                 unknown_codes[code] += 1; continue
@@ -243,7 +245,7 @@ def load_facts_from_indirect(path, tax, rates, report):
     items = json.load(open(path, encoding="utf-8"))
     for it in items:
         code = norm_stok(it.get("kod"))
-        if code is None or not it.get("tutar"): continue
+        if code is None or not it.get("tutar") or code in EXCLUDED_STOK: continue
         ident = tax.get(code)
         if ident is None:
             unknown[code] += 1; continue
@@ -552,10 +554,13 @@ def main():
     }
     rates = ref["exchange_rates"]
     exclude_cari = load_json(os.path.join(REF,"excluded_cari.json"), [])
+    exclude_stok = load_json(os.path.join(REF,"excluded_stok.json"), [])
+    global EXCLUDED_STOK
+    EXCLUDED_STOK = set(norm_stok(x) for x in exclude_stok)
     report = {}
 
     print(f"► Taksonomi okunuyor: {os.path.basename(args.tax)}")
-    tax = load_taxonomy(args.tax)
+    tax = load_taxonomy(args.tax, exclude_stok)
     print(f"  {len(tax)} stok kodu yüklendi")
 
     facts = []
