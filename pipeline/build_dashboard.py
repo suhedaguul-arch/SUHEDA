@@ -104,7 +104,7 @@ def parse_date(v):
         return datetime(v.year, v.month, v.day)
     if v is None: return None
     s = str(v).strip()[:10]
-    for fmt in ("%Y-%m-%d", "%d.%m.%Y", "%d/%m/%Y"):
+    for fmt in ("%Y-%m-%d", "%d.%m.%Y", "%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d"):
         try: return datetime.strptime(s, fmt)
         except ValueError: pass
     return None
